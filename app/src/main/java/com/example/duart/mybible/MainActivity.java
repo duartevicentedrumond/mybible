@@ -18,19 +18,26 @@ public class MainActivity extends AppCompatActivity {
 
     public void login_validation(View view) {
 
-        TextView text_view_password = (TextView) findViewById(R.id.passwordTextView);
-        TextView text_view_error_message = (TextView) findViewById(R.id.error_message);
-        Button btn_login_validation = (Button) findViewById(R.id.button);
-        EditText password = (EditText) findViewById(R.id.passWordEditText);
+        TextView text_view_error_message = (TextView) findViewById(R.id.error_message); //define text_view_password with the element whose id is error_message
+        EditText password = (EditText) findViewById(R.id.password_edittext); //define password with the element whose id is password_edittext
 
         if (password.getText().toString().equals("admin")) {
+            /*if password is equal to "admin", then it will:
+                -start a new intent called intent_main_menu
+            */
 
             Intent intent_main_menu = new Intent( MainActivity.this, main_menu_activity.class );
             startActivity( intent_main_menu );
 
         }else{
+            /*if password is not equal to "admin", then it will:
+                -show an error message
+                -clean the input password's field
+            */
+
             text_view_error_message.setText("this password is wrong.\nplease input the correct one.");
             password.setText("");
+
         }
     }
 
