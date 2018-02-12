@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">mybible</string>
+    <string name="password">password</string>
+    <string name="password_validate">ok</string>
 </resources>

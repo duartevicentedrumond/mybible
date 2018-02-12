@@ -7,12 +7,57 @@
     tools:context="com.example.duart.mybible.MainActivity">
 
     <TextView
+        android:id="@+id/passwordTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
+        android:layout_marginStart="16dp"
+        android:fontFamily="@font/open_sans"
+        android:text="@string/password"
+        android:textColor="@color/colorText"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/passWordEditText"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/passWordEditText"
+        android:layout_width="100sp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@android:color/transparent"
+        android:cursorVisible="false"
+        android:ems="10"
+        android:fontFamily="@font/open_sans"
+        android:inputType="textPassword"
+        android:textSize="14sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/passwordTextView"
+        app:layout_constraintEnd_toStartOf="@+id/button"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/passwordTextView" />
+
+    <Button
+        android:id="@+id/button"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_shape"
+        android:fontFamily="@font/open_sans"
+        android:onClick="login_validation"
+        android:text="@string/password_validate"
+        app:layout_constraintBaseline_toBaselineOf="@+id/passWordEditText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/passWordEditText" />
+
+    <TextView
+        android:id="@+id/error_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:textColor="@color/deep_carmine"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/passWordEditText" />
 
 </android.support.constraint.ConstraintLayout>

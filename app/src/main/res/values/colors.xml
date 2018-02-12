@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorPrimary">#D1D2D4</color>
+    <color name="colorPrimaryDark">#504c4c</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="colorText">#929292</color>
+    <color name="white">#ffffff</color>
+    <color name="snow">#fafafa</color>
+    <color name="deep_carmine">#A4243B</color>
 </resources>
