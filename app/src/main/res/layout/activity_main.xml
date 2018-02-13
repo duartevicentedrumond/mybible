@@ -44,6 +44,7 @@
         android:fontFamily="@font/open_sans"
         android:onClick="login_validation"
         android:text="@string/password_validate"
+        android:textAllCaps="false"
         app:layout_constraintBaseline_toBaselineOf="@+id/password_edittext"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

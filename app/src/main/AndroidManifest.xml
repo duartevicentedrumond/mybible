@@ -29,4 +29,7 @@
             android:resource="@array/preloaded_fonts" />
     </application>
 
+    <!--  Internet Permissions -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
 </manifest>
