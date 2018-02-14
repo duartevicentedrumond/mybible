@@ -5,6 +5,7 @@
     <string name="btnSendRequest">Send HTTP Request</string>
     <string name="menu_send_request">Send Request</string>
     <string name="menu_input_request">Input Request</string>
+    <string name="btnInputRequest">Input HTTP Request</string>
 
     <!-- TODO: Remove or change this placeholder text -->
 
