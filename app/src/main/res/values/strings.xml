@@ -3,4 +3,9 @@
     <string name="password">password</string>
     <string name="password_validate">ok</string>
     <string name="btnSendRequest">Send HTTP Request</string>
+    <string name="menu_send_request">Send Request</string>
+    <string name="menu_input_request">Input Request</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+
 </resources>

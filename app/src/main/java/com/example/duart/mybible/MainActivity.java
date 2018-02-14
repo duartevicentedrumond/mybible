@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
                 -start a new intent called intent_main_menu
             */
 
-            Intent intent_main_menu = new Intent( MainActivity.this, main_menu_activity.class );
+            Intent intent_main_menu = new Intent( MainActivity.this, MainMenu.class );
             startActivity( intent_main_menu );
 
         }else{
