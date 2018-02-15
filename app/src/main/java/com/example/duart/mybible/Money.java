@@ -203,4 +203,11 @@ public class Money extends AppCompatActivity {
 
     }
 
+    public void addNewEntries(View view){
+
+        Intent intent2 = new Intent( Money.this, NewEntries.class );
+        startActivity( intent2 );
+
+    }
+
 }

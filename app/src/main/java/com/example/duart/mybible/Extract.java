@@ -36,6 +36,7 @@ public class Extract extends AppCompatActivity {
     private static final String REQUESTTAG = "string request first";
     private Button btnSeeEntries;
     private ListView listViewEntries;
+    private TextView textViewEntry;
 
     private RequestQueue mRequestQueue;
 
@@ -101,7 +102,9 @@ public class Extract extends AppCompatActivity {
                 ArrayList<String> entries = new ArrayList();
 
                 for (int i = BalanceHashMap.size()-1; i > 0; i--){
-                    entries.add(BalanceHashMap.get(i).getDate().substring(0, BalanceHashMap.get(i).getDate().length() -9 ) + "\n" + BalanceHashMap.get(i).getDescription() + "\n" + BalanceHashMap.get(i).getValue() + "");
+
+                    entries.add(BalanceHashMap.get(i).getDate().substring(0, BalanceHashMap.get(i).getDate().length() -9 ) + "\n" + BalanceHashMap.get(i).getDescription() + "\n" + BalanceHashMap.get(i).getValue() + " €");
+
                 }
 
                 adapter.clear();
