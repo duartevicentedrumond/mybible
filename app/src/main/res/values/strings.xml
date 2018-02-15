@@ -6,6 +6,11 @@
     <string name="menu_send_request">Send Request</string>
     <string name="menu_input_request">Input Request</string>
     <string name="btnInputRequest">Input HTTP Request</string>
+    <string name="money">money</string>
+    <string name="check_money">check wallet</string>
+    <string name="balance">balanço</string>
+    <string name="balance_debts">a receber</string>
+    <string name="balance_pay">a pagar</string>
 
     <!-- TODO: Remove or change this placeholder text -->
 

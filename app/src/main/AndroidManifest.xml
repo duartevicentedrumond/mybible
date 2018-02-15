@@ -23,15 +23,17 @@
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
+
         <activity
             android:name=".MainMenu"
-            android:parentActivityName=".MainActivity"/>
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".SendHTTPRequest"
-            android:parentActivityName=".MainMenu"/>
+            android:parentActivityName=".MainMenu" />
         <activity
             android:name=".InputHTTPRequest"
-            android:parentActivityName=".MainMenu"/>
+            android:parentActivityName=".MainMenu" />
+        <activity android:name=".Money"></activity>
     </application>
 
 </manifest>

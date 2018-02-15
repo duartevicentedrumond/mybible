@@ -27,4 +27,11 @@ public class MainMenu extends AppCompatActivity {
 
     }
 
+    public void moneyClick(View view){
+
+        Intent intent3 = new Intent( MainMenu.this, Money.class );
+        startActivity( intent3 );
+
+    }
+
 }
