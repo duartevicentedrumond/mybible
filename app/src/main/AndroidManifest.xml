@@ -33,7 +33,9 @@
         <activity
             android:name=".InputHTTPRequest"
             android:parentActivityName=".MainMenu" />
-        <activity android:name=".Money"></activity>
+        <activity
+            android:name=".Money"
+            android:parentActivityName=".MainMenu"/>
     </application>
 
 </manifest>
