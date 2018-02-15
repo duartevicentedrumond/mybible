@@ -15,9 +15,8 @@
     <string name="description">descrição</string>
     <string name="value">montante</string>
     <string name="source_destination">elo</string>
-    <string name="repay">reembolsar</string>
-    <string name="repayment">saldar</string>
-    <string name="type">tipo</string>
+    <string name="add_new_transaction">add new entry</string>
+    <string name="see_extract">see entries</string>
 
     <!-- TODO: Remove or change this placeholder text -->
 

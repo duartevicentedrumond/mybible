@@ -35,7 +35,10 @@
             android:parentActivityName=".MainMenu" />
         <activity
             android:name=".Money"
-            android:parentActivityName=".MainMenu"/>
+            android:parentActivityName=".MainMenu" />
+        <activity
+            android:name=".Extract"
+            android:parentActivityName=".Money"/>
     </application>
 
 </manifest>
