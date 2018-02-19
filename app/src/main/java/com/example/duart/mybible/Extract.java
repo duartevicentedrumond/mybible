@@ -1,13 +1,18 @@
 package com.example.duart.mybible;
 
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -37,6 +42,8 @@ public class Extract extends AppCompatActivity {
     private Button btnSeeEntries;
     private ListView listViewEntries;
     private TextView textViewEntry;
+    private mybibleDataBase dataBase;
+    private SQLiteDatabase sqLiteDatabase;
 
     private RequestQueue mRequestQueue;
 
@@ -47,92 +54,53 @@ public class Extract extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_extract);
 
-        btnSeeEntries = (Button) findViewById(R.id.btn_see_entries);
         listViewEntries = (ListView) findViewById(R.id.list_view_entries);
-        final ArrayAdapter<String> adapter = new ArrayAdapter(this, R.layout.list_view_layout);
-        listViewEntries.setAdapter(adapter);
+        dataBase = new mybibleDataBase(this);
 
-        btnSeeEntries.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        final ArrayList<String> arrayList = new ArrayList<>();
+        final ArrayList<String> arrayListId = new ArrayList<>();
+        final ArrayList<String> arrayListDate = new ArrayList<>();
+        final ArrayList<String> arrayListDescription = new ArrayList<>();
+        final ArrayList<String> arrayListValue = new ArrayList<>();
+        ListAdapter listAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, arrayList);
 
-                checkWallet( adapter );
+        Cursor data = dataBase.getAllWalletData();
 
-            }
-        });
-    }
-
-    private void checkWallet(final ArrayAdapter adapter ) {
-
-        mRequestQueue = Volley.newRequestQueue(this);
-
-        final DecimalFormat df = new DecimalFormat("#.##");
-        df.setRoundingMode(RoundingMode.CEILING);
-
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-
-                Log.i(TAG, "Response: " + response.toString());
-
-                Map<Integer, balanceClass> BalanceHashMap = new HashMap<>();
-                for (int i = 0; i < response.length(); i++){
-
-                    try {
-
-                        JSONObject balance = response.getJSONObject(i);
-
-                        String date = balance.getString("date");
-                        String description = balance.getString("description");
-                        Double value = balance.getDouble("value");
-                        String source_destination = balance.getString("source_destination");
-                        String repay = balance.getString("repay");
-                        String repayment = balance.getString("repayment");
-                        String type = balance.getString("type");
-
-                        BalanceHashMap.put(i, new balanceClass(date, description, value, source_destination, repay, repayment, type));
-
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-
-                ArrayList<String> entries = new ArrayList();
-
-                for (int i = BalanceHashMap.size()-1; i > 0; i--){
-
-                    entries.add(BalanceHashMap.get(i).getDate().substring(0, BalanceHashMap.get(i).getDate().length() -9 ) + "\n" + BalanceHashMap.get(i).getDescription() + "\n" + BalanceHashMap.get(i).getValue() + " €");
-
-                }
-
-                adapter.clear();
-                adapter.addAll(entries);
-                adapter.notifyDataSetChanged();
-
-                Log.i(TAG, "HashMap: " + BalanceHashMap.get(57).getDate());
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-                Log.i(TAG, "Error: " + error.toString());
-
-            }
-        });
-
-        jsonArrayRequest.setTag(REQUESTTAG);
-        mRequestQueue.add(jsonArrayRequest);
-
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if (mRequestQueue != null){
-            mRequestQueue.cancelAll(REQUESTTAG);
+        data.moveToLast();
+        while (data.moveToPrevious()){
+            arrayListId.add ( data.getString(0) );
+            arrayListDate.add( data.getString(1) );
+            arrayListDescription.add( data.getString(2) );
+            arrayListValue.add( data.getString(3) );
         }
+
+        Log.i(TAG, "ARRAYSIZE: " + arrayListDate.size());
+
+        for ( int i = 0; i < arrayListDate.size(); i++){
+            String date = arrayListDate.get(i).toString().substring(8, arrayListDate.get(i).toString().length() - 9)
+                    + "."
+                    + arrayListDate.get(i).toString().substring(5, arrayListDate.get(i).toString().length() - 12)
+                    + "."
+                    + arrayListDate.get(i).toString().substring(2, arrayListDate.get(i).toString().length() - 15)
+                    + " "
+                    + arrayListDate.get(i).toString().substring(10, arrayListDate.get(i).toString().length() - 6)
+                    + "h"
+                    + arrayListDate.get(i).toString().substring(14, arrayListDate.get(i).toString().length() - 3)
+                    + "min";
+            arrayList.add(date + " #" + arrayListId.get(i) + "\n" + arrayListDescription.get(i) + "\n" + arrayListValue.get(i) + " €");
+            Log.i(TAG, "ARRAYSIZE: " + date);
+            listViewEntries.setAdapter(listAdapter);
+        }
+
+        listViewEntries.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Toast.makeText(getBaseContext(), adapterView.getItemAtPosition(i) + "is selected", Toast.LENGTH_SHORT).show();
+                view.setSelected(true);
+            }
+        });
+
     }
+
+
 }

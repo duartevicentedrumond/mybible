@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
 
 public class MainMenu extends AppCompatActivity {
 
@@ -31,6 +32,13 @@ public class MainMenu extends AppCompatActivity {
 
         Intent intent3 = new Intent( MainMenu.this, Money.class );
         startActivity( intent3 );
+
+    }
+
+    public void toDoClick(View view){
+
+        Intent intent4 = new Intent( MainMenu.this, UserExample.class );
+        startActivity( intent4 );
 
     }
 

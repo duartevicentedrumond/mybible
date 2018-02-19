@@ -35,13 +35,17 @@
             android:parentActivityName=".MainMenu" />
         <activity
             android:name=".Money"
+
             android:parentActivityName=".MainMenu" />
         <activity
             android:name=".Extract"
             android:parentActivityName=".Money" />
         <activity
             android:name=".NewEntries"
-            android:parentActivityName=".Money"/>
+            android:parentActivityName=".Money" />
+        <activity
+            android:name=".UserExample"
+            android:parentActivityName=".MainMenu"/>
     </application>
 
 </manifest>

@@ -11,13 +11,17 @@
     <string name="balance">balanço</string>
     <string name="balance_debts">a receber</string>
     <string name="balance_pay">a pagar</string>
-    <string name="transaction">transacção</string>
     <string name="description">descrição</string>
     <string name="value">montante</string>
     <string name="source_destination">elo</string>
     <string name="add_new_transaction">add new entry</string>
     <string name="see_extract">see entries</string>
+    <string name="to_do">to do</string>
     <string name="sync">sync</string>
+    <string name="add_data">add data</string>
+    <string name="read_data">read data</string>
+    <string name="input_name">name</string>
+    <string name="input_status">status</string>
 
     <!-- TODO: Remove or change this placeholder text -->
 

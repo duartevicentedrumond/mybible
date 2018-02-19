@@ -2,11 +2,14 @@ package com.example.duart.mybible;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -45,10 +48,12 @@ public class Money extends AppCompatActivity {
     private Button btnCheckWallet;
     private TextView textViewMoney;
     private TextView textViewBalancePay;
+    private TextView textViewBalanceDebt;
+    private mybibleDataBase dataBase;
+    private SQLiteDatabase sqLiteDatabase;
 
     private RequestQueue mRequestQueue;
 
-    private String url = "http://home.localtunnel.me/android/read_wallet.php";
     private Double totalValueRepay = 0.0;
 
     @Override
@@ -59,20 +64,47 @@ public class Money extends AppCompatActivity {
         btnCheckWallet = (Button) findViewById(R.id.btn_check_money);
         textViewMoney = (TextView) findViewById(R.id.text_view_money);
         textViewBalancePay = (TextView) findViewById(R.id.text_view_balance_pay);
+        textViewBalanceDebt = (TextView) findViewById(R.id.text_view_balance_debts);
+        dataBase = new mybibleDataBase(this);
 
         btnCheckWallet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                checkWallet();
+                getWalletData();
 
             }
         });
+
     }
 
-    private void checkWallet() {
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.sync, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+
+            case R.id.action_favorite:
+                startActivity( new Intent( Money.this, Extract.class ) );
+                return true;
+
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
+        }
+    }
+
+    private void getWalletData() {
 
         mRequestQueue = Volley.newRequestQueue(this);
+
+        String url = "http://home.localtunnel.me/android/sync_wallet_mysql_sqlite.php";
 
         final DecimalFormat df = new DecimalFormat("#.##");
         df.setRoundingMode(RoundingMode.CEILING);
@@ -81,97 +113,33 @@ public class Money extends AppCompatActivity {
             @Override
             public void onResponse(JSONArray response) {
 
-                Log.i(TAG, "Response: " + response.toString());
-
-                textViewMoney.setText("");
-
-                HashMap<Integer, balanceClass> BalanceHashMap = new HashMap<>();
-                for (int i = 0; i < response.length(); i++){
+                for (int i = 0; i < response.length(); i++) {
 
                     try {
 
-                        JSONObject balance = response.getJSONObject(i);
+                        JSONObject mysqlDataUnsync = response.getJSONObject(i);
 
-                        String date = balance.getString("date");
-                        String description = balance.getString("description");
-                        Double value = balance.getDouble("value");
-                        String source_destination = balance.getString("source_destination");
-                        String repay = balance.getString("repay");
-                        String repayment = balance.getString("repayment");
-                        String type = balance.getString("type");
+                        Integer id = Integer.parseInt(mysqlDataUnsync.getString("id"));
+                        String date = mysqlDataUnsync.getString("date");
+                        String description = mysqlDataUnsync.getString("description");
+                        Double value = Double.parseDouble(mysqlDataUnsync.getString("value"));
+                        String source_destination = mysqlDataUnsync.getString("source_destination");
+                        String repay = mysqlDataUnsync.getString("repay");
+                        String repayment = mysqlDataUnsync.getString("repayment");
+                        String type = mysqlDataUnsync.getString("type");
 
-                        BalanceHashMap.put(i, new balanceClass(date, description, value, source_destination, repay, repayment, type));
+                        balanceClass balanceClassObject = new balanceClass(id, date, description, value, source_destination, repay, repayment, type, 1 );
 
+                        sqLiteDatabase = dataBase.getWritableDatabase();
+                        String insertQuery = "INSERT INTO wallet (id, date, description, value, source_destination, repay, repayment, type, status ) Values (" + balanceClassObject.getId() + ", '" + balanceClassObject.getDate() + "', '" + balanceClassObject.getDescription() + "', '" + balanceClassObject.getValue() + "', '" + balanceClassObject.getSourceDestination() + "', '" + balanceClassObject.getRepay() + "', '" + balanceClassObject.getRepayment() + "', '" + balanceClassObject.getType() + "', " + 1 + ");";
+                        Log.i(TAG, "MYSQL: " + insertQuery);
+                        sqLiteDatabase.execSQL(insertQuery);
 
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
 
                 }
-
-
-                /**
-
-                    This code computes the sum of all entries in our database's column "value" and puts its value in the variable "totalValue"
-                 **/
-
-                Collection<balanceClass> values = BalanceHashMap.values();
-                List list_source_destination = new ArrayList();
-
-                for (balanceClass i : values ){
-
-                    //Computes the sum of all entries of database's column "value"
-                    totalValue += i.getValue();
-
-                    //Filters all names of database's column "source_destination"
-                    if( i.getRepay().equals("yes") ){
-                        list_source_destination.add(i.getSourceDestination());
-                    }
-
-                }
-
-                Set<String> hashSet = new HashSet<>();
-
-                hashSet.addAll(list_source_destination);
-                list_source_destination.clear();
-                list_source_destination.addAll(hashSet);
-
-                for ( int i = 0; i < list_source_destination.size(); i++ ){
-
-                    for (balanceClass j : values ){
-
-                        if( j.getSourceDestination().equals(list_source_destination.get(i)) ){
-
-                            totalValueRepay += j.getValue();
-
-                        }
-
-                    }
-
-                    if (totalValueRepay < 0 ){
-                        textViewBalancePay.setText(list_source_destination.get(i) + ": " + df.format(totalValueRepay) + " €\n\n");
-                        textViewBalancePay.setTextColor(getResources().getColor(R.color.tropical_rain_forest));
-                    } else if (totalValueRepay>0){
-                        textViewBalancePay.setText(list_source_destination.get(i) + ": " + df.format(totalValueRepay) + " €\n\n");
-                        textViewBalancePay.setTextColor(getResources().getColor(R.color.deep_carmine));
-                    }
-
-                }
-
-                Log.i(TAG, "HashMap: " + list_source_destination);
-
-                textViewMoney.setText(df.format(totalValue) + " €");
-
-
-                if (totalValue>0){
-                    textViewMoney.setTextColor(getResources().getColor(R.color.tropical_rain_forest));
-                }else if (totalValue<0){
-                    textViewMoney.setTextColor(getResources().getColor(R.color.deep_carmine));
-                }
-
-                totalValue = 0.0;
-                totalValueRepay = 0.0;
-                totalValueToReceive = 0.0;
 
             }
         }, new Response.ErrorListener() {
@@ -194,13 +162,6 @@ public class Money extends AppCompatActivity {
         if (mRequestQueue != null){
             mRequestQueue.cancelAll(REQUESTTAG);
         }
-    }
-
-    public void seeEntries(View view){
-
-        Intent intent = new Intent( Money.this, Extract.class );
-        startActivity( intent );
-
     }
 
     public void addNewEntries(View view){

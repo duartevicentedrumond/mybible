@@ -168,7 +168,6 @@ public class NewEntries extends AppCompatActivity {
         }
 
         SendPostReqAsyncTask sendPostReqAsyncTask = new SendPostReqAsyncTask();
-
         sendPostReqAsyncTask.execute(description, value, sourceDestination, repay, repayment, type);
 
         Log.i(TAG, type);

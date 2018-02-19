@@ -8,6 +8,8 @@ import java.sql.Timestamp;
 
 public class balanceClass {
 
+    private Integer id;
+    private Integer status;
     private String date;
     private String description;
     private Double value;
@@ -17,8 +19,9 @@ public class balanceClass {
     private String type;
 
 
-    public balanceClass(String dateParam, String descriptionParam, Double valueParam, String source_destinationParam, String repayParam, String repaymentParam, String typeParam){
+    public balanceClass(Integer idParam, String dateParam, String descriptionParam, Double valueParam, String source_destinationParam, String repayParam, String repaymentParam, String typeParam, Integer statusParam){
 
+        this.id = idParam;
         this.date = dateParam;
         this.description = descriptionParam;
         this.value = valueParam;
@@ -26,6 +29,7 @@ public class balanceClass {
         this.repay = repayParam;
         this.repayment = repaymentParam;
         this.type = typeParam;
+        this.status = statusParam;
 
     }
 
@@ -76,6 +80,20 @@ public class balanceClass {
     }
     public void setType(String type) {
         this.type = type;
+    }
+
+    public Integer getStatus(){
+        return status;
+    }
+    public void setStatus(Integer status){
+        this.status = status;
+    }
+
+    public Integer getId(){
+        return id;
+    }
+    public void setId(Integer id){
+        this.id = id;
     }
 
 }

@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
         TextView text_view_error_message = (TextView) findViewById(R.id.error_message); //define text_view_password with the element whose id is error_message
         EditText password = (EditText) findViewById(R.id.password_edittext); //define password with the element whose id is password_edittext
 
-        if (password.getText().toString().equals("admin")) {
+        if (password.getText().toString().equals("")) {
             /*if password is equal to "admin", then it will:
                 -start a new intent called intent_main_menu
             */
