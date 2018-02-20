@@ -11,12 +11,23 @@ public class MainMenu extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
+
+        //this line removes the arrow from the action bar menu in this activity
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+
     }
 
     public void moneyClick(View view){
 
-        Intent intent3 = new Intent( MainMenu.this, Wallet.class );
-        startActivity( intent3 );
+        Intent intent = new Intent( MainMenu.this, Wallet.class );
+        startActivity( intent );
+
+    }
+
+    public void toDoListClick(View view){
+
+        Intent intent = new Intent( MainMenu.this, ToDoList.class );
+        startActivity( intent );
 
     }
 

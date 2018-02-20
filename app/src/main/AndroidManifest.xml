@@ -38,7 +38,11 @@
             android:parentActivityName=".Wallet" />
         <activity
             android:name=".UpdateWallet"
-            android:parentActivityName=".SeeAllWallet"/>
+            android:parentActivityName=".SeeAllWallet" />
+        <activity
+            android:name=".ToDoList"
+            android:screenOrientation="landscape"
+            />
     </application>
 
 </manifest>

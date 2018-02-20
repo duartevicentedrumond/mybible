@@ -66,7 +66,7 @@ public class SeeAllWallet extends AppCompatActivity {
                     + "h"
                     + arrayListDate.get(i).toString().substring(14, arrayListDate.get(i).toString().length() - 3)
                     + "min";
-            arrayList.add(" #" + arrayListId.get(i) + "\n" + date + "\n" + arrayListDescription.get(i) + "\n" + arrayListValue.get(i) + " €\n");
+            arrayList.add("#" + arrayListId.get(i) + "\n" + date + "\n" + arrayListDescription.get(i) + "\n" + arrayListValue.get(i) + " €\n");
             listViewEntries.setAdapter(listAdapter);
         }
 
