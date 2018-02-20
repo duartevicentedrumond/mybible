@@ -79,6 +79,7 @@ public class Wallet extends AppCompatActivity {
                 syncGetWallet();
                 prepareSendWallet();
                 syncEditedWallet();
+                syncDeletedWallet();
                 return true;
 
             case R.id.action_add:
@@ -178,7 +179,6 @@ public class Wallet extends AppCompatActivity {
         ArrayList<String> arrayListUnsyncDataRepayment = new ArrayList<>();
         ArrayList<String> arrayListUnsyncDataType = new ArrayList<>();
 
-        unsyncData.moveToFirst();
         while (unsyncData.moveToNext()){
             arrayListUnsyncDataId.add(unsyncData.getString(0));
             arrayListUnsyncDataDate.add(unsyncData.getString(1));
@@ -287,18 +287,13 @@ public class Wallet extends AppCompatActivity {
             arrayListEditedDataType.add(editedData.getString(7));
         }
 
-        Log.i(TAG, "SIZE: " + arrayListEditedDataDate.size() );
-
         for (int i = 0; i < arrayListEditedDataDate.size(); i++){
             syncEditedSendWallet(arrayListEditedDataId.get(i).toString(), arrayListEditedDataDate.get(i).toString(), arrayListEditedDataDescription.get(i).toString(), arrayListEditedDataValue.get(i).toString(), arrayListEditedDataSourceDestination.get(i).toString() , arrayListEditedDataRepay.get(i).toString(), arrayListEditedDataRepayment.get(i).toString(), arrayListEditedDataType.get(i).toString(), "1");
-            Log.i(TAG, "QUERY: " + arrayListEditedDataId.get(i) + " " + arrayListEditedDataDate.get(i) + " " + arrayListEditedDataDescription.get(i) + " " + arrayListEditedDataValue.get(i) + " " + arrayListEditedDataSourceDestination.get(i) + " " + arrayListEditedDataRepay.get(i) + " " + arrayListEditedDataRepayment.get(i) + " " + arrayListEditedDataType.get(i));
         }
 
         sqLiteDatabase = dataBase.getWritableDatabase();
         String setStatusQuery = "UPDATE wallet SET status=1 WHERE status=2;";
         sqLiteDatabase.execSQL(setStatusQuery);
-
-        Log.i(TAG, "DONE");
     }
 
     private void syncEditedSendWallet( final String id, final String date, final String description, final String value, final String source_destination, final String repay, final String repayment, final String type, final String status){
@@ -362,6 +357,106 @@ public class Wallet extends AppCompatActivity {
 
         SendPostReqAsyncTask sendPostReqAsyncTask = new SendPostReqAsyncTask();
         sendPostReqAsyncTask.execute(id, date, description, value, source_destination, repay, repayment, type, status );
+    }
+
+    private void syncDeletedWallet(){
+        sqLiteDatabase = dataBase.getReadableDatabase();
+        String getDeletedData = "SELECT * FROM wallet WHERE status=3;";
+        Cursor deletedData = sqLiteDatabase.rawQuery(getDeletedData, null);
+
+        Log.i(TAG, "DELETED: " + deletedData.getCount());
+
+        ArrayList<String> arrayListDeletedDataId = new ArrayList<>();
+        ArrayList<String> arrayListDeletedDataDate = new ArrayList<>();
+        ArrayList<String> arrayListDeletedDataDescription = new ArrayList<>();
+        ArrayList<String> arrayListDeletedDataValue = new ArrayList<>();
+        ArrayList<String> arrayListDeletedDataSourceDestination = new ArrayList<>();
+        ArrayList<String> arrayListDeletedDataRepay = new ArrayList<>();
+        ArrayList<String> arrayListDeletedDataRepayment = new ArrayList<>();
+        ArrayList<String> arrayListDeletedDataType = new ArrayList<>();
+
+        while (deletedData.moveToNext()){
+            arrayListDeletedDataId.add(deletedData.getString(0));
+            arrayListDeletedDataDate.add(deletedData.getString(1));
+            arrayListDeletedDataDescription.add(deletedData.getString(2));
+            arrayListDeletedDataValue.add(deletedData.getString(3));
+            arrayListDeletedDataSourceDestination.add(deletedData.getString(4));
+            arrayListDeletedDataRepay.add(deletedData.getString(5));
+            arrayListDeletedDataRepayment.add(deletedData.getString(6));
+            arrayListDeletedDataType.add(deletedData.getString(7));
+        }
+
+        for (int i = 0; i < arrayListDeletedDataDate.size(); i++){
+            syncDeletedSendWallet(arrayListDeletedDataId.get(i).toString(), arrayListDeletedDataDate.get(i).toString(), arrayListDeletedDataDescription.get(i).toString(), arrayListDeletedDataValue.get(i).toString(), arrayListDeletedDataSourceDestination.get(i).toString() , arrayListDeletedDataRepay.get(i).toString(), arrayListDeletedDataRepayment.get(i).toString(), arrayListDeletedDataType.get(i).toString(), "1");
+        }
+
+        sqLiteDatabase = dataBase.getWritableDatabase();
+        String deleteQuery = "DELETE FROM wallet WHERE status=3";
+        sqLiteDatabase.execSQL(deleteQuery);
+
+    }
+
+    private void syncDeletedSendWallet( final String id, final String date, final String description, final String value, final String source_destination, final String repay, final String repayment, final String type, final String status){
+
+        class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
+            @Override
+            protected String doInBackground(String... params) {
+
+                String url = "http://home.localtunnel.me/android/sync_send_deleted_wallet.php";
+
+                List<NameValuePair> nameValuePairs = new ArrayList<>();
+
+                String idHolder = id;
+                String dateHolder = date;
+                String descriptionHolder = description;
+                String valueHolder = value;
+                String source_destinationHolder = source_destination;
+                String repayHolder = repay;
+                String repaymentHolder = repayment;
+                String typeHolder = type;
+                String statusHolder = status;
+
+                nameValuePairs.add(new BasicNameValuePair("id", idHolder));
+                nameValuePairs.add(new BasicNameValuePair("date", dateHolder));
+                nameValuePairs.add(new BasicNameValuePair("description", descriptionHolder));
+                nameValuePairs.add(new BasicNameValuePair("value", valueHolder));
+                nameValuePairs.add(new BasicNameValuePair("source_destination", source_destinationHolder));
+                nameValuePairs.add(new BasicNameValuePair("repay", repayHolder));
+                nameValuePairs.add(new BasicNameValuePair("repayment", repaymentHolder));
+                nameValuePairs.add(new BasicNameValuePair("type", typeHolder));
+                nameValuePairs.add(new BasicNameValuePair("status", statusHolder));
+
+                try {
+
+                    HttpClient httpClient = new DefaultHttpClient();
+
+                    HttpPost httpPost = new HttpPost(url);
+
+                    httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                    HttpResponse httpResponse = httpClient.execute(httpPost);
+
+                    HttpEntity httpEntity = httpResponse.getEntity();
+
+                } catch (ClientProtocolException e) {
+
+                } catch (IOException e) {
+
+                }
+
+                return "Data Inserted Successfully";
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+
+                super.onPostExecute(result);
+
+            }
+        }
+
+        SendPostReqAsyncTask sendPostReqAsyncTask = new SendPostReqAsyncTask();
+        sendPostReqAsyncTask.execute(id);
     }
 
     public void getDebtors(){

@@ -54,7 +54,7 @@ public class SeeAllWallet extends AppCompatActivity {
         ListAdapter listAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, arrayList);
 
         sqLiteDatabase = dataBase.getReadableDatabase();
-        Cursor data = sqLiteDatabase.rawQuery("SELECT * FROM wallet", null);
+        Cursor data = sqLiteDatabase.rawQuery("SELECT * FROM wallet WHERE status !=3", null);
 
         data.moveToFirst();
         while (data.moveToNext()){
