@@ -34,18 +34,20 @@
             android:name=".InputHTTPRequest"
             android:parentActivityName=".MainMenu" />
         <activity
-            android:name=".Money"
-
+            android:name=".Wallet"
             android:parentActivityName=".MainMenu" />
         <activity
-            android:name=".Extract"
-            android:parentActivityName=".Money" />
+            android:name=".SeeAllWallet"
+            android:parentActivityName=".Wallet" />
         <activity
-            android:name=".NewEntries"
-            android:parentActivityName=".Money" />
+            android:name=".NewEntryWallet"
+            android:parentActivityName=".Wallet" />
         <activity
             android:name=".UserExample"
-            android:parentActivityName=".MainMenu"/>
+            android:parentActivityName=".MainMenu" />
+        <activity
+            android:name=".UpdateWallet"
+            android:parentActivityName=".SeeAllWallet"/>
     </application>
 
 </manifest>

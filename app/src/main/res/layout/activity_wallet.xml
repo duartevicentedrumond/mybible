@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.duart.mybible.Money">
+    tools:context="com.example.duart.mybible.Wallet">
 
     <TextView
         android:id="@+id/text_view_pay"
@@ -16,20 +16,6 @@
         android:textAlignment="center"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_view_money" />
-
-    <Button
-        android:id="@+id/btn_check_money"
-        style="?android:attr/borderlessButtonStyle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/button_shape"
-        android:text="@string/check_money"
-        android:textAllCaps="false"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btn_see_entries"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/btn_add_new_entry" />
 
     <TextView
         android:id="@+id/text_view_money"
@@ -84,33 +70,5 @@
         android:textAlignment="center"
         app:layout_constraintStart_toStartOf="@+id/text_view_debts"
         app:layout_constraintTop_toBottomOf="@+id/text_view_debts" />
-
-    <Button
-        android:id="@+id/btn_add_new_entry"
-        style="?android:attr/borderlessButtonStyle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:onClick="addNewEntries"
-        android:text="@string/add_new_transaction"
-        android:textAllCaps="false"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btn_check_money"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/btn_see_entries"
-        style="?android:attr/borderlessButtonStyle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:onClick="seeEntries"
-        android:text="@string/see_extract"
-        android:textAllCaps="false"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/btn_check_money" />
 
 </android.support.constraint.ConstraintLayout>

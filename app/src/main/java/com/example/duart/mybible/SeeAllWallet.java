@@ -1,10 +1,13 @@
 package com.example.duart.mybible;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -14,30 +17,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.Volley;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
-public class Extract extends AppCompatActivity {
+public class SeeAllWallet extends AppCompatActivity {
 
-    private static final String TAG = Extract.class.getName();
+    private static final String TAG = SeeAllWallet.class.getName();
     private static final String REQUESTTAG = "string request first";
     private Button btnSeeEntries;
     private ListView listViewEntries;
@@ -52,7 +38,10 @@ public class Extract extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_extract);
+        setContentView(R.layout.activity_see_all_wallet);
+
+        //this line removes the arrow from the action bar menu in this activity
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
         listViewEntries = (ListView) findViewById(R.id.list_view_entries);
         dataBase = new mybibleDataBase(this);
@@ -64,19 +53,18 @@ public class Extract extends AppCompatActivity {
         final ArrayList<String> arrayListValue = new ArrayList<>();
         ListAdapter listAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, arrayList);
 
-        Cursor data = dataBase.getAllWalletData();
+        sqLiteDatabase = dataBase.getReadableDatabase();
+        Cursor data = sqLiteDatabase.rawQuery("SELECT * FROM wallet", null);
 
-        data.moveToLast();
-        while (data.moveToPrevious()){
+        data.moveToFirst();
+        while (data.moveToNext()){
             arrayListId.add ( data.getString(0) );
             arrayListDate.add( data.getString(1) );
             arrayListDescription.add( data.getString(2) );
             arrayListValue.add( data.getString(3) );
         }
 
-        Log.i(TAG, "ARRAYSIZE: " + arrayListDate.size());
-
-        for ( int i = 0; i < arrayListDate.size(); i++){
+        for ( int i = arrayListDate.size()-1; i > 0 ; i--){
             String date = arrayListDate.get(i).toString().substring(8, arrayListDate.get(i).toString().length() - 9)
                     + "."
                     + arrayListDate.get(i).toString().substring(5, arrayListDate.get(i).toString().length() - 12)
@@ -87,20 +75,48 @@ public class Extract extends AppCompatActivity {
                     + "h"
                     + arrayListDate.get(i).toString().substring(14, arrayListDate.get(i).toString().length() - 3)
                     + "min";
-            arrayList.add(date + " #" + arrayListId.get(i) + "\n" + arrayListDescription.get(i) + "\n" + arrayListValue.get(i) + " €");
-            Log.i(TAG, "ARRAYSIZE: " + date);
+            arrayList.add(" #" + arrayListId.get(i) + "\n" + date + "\n" + arrayListDescription.get(i) + "\n" + arrayListValue.get(i) + " €");
             listViewEntries.setAdapter(listAdapter);
         }
 
+        //this detects which item was selected from listview
         listViewEntries.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(getBaseContext(), adapterView.getItemAtPosition(i) + "is selected", Toast.LENGTH_SHORT).show();
-                view.setSelected(true);
+
+                String dataSelected = adapterView.getItemAtPosition(i).toString();
+
+                Intent intent = new Intent( SeeAllWallet.this, UpdateWallet.class );
+                intent.putExtra("dataSelected", dataSelected);
+
+                startActivity( intent );
             }
         });
 
     }
+
+    //necessary to show buttons on action bar menu
+        @Override
+        public boolean onCreateOptionsMenu(Menu menu) {
+            getMenuInflater().inflate(R.menu.menu_see_all_wallet, menu);
+            return super.onCreateOptionsMenu(menu);
+        }
+
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item) {
+            switch (item.getItemId()) {
+
+                case R.id.action_wallet:
+                    startActivity( new Intent( SeeAllWallet.this, Wallet.class ) );
+                    return true;
+
+                default:
+                    // If we got here, the user's action was not recognized.
+                    // Invoke the superclass to handle it.
+                    return super.onOptionsItemSelected(item);
+
+            }
+        }
 
 
 }
