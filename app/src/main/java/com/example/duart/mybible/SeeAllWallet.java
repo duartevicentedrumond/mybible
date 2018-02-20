@@ -23,17 +23,9 @@ import java.util.ArrayList;
 
 public class SeeAllWallet extends AppCompatActivity {
 
-    private static final String TAG = SeeAllWallet.class.getName();
-    private static final String REQUESTTAG = "string request first";
-    private Button btnSeeEntries;
     private ListView listViewEntries;
-    private TextView textViewEntry;
     private mybibleDataBase dataBase;
     private SQLiteDatabase sqLiteDatabase;
-
-    private RequestQueue mRequestQueue;
-
-    private String url = "http://home.localtunnel.me/android/read_wallet.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +66,7 @@ public class SeeAllWallet extends AppCompatActivity {
                     + "h"
                     + arrayListDate.get(i).toString().substring(14, arrayListDate.get(i).toString().length() - 3)
                     + "min";
-            arrayList.add(" #" + arrayListId.get(i) + "\n" + date + "\n" + arrayListDescription.get(i) + "\n" + arrayListValue.get(i) + " €");
+            arrayList.add(" #" + arrayListId.get(i) + "\n" + date + "\n" + arrayListDescription.get(i) + "\n" + arrayListValue.get(i) + " €\n");
             listViewEntries.setAdapter(listAdapter);
         }
 
