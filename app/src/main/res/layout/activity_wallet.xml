@@ -59,6 +59,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:textAlignment="center"
+        android:textColor="@color/deep_carmine"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_view_pay" />
 
@@ -68,6 +69,7 @@
         android:layout_height="19dp"
         android:layout_marginTop="8dp"
         android:textAlignment="center"
+        android:textColor="@color/tropical_rain_forest"
         app:layout_constraintStart_toStartOf="@+id/text_view_debts"
         app:layout_constraintTop_toBottomOf="@+id/text_view_debts" />
 

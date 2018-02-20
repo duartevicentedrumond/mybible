@@ -100,6 +100,10 @@ public class Wallet extends AppCompatActivity {
 
     private void syncGetNewEntryWallet() {
 
+        /**sqLiteDatabase = dataBase.getWritableDatabase();
+        String deleteQuery = "DELETE FROM wallet;";
+        sqLiteDatabase.execSQL(deleteQuery);**/
+
         mRequestQueue = Volley.newRequestQueue(this);
 
         String url = "http://casa.localtunnel.me/android/sync_get_new_entry_wallet_android.php";
@@ -474,8 +478,12 @@ public class Wallet extends AppCompatActivity {
                 Cursor debtsSum = sqLiteDatabase.rawQuery(computeDebtQuery, null);
                 debtsSum.moveToFirst();
                 showDebtorsList.add(debtorsList.get(i).toString() + ": " + debtsSum.getString(0));
-                Log.i(TAG, "Result: " + showDebtorsList.get(i));
-                textViewBalancePay.append(showDebtorsList.get(i) + " €\n");
+                if ( Double.parseDouble(debtsSum.getString(0)) < 0 ){
+                    textViewBalanceDebt.append(showDebtorsList.get(i) + " €\n");
+                } else if ( Double.parseDouble(debtsSum.getString(0)) > 0 ){
+                    textViewBalancePay.append(showDebtorsList.get(i) + " €\n");
+                }
+
             }
         }
     }
