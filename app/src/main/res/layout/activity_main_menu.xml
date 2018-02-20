@@ -6,58 +6,28 @@
     android:layout_height="match_parent"
     tools:context="com.example.duart.mybible.MainMenu">
 
-    <Button
-        android:id="@+id/button2"
-        style="?android:attr/borderlessButtonStyle"
+    <ImageButton
+        android:id="@+id/btn_wallet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/button_shape"
-        android:onClick="sendRequestClick"
-        android:text="@string/menu_send_request"
-        android:textAllCaps="false"
-        app:layout_constraintEnd_toStartOf="@+id/button3"
-        app:layout_constraintHorizontal_bias="0.5"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:onClick="moneyClick"
+        android:src="@drawable/ic_wallet"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/button3"
-        style="?android:attr/borderlessButtonStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/button_shape"
-        android:onClick="inputRequestClick"
-        android:text="@string/menu_input_request"
-        android:textAllCaps="false"
-        app:layout_constraintBaseline_toBaselineOf="@+id/button2"
-        app:layout_constraintEnd_toStartOf="@+id/btn_money"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/button2" />
-
-    <Button
-        android:id="@+id/btn_money"
-        style="?android:attr/borderlessButtonStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:background="@drawable/button_shape"
-        android:onClick="moneyClick"
-        android:text="@string/money"
-        android:textAllCaps="false"
-        app:layout_constraintBaseline_toBaselineOf="@+id/button2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/button3" />
-
-    <Button
+    <ImageButton
         android:id="@+id/btn_to_do"
-        style="?android:attr/borderlessButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:onClick="toDoClick"
-        android:text="@string/to_do"
-        android:textAllCaps="false"
-        app:layout_constraintStart_toStartOf="@+id/button2"
-        app:layout_constraintTop_toBottomOf="@+id/button2" />
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/ic_to_do_list"
+        app:layout_constraintStart_toEndOf="@+id/btn_wallet"
+        app:layout_constraintTop_toTopOf="parent" />
 </android.support.constraint.ConstraintLayout>

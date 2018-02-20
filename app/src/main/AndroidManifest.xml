@@ -28,12 +28,6 @@
             android:name=".MainMenu"
             android:parentActivityName=".MainActivity" />
         <activity
-            android:name=".SendHTTPRequest"
-            android:parentActivityName=".MainMenu" />
-        <activity
-            android:name=".InputHTTPRequest"
-            android:parentActivityName=".MainMenu" />
-        <activity
             android:name=".Wallet"
             android:parentActivityName=".MainMenu" />
         <activity
@@ -42,9 +36,6 @@
         <activity
             android:name=".NewEntryWallet"
             android:parentActivityName=".Wallet" />
-        <activity
-            android:name=".UserExample"
-            android:parentActivityName=".MainMenu" />
         <activity
             android:name=".UpdateWallet"
             android:parentActivityName=".SeeAllWallet"/>

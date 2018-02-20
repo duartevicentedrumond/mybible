@@ -13,31 +13,10 @@ public class MainMenu extends AppCompatActivity {
         setContentView(R.layout.activity_main_menu);
     }
 
-    public void sendRequestClick(View view){
-
-        Intent intent1 = new Intent( MainMenu.this, SendHTTPRequest.class );
-        startActivity( intent1 );
-
-    }
-
-    public void inputRequestClick(View view){
-
-        Intent intent2 = new Intent( MainMenu.this, InputHTTPRequest.class );
-        startActivity( intent2 );
-
-    }
-
     public void moneyClick(View view){
 
         Intent intent3 = new Intent( MainMenu.this, Wallet.class );
         startActivity( intent3 );
-
-    }
-
-    public void toDoClick(View view){
-
-        Intent intent4 = new Intent( MainMenu.this, UserExample.class );
-        startActivity( intent4 );
 
     }
 
