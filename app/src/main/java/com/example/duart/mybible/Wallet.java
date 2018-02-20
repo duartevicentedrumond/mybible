@@ -168,6 +168,8 @@ public class Wallet extends AppCompatActivity {
         String getUnsyncData = "SELECT * FROM wallet WHERE status=0;";
         Cursor unsyncData = sqLiteDatabase.rawQuery(getUnsyncData, null);
 
+        String url = "http://home.localtunnel.me/android/prepare_send_wallet.php";
+
         Log.i(TAG, "TAMANHO: " + unsyncData.getCount());
 
         ArrayList<String> arrayListUnsyncDataId = new ArrayList<>();
@@ -185,13 +187,13 @@ public class Wallet extends AppCompatActivity {
             arrayListUnsyncDataDescription.add(unsyncData.getString(2));
             arrayListUnsyncDataValue.add(unsyncData.getString(3));
             arrayListUnsyncDataSourceDestination.add(unsyncData.getString(4));
-            arrayListUnsyncDataRepay.add(unsyncData.getString(5));
+            arrayListUnsyncDataRepay.add(unsyncData.ggetString(5));
             arrayListUnsyncDataRepayment.add(unsyncData.getString(6));
             arrayListUnsyncDataType.add(unsyncData.getString(7));
         }
 
         for (int i = 0; i < arrayListUnsyncDataDate.size(); i++){
-            syncPrepareSendWallet(arrayListUnsyncDataId.get(i).toString(), arrayListUnsyncDataDate.get(i).toString(), arrayListUnsyncDataDescription.get(i).toString(), arrayListUnsyncDataValue.get(i).toString(), arrayListUnsyncDataSourceDestination.get(i).toString() , arrayListUnsyncDataRepay.get(i).toString(), arrayListUnsyncDataRepayment.get(i).toString(), arrayListUnsyncDataType.get(i).toString(), "1");
+            sendWallet(arrayListUnsyncDataId.get(i).toString(), arrayListUnsyncDataDate.get(i).toString(), arrayListUnsyncDataDescription.get(i).toString(), arrayListUnsyncDataValue.get(i).toString(), arrayListUnsyncDataSourceDestination.get(i).toString() , arrayListUnsyncDataRepay.get(i).toString(), arrayListUnsyncDataRepayment.get(i).toString(), arrayListUnsyncDataType.get(i).toString(), "1", url);
         }
 
         sqLiteDatabase = dataBase.getWritableDatabase();
@@ -199,13 +201,11 @@ public class Wallet extends AppCompatActivity {
         sqLiteDatabase.execSQL(setStatusQuery);
     }
 
-    private void syncPrepareSendWallet( final String id, final String date, final String description, final String value, final String source_destination, final String repay, final String repayment, final String type, final String status){
+    private void sendWallet( final String id, final String date, final String description, final String value, final String source_destination, final String repay, final String repayment, final String type, final String status, final String url){
 
         class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
             @Override
             protected String doInBackground(String... params) {
-
-                String url = "http://home.localtunnel.me/android/prepare_send_wallet.php";
 
                 List<NameValuePair> nameValuePairs = new ArrayList<>();
 

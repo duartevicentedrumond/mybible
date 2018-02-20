@@ -56,7 +56,6 @@ public class SeeAllWallet extends AppCompatActivity {
         sqLiteDatabase = dataBase.getReadableDatabase();
         Cursor data = sqLiteDatabase.rawQuery("SELECT * FROM wallet WHERE status !=3", null);
 
-        data.moveToFirst();
         while (data.moveToNext()){
             arrayListId.add ( data.getString(0) );
             arrayListDate.add( data.getString(1) );
@@ -64,7 +63,7 @@ public class SeeAllWallet extends AppCompatActivity {
             arrayListValue.add( data.getString(3) );
         }
 
-        for ( int i = arrayListDate.size()-1; i > 0 ; i--){
+        for ( int i = arrayListDate.size()-1; i > -1 ; i--){
             String date = arrayListDate.get(i).toString().substring(8, arrayListDate.get(i).toString().length() - 9)
                     + "."
                     + arrayListDate.get(i).toString().substring(5, arrayListDate.get(i).toString().length() - 12)
