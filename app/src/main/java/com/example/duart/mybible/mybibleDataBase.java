@@ -18,26 +18,46 @@ public class mybibleDataBase extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        String createTableQuery;
-        createTableQuery = "CREATE TABLE wallet ( id INTEGER PRIMARY KEY, date DATETIME DEFAULT CURRENT_TIMESTAMP, description TEXT, value TEXT, source_destination TEXT, repay TEXT, repayment TEXT, type TEXT, status INTEGER)";
-        sqLiteDatabase.execSQL(createTableQuery);
+        String createTableWalletQuery;
+        createTableWalletQuery = "CREATE TABLE wallet ( id INTEGER PRIMARY KEY, date DATETIME DEFAULT CURRENT_TIMESTAMP, description TEXT, value TEXT, source_destination TEXT, repay TEXT, repayment TEXT, type TEXT, status INTEGER)";
+        sqLiteDatabase.execSQL(createTableWalletQuery);
+
+        String createTableItemQuery;
+        createTableItemQuery = "CREATE TABLE item ( id INTEGER PRIMARY KEY, name TEXT, category TEXT, status INTEGER)";
+        sqLiteDatabase.execSQL(createTableItemQuery);
+
+        String createTableSubdivisionQuery;
+        createTableSubdivisionQuery = "CREATE TABLE subdivision ( id INTEGER PRIMARY KEY, subdivision TEXT, status INTEGER)";
+        sqLiteDatabase.execSQL(createTableSubdivisionQuery);
+
+        String createTableBoxQuery;
+        createTableBoxQuery = "CREATE TABLE box ( id INTEGER PRIMARY KEY, box TEXT, id_subdivision, status INTEGER)";
+        sqLiteDatabase.execSQL(createTableBoxQuery);
+
+        String createTableLocationQuery;
+        createTableLocationQuery = "CREATE TABLE location ( id_item INTEGER, id_box INTEGER, status INTEGER)";
+        sqLiteDatabase.execSQL(createTableLocationQuery);
+
+        String createTableClothesQuery;
+        createTableClothesQuery = "CREATE TABLE clothes ( id_item INTEGER, utilization INTEGER, status INTEGER)";
+        sqLiteDatabase.execSQL(createTableClothesQuery);
+
+        String createTableConsumablesQuery;
+        createTableConsumablesQuery = "CREATE TABLE consumables ( id_item INTEGER, date DATETIME DEFAULT CURRENT_TIMESTAMP, state INTEGER, cost TEXT, status INTEGER)";
+        sqLiteDatabase.execSQL(createTableConsumablesQuery);
+
+        String createTableNoConsumablesQuery;
+        createTableNoConsumablesQuery = "CREATE TABLE noconsumables ( id_item INTEGER, date DATETIME DEFAULT CURRENT_TIMESTAMP, state INTEGER, cost TEXT, status INTEGER)";
+        sqLiteDatabase.execSQL(createTableNoConsumablesQuery);
+
+        String createTableBorrowQuery;
+        createTableBorrowQuery = "CREATE TABLE borrow ( id_item INTEGER, date DATETIME DEFAULT CURRENT_TIMESTAMP, state INTEGER, person TEXT, status INTEGER )";
+        sqLiteDatabase.execSQL(createTableBorrowQuery);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
 
-    }
-
-    public Cursor getAllWalletData(){
-        SQLiteDatabase database = this.getReadableDatabase();
-        Cursor data = database.rawQuery("SELECT * FROM wallet", null);
-        return data;
-    }
-
-    public Cursor getUnsyncWalletData(){
-        SQLiteDatabase database = this.getReadableDatabase();
-        Cursor data = database.rawQuery("SELECT * FROM wallet WHERE status=0", null);
-        return data;
     }
 
 }

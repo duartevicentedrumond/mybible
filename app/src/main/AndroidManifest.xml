@@ -41,8 +41,23 @@
             android:parentActivityName=".SeeAllWallet" />
         <activity
             android:name=".ToDoList"
-            android:screenOrientation="landscape"
-            />
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".Box"
+            android:parentActivityName=".MainMenu" />
+        <activity
+            android:name=".NewItemBox"
+            android:parentActivityName=".ItemBox" />
+        <activity
+            android:name=".ItemBox"
+            android:parentActivityName=".Box" />
+        <activity
+            android:name=".CategoryBox"
+            android:parentActivityName=".Box" />
+        <activity
+            android:name=".LocationBox"
+            android:parentActivityName=".Box" />
+        <activity android:name=".NewLocationBox"></activity>
     </application>
 
 </manifest>

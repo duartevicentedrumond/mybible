@@ -31,4 +31,11 @@ public class MainMenu extends AppCompatActivity {
 
     }
 
+    public void boxClick(View view){
+
+        Intent intent = new Intent( MainMenu.this, Box.class );
+        startActivity( intent );
+
+    }
+
 }

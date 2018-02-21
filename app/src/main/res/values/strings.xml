@@ -29,6 +29,8 @@
     <string name="text_view_friday">sexta</string>
     <string name="text_view_saturday">sábado</string>
     <string name="text_view_sunday">domingo</string>
+    <string name="edit_text_new_box">caixa</string>
+    <string name="edit_text_new_location">subdivisão</string>
 
     <!-- TODO: Remove or change this placeholder text -->
 

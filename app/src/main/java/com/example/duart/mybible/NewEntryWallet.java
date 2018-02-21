@@ -56,7 +56,7 @@ public class NewEntryWallet extends AppCompatActivity {
     //necessary to show buttons on action bar menu
         @Override
         public boolean onCreateOptionsMenu(Menu menu) {
-            getMenuInflater().inflate(R.menu.menu_new_entry_wallet, menu);
+            getMenuInflater().inflate(R.menu.menu_new, menu);
             return super.onCreateOptionsMenu(menu);
         }
 
@@ -64,7 +64,7 @@ public class NewEntryWallet extends AppCompatActivity {
         public boolean onOptionsItemSelected(MenuItem item) {
             switch (item.getItemId()) {
 
-                case R.id.action_add_new_entry:
+                case R.id.action_add_new:
                     getData();
                     insertData(date, description, value, sourceDestination, repay, repayment, type);
                     startActivity( new Intent( NewEntryWallet.this, Wallet.class ) );

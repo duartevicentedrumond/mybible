@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.duart.mybible.NewLocationBox">
+
+    <EditText
+        android:id="@+id/edit_text_new_box"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <AutoCompleteTextView
+        android:id="@+id/edit_text_new_location"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="@+id/edit_text_new_box"
+        app:layout_constraintStart_toStartOf="@+id/edit_text_new_box"
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_new_box" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="@string/edit_text_new_box"
+        android:textSize="18sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/edit_text_new_box"
+        app:layout_constraintEnd_toStartOf="@+id/edit_text_new_box" />
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="@string/edit_text_new_location"
+        android:textSize="18sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/edit_text_new_location"
+        app:layout_constraintEnd_toStartOf="@+id/edit_text_new_location" />
+
+
+</android.support.constraint.ConstraintLayout>
