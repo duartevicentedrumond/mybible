@@ -39,16 +39,24 @@ public class mybibleDataBase extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(createTableLocationQuery);
 
         String createTableClothesQuery;
-        createTableClothesQuery = "CREATE TABLE clothes ( id_item INTEGER, utilization INTEGER, status INTEGER)";
+        createTableClothesQuery = "CREATE TABLE clothes ( id_item INTEGER, utilization INTEGER, status INTEGER )";
         sqLiteDatabase.execSQL(createTableClothesQuery);
 
+        String createTableLinkClothesQuery;
+        createTableLinkClothesQuery = "CREATE TABLE link_clothes ( id_item_1 INTEGER, id_item_2 INTEGER, status INTEGER )";
+        sqLiteDatabase.execSQL(createTableLinkClothesQuery);
+
         String createTableConsumablesQuery;
-        createTableConsumablesQuery = "CREATE TABLE consumables ( id_item INTEGER, date DATETIME DEFAULT CURRENT_TIMESTAMP, state INTEGER, cost TEXT, status INTEGER)";
+        createTableConsumablesQuery = "CREATE TABLE consumables ( id_item INTEGER, date DATETIME DEFAULT CURRENT_TIMESTAMP, change_stock INTEGER, status INTEGER )";
         sqLiteDatabase.execSQL(createTableConsumablesQuery);
 
         String createTableNoConsumablesQuery;
-        createTableNoConsumablesQuery = "CREATE TABLE noconsumables ( id_item INTEGER, date DATETIME DEFAULT CURRENT_TIMESTAMP, state INTEGER, cost TEXT, status INTEGER)";
+        createTableNoConsumablesQuery = "CREATE TABLE noconsumables ( id_item INTEGER, date DATETIME DEFAULT CURRENT_TIMESTAMP, state INTEGER, status INTEGER )";
         sqLiteDatabase.execSQL(createTableNoConsumablesQuery);
+
+        String createTableCostQuery;
+        createTableCostQuery = "CREATE TABLE cost ( id_item INTEGER, date DATETIME DEFAULT CURRENT_TIMESTAMP, cost TEXT, status INTEGER )";
+        sqLiteDatabase.execSQL(createTableCostQuery);
 
         String createTableBorrowQuery;
         createTableBorrowQuery = "CREATE TABLE borrow ( id_item INTEGER, date DATETIME DEFAULT CURRENT_TIMESTAMP, state INTEGER, person TEXT, status INTEGER )";

@@ -26,6 +26,8 @@
     <string name="text_view_category">categoria</string>
     <string name="text_view_box">caixa</string>
     <string name="text_view_location">localização</string>
+    <string name="text_view_consumable">consumível?</string>
+    <string name="text_view_cost">custo</string>
 
     <!-- TODO: Remove or change this placeholder text -->
 

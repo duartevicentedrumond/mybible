@@ -88,4 +88,45 @@
         app:layout_constraintBaseline_toBaselineOf="@+id/edit_text_box"
         app:layout_constraintEnd_toStartOf="@+id/edit_text_box" />
 
+    <AutoCompleteTextView
+        android:id="@+id/edit_text_consumable"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/edit_text_box"
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_box" />
+
+    <TextView
+        android:id="@+id/text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="@string/text_view_consumable"
+        android:textSize="18sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/edit_text_consumable"
+        app:layout_constraintEnd_toStartOf="@+id/edit_text_consumable" />
+
+    <EditText
+        android:id="@+id/edit_text_cost"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
+        android:inputType="numberDecimal|numberSigned"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/edit_text_consumable"
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_consumable" />
+
+    <TextView
+        android:id="@+id/text_view_cost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="@string/text_view_cost"
+        android:textSize="18sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/edit_text_cost"
+        app:layout_constraintEnd_toStartOf="@+id/edit_text_cost" />
+
 </android.support.constraint.ConstraintLayout>
