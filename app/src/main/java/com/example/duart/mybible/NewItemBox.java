@@ -45,6 +45,7 @@ public class NewItemBox extends AppCompatActivity {
         getCategoryAutoComplete();
         getLocationAutoComplete();
         getBoxAutoComplete();
+        getConsumableAutoComplete();
 
     }
 
@@ -151,6 +152,16 @@ public class NewItemBox extends AppCompatActivity {
             arrayListBox.add(data.getString(0));
         }
         editTextBox.setAdapter(adapter);
+    }
+
+    public void getConsumableAutoComplete(){
+        ArrayList<String> arrayListConsumable = new ArrayList<>();
+        ArrayAdapter<String> adapter  = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, arrayListConsumable);
+
+        arrayListConsumable.add("sim");
+        arrayListConsumable.add("nao");
+
+        editTextConsumable.setAdapter(adapter);
     }
 
 }
