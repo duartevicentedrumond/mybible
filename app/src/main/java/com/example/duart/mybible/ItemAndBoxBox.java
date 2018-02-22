@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -19,6 +21,7 @@ public class ItemAndBoxBox extends AppCompatActivity {
     private SQLiteOpenHelper dataBase;
     private SQLiteDatabase sqLiteDatabase;
     private ListView listViewItemAndBox;
+    private String boxId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +33,7 @@ public class ItemAndBoxBox extends AppCompatActivity {
 
         getIntentAndTransform();
         printItemAndBoxList(stringLocation);
+        clickableListView();
     }
 
     public String getIntentAndTransform(){
@@ -44,28 +48,46 @@ public class ItemAndBoxBox extends AppCompatActivity {
         ArrayList<String> arrayListItemAndBox = new ArrayList<>();
         ListAdapter listAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, arrayListItemAndBox);
 
-        sqLiteDatabase = dataBase.getReadableDatabase();
-        Cursor subdivisionId = sqLiteDatabase.rawQuery("SELECT id FROM subdivision WHERE subdivision='" + stringLocation + "';", null);
-        subdivisionId.moveToFirst();
-        String stringSubdivisionId = subdivisionId.getString(0);
+        //selects all boxes inside the subdivision selected
+            sqLiteDatabase = dataBase.getReadableDatabase();
+            Cursor data = sqLiteDatabase.rawQuery("SELECT box, subdivision FROM box LEFT JOIN subdivision ON box.id_subdivision=subdivision.id WHERE subdivision='" + stringLocation + "';", null);
+            while (data.moveToNext()){
+                arrayListItemAndBox.add(data.getString(0));
+            }
 
-        sqLiteDatabase = dataBase.getReadableDatabase();
-        Cursor data = sqLiteDatabase.rawQuery("SELECT box FROM box WHERE id_subdivision=" + stringSubdivisionId + ";", null);
-        while (data.moveToNext()){
-            arrayListItemAndBox.add(data.getString(0));
-        }
+        //selects all items which are not inside any box but are inside the subdivision selected
+            sqLiteDatabase = dataBase.getReadableDatabase();
+            Cursor itemWithoutBox = sqLiteDatabase.rawQuery("SELECT name, subdivision, id_box  FROM item LEFT JOIN (SELECT id, subdivision, id_item, id_box FROM subdivision LEFT JOIN location ON subdivision.id=location.id_subdivision) A ON item.id=A.id_item WHERE subdivision='" + stringLocation + "' AND id_box='';", null);
+            if (itemWithoutBox.getCount()!=0){
+                while (itemWithoutBox.moveToNext()){
+                    arrayListItemAndBox.add(itemWithoutBox.getString(0));
+                }
+            }
 
-        sqLiteDatabase = dataBase.getReadableDatabase();
-        Cursor itemWithoutBox = sqLiteDatabase.rawQuery("SELECT id_item FROM location WHERE id_subdivision='" + stringSubdivisionId + "' AND id_box='';", null);
-        itemWithoutBox.moveToFirst();
-        String itemWithoutBoxId = itemWithoutBox.getString(0);
+        //prints the items and boxes inside the subdivision selected
+            listViewItemAndBox.setAdapter(listAdapter);
+    }
 
-        sqLiteDatabase = dataBase.getReadableDatabase();
-        Cursor itemWithoutBoxData = sqLiteDatabase.rawQuery("SELECT name FROM item WHERE id=" + itemWithoutBoxId + ";", null);
-        while (itemWithoutBox.moveToNext()){
-            arrayListItemAndBox.add(itemWithoutBoxData.getString(0));
-        }
+    public void clickableListView(){
+        listViewItemAndBox.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-        listViewItemAndBox.setAdapter(listAdapter);
+                String dataSelected = adapterView.getItemAtPosition(i).toString();
+
+                //checks if the selected list item belongs to table item
+                    sqLiteDatabase = dataBase.getReadableDatabase();
+                    Cursor item = sqLiteDatabase.rawQuery("SELECT * FROM item WHERE name='" + dataSelected + "';", null);
+                    Log.i("TAG", "SIZE: " + item.getCount());
+                    if (item.getCount()==0){
+                        String stringQuery = "SELECT item.id, name, box FROM item LEFT JOIN (SELECT id_box, id_item, box FROM location LEFT JOIN box ON location.id_box=box.id ) A ON A.id_item=item.id WHERE box='" + dataSelected + "';";
+                        Log.i("TAG", "QUERY: " + stringQuery);
+                        Intent intent = new Intent(ItemAndBoxBox.this, ItemBox.class);
+                        intent.putExtra("stringQuery", stringQuery);
+                        startActivity( intent );
+                    }
+
+            }
+        });
     }
 }
