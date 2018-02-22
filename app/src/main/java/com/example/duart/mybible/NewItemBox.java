@@ -103,7 +103,7 @@ public class NewItemBox extends AppCompatActivity {
             }
 
             sqLiteDatabase = dataBase.getWritableDatabase();
-            sqLiteDatabase.execSQL("INSERT INTO location (id_item, id_subdivision, id_box, status) VALUES (" + itemId + ", " + subdivisionId + ", " + boxId +", 0);");
+            sqLiteDatabase.execSQL("INSERT INTO location (id_item, id_subdivision, id_box, status) VALUES (" + itemId + ", " + subdivisionId + ", '" + boxId +"', 0);");
 
         //inputs into consumables or no consumables table
             if( editTextConsumable.getText().toString().equals("sim") ){

@@ -34,8 +34,8 @@ public class ItemBox extends AppCompatActivity {
         dataBase = new mybibleDataBase(this);
 
         getIntentAndTransform();
-
         printItemList(stringQuery);
+        clickableListView();
 
     }
 
@@ -77,7 +77,7 @@ public class ItemBox extends AppCompatActivity {
         Cursor data = sqLiteDatabase.rawQuery(stringQuery, null);
 
         while (data.moveToNext()){
-            arrayListItems.add(data.getString(0).toString() + " " + data.getString(1).toString() + " " + data.getString(2).toString());
+            arrayListItems.add("#" + data.getString(0) + " " + data.getString(1));
         }
         listViewItems.setAdapter(listAdapter);
     }
@@ -86,12 +86,10 @@ public class ItemBox extends AppCompatActivity {
         listViewItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
                 String itemSelected = adapterView.getItemAtPosition(i).toString();
                 Intent intent = new Intent(ItemBox.this, ViewItemBox.class);
                 intent.putExtra("itemSelected", itemSelected);
                 startActivity( intent );
-
             }
         });
     }
