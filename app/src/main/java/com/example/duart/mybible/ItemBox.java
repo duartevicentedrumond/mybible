@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -78,5 +80,19 @@ public class ItemBox extends AppCompatActivity {
             arrayListItems.add(data.getString(0).toString() + " " + data.getString(1).toString() + " " + data.getString(2).toString());
         }
         listViewItems.setAdapter(listAdapter);
+    }
+
+    public void clickableListView(){
+        listViewItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                String itemSelected = adapterView.getItemAtPosition(i).toString();
+                Intent intent = new Intent(ItemBox.this, ViewItemBox.class);
+                intent.putExtra("itemSelected", itemSelected);
+                startActivity( intent );
+
+            }
+        });
     }
 }
