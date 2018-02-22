@@ -1,5 +1,6 @@
 package com.example.duart.mybible;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
@@ -18,7 +19,6 @@ public class NewLocationBox extends AppCompatActivity {
     private AutoCompleteTextView editTextNewLocation;
     private mybibleDataBase dataBase;
     private SQLiteDatabase sqLiteDatabase;
-    private ArrayList<String> arrayListLocation = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +28,9 @@ public class NewLocationBox extends AppCompatActivity {
         editTextNewBox = (EditText) findViewById(R.id.edit_text_new_box);
         editTextNewLocation = (AutoCompleteTextView) findViewById(R.id.edit_text_new_location);
         dataBase = new mybibleDataBase(this);
+
+        //this line removes the arrow from the action bar menu in this activity
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
         getLocationAutoComplete();
 
@@ -46,6 +49,7 @@ public class NewLocationBox extends AppCompatActivity {
 
                 case R.id.action_add_new:
                     insertNewLocationBox();
+                    startActivity( new Intent( NewLocationBox.this, LocationBox.class ) );
                     return true;
 
                 default:
@@ -67,19 +71,25 @@ public class NewLocationBox extends AppCompatActivity {
             sqLiteDatabase = dataBase.getReadableDatabase();
             Cursor data = sqLiteDatabase.rawQuery("SELECT id FROM subdivision WHERE subdivision='" + newLocation + "';", null);
 
-            String Location = data.getString(0);
+            data.moveToFirst();
+            if (data.getCount() != 0){
+                String Location = data.getString(0);
 
-            sqLiteDatabase = dataBase.getWritableDatabase();
-            sqLiteDatabase.execSQL("INSERT INTO box (box, id_subdivision, status) VALUES ('" + newBox + "', '" + Location + "', 0);");
+                sqLiteDatabase = dataBase.getWritableDatabase();
+                sqLiteDatabase.execSQL("INSERT INTO box (box, id_subdivision, status) VALUES ('" + newBox + "', '" + Location + "', 0);");
+            }
         }
     }
 
     public void getLocationAutoComplete(){
+        ArrayList<String> arrayListLocation = new ArrayList<>();
         ArrayAdapter<String> adapter  = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, arrayListLocation);
 
-        arrayListLocation.add("Portugal");
-        arrayListLocation.add("Espanha");
-
+        sqLiteDatabase = dataBase.getReadableDatabase();
+        Cursor data = sqLiteDatabase.rawQuery("SELECT DISTINCT subdivision FROM subdivision;", null);
+        while (data.moveToNext()){
+            arrayListLocation.add(data.getString(0));
+        }
         editTextNewLocation.setAdapter(adapter);
     }
 }

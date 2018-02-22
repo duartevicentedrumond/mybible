@@ -1,18 +1,36 @@
 package com.example.duart.mybible;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+
+import java.util.ArrayList;
 
 public class LocationBox extends AppCompatActivity {
+
+    private ListView listViewLocation;
+    private mybibleDataBase dataBase;
+    private SQLiteDatabase sqLiteDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location_box);
 
+        listViewLocation = (ListView) findViewById(R.id.list_view_location);
+        dataBase = new mybibleDataBase(this);
+
+        printLocationList();
+        clickableListView();
 
     }
 
@@ -38,4 +56,32 @@ public class LocationBox extends AppCompatActivity {
 
             }
         }
+
+    public void printLocationList(){
+        ArrayList<String> arrayListLocation = new ArrayList<>();
+        ListAdapter listAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, arrayListLocation);
+
+        sqLiteDatabase = dataBase.getReadableDatabase();
+        Cursor data = sqLiteDatabase.rawQuery("SELECT DISTINCT subdivision FROM subdivision;", null);
+
+        while (data.moveToNext()){
+            arrayListLocation.add(data.getString(0));
+        }
+        listViewLocation.setAdapter(listAdapter);
+    }
+
+    public void clickableListView(){
+        listViewLocation.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                String dataSelected = adapterView.getItemAtPosition(i).toString();
+                String stringLocation = dataSelected;
+                Intent intent = new Intent(LocationBox.this, ItemAndBoxBox.class);
+                intent.putExtra("stringLocation", stringLocation);
+                startActivity( intent );
+
+            }
+        });
+    }
 }

@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.duart.mybible.LocationBox">
+    tools:context="com.example.duart.mybible.ItemAndBoxBox">
 
     <ListView
-        android:id="@+id/list_view_location"
+        android:id="@+id/list_view_item_and_box"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="8dp"

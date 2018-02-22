@@ -30,7 +30,11 @@
     <string name="text_view_saturday">sábado</string>
     <string name="text_view_sunday">domingo</string>
     <string name="edit_text_new_box">caixa</string>
-    <string name="edit_text_new_location">subdivisão</string>
+    <string name="edit_text_new_location">localização</string>
+    <string name="text_view_name">nome</string>
+    <string name="text_view_category">categoria</string>
+    <string name="text_view_box">caixa</string>
+    <string name="text_view_location">localização</string>
 
     <!-- TODO: Remove or change this placeholder text -->
 

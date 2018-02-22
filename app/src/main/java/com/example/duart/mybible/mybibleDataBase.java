@@ -31,11 +31,11 @@ public class mybibleDataBase extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(createTableSubdivisionQuery);
 
         String createTableBoxQuery;
-        createTableBoxQuery = "CREATE TABLE box ( id INTEGER PRIMARY KEY, box TEXT, id_subdivision, status INTEGER)";
+        createTableBoxQuery = "CREATE TABLE box ( id INTEGER PRIMARY KEY, box TEXT, id_subdivision INTEGER, status INTEGER)";
         sqLiteDatabase.execSQL(createTableBoxQuery);
 
         String createTableLocationQuery;
-        createTableLocationQuery = "CREATE TABLE location ( id_item INTEGER, id_box INTEGER, status INTEGER)";
+        createTableLocationQuery = "CREATE TABLE location ( id_item INTEGER, id_subdivision INTEGER, id_box INTEGER, status INTEGER)";
         sqLiteDatabase.execSQL(createTableLocationQuery);
 
         String createTableClothesQuery;

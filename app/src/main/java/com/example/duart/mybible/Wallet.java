@@ -465,7 +465,7 @@ public class Wallet extends AppCompatActivity {
     public void getDebtors(){
 
         sqLiteDatabase = dataBase.getReadableDatabase();
-        String findDebtorsQuery = "SELECT DISTINCT source_destination FROM wallet WHERE source_destination != '';";
+        String findDebtorsQuery = "SELECT DISTINCT source_destination FROM wallet WHERE source_destination != '' AND repay='yes';";
         Cursor debtors = sqLiteDatabase.rawQuery(findDebtorsQuery, null);
 
         List debtorsList = new ArrayList();
