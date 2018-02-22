@@ -6,11 +6,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.EditText;
 
 import java.util.ArrayList;
@@ -143,15 +145,23 @@ public class NewItemBox extends AppCompatActivity {
     }
 
     public void getBoxAutoComplete(){
-        ArrayList<String> arrayListBox = new ArrayList<>();
-        ArrayAdapter<String> adapter  = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, arrayListBox);
+        final ArrayList<String> arrayListBox = new ArrayList<>();
+        final ArrayAdapter<String> adapter  = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, arrayListBox);
 
-        sqLiteDatabase = dataBase.getReadableDatabase();
-        Cursor data = sqLiteDatabase.rawQuery("SELECT DISTINCT box FROM box;", null);
-        while (data.moveToNext()){
-            arrayListBox.add(data.getString(0));
-        }
-        editTextBox.setAdapter(adapter);
+        editTextLocation.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    sqLiteDatabase = dataBase.getReadableDatabase();
+                    Cursor data = sqLiteDatabase.rawQuery("SELECT box, subdivision FROM box LEFT JOIN subdivision ON box.id_subdivision=subdivision.id WHERE subdivision='" + editTextLocation.getText().toString() + "';", null);
+                    Log.i("TAG", "SIZE: " + data.getCount());
+                    while (data.moveToNext()){
+                        arrayListBox.add(data.getString(0));
+                    }
+                    editTextBox.setAdapter(adapter);
+                }
+            }
+        });
     }
 
     public void getConsumableAutoComplete(){
