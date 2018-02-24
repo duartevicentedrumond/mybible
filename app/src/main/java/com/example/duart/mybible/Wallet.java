@@ -478,7 +478,7 @@ public class Wallet extends AppCompatActivity {
             List showDebtorsList = new ArrayList();
 
             for (int i = 0; i < debtorsList.size(); i++){
-                String computeDebtQuery = "SELECT SUM( value ) FROM wallet WHERE source_destination='" + debtorsList.get(i).toString() + "';";
+                String computeDebtQuery = "SELECT SUM( value ) FROM wallet WHERE source_destination='" + debtorsList.get(i).toString() + "' AND repay='yes';";
                 Cursor debtsSum = sqLiteDatabase.rawQuery(computeDebtQuery, null);
                 debtsSum.moveToFirst();
                 showDebtorsList.add(debtorsList.get(i).toString() + ": " + debtsSum.getString(0));
