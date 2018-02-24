@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
@@ -33,10 +32,10 @@ public class NewItemBox extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_item_box);
 
-        editTextName = (EditText) findViewById(R.id.edit_text_name);
+        editTextName = (EditText) findViewById(R.id.edit_text_item_name);
         editTextCategory = (AutoCompleteTextView) findViewById(R.id.edit_text_category);
-        editTextLocation = (AutoCompleteTextView) findViewById(R.id.edit_text_location);
-        editTextBox = (AutoCompleteTextView) findViewById(R.id.edit_text_box);
+        editTextLocation = (AutoCompleteTextView) findViewById(R.id.edit_text_item_location);
+        editTextBox = (AutoCompleteTextView) findViewById(R.id.edit_text_item_box);
         editTextConsumable = (AutoCompleteTextView) findViewById(R.id.edit_text_consumable);
         editTextCost = (EditText) findViewById(R.id.edit_text_cost);
         dataBase = new mybibleDataBase(this);
@@ -117,12 +116,6 @@ public class NewItemBox extends AppCompatActivity {
         //inputs into cost table
             sqLiteDatabase = dataBase.getWritableDatabase();
             sqLiteDatabase.execSQL("INSERT INTO cost (id_item, cost, status) VALUES (" + itemId + ",'" + editTextCost.getText().toString() + "', 0);");
-
-        //inputs into clothes table or not
-            if( editTextCategory.getText().toString().equals("roupa") ){
-                sqLiteDatabase = dataBase.getWritableDatabase();
-                sqLiteDatabase.execSQL("INSERT INTO clothes (id_item, state, status) VALUES (" + itemId + ", 1, 0);");
-            }
 
     }
 

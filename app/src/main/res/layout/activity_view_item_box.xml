@@ -28,12 +28,13 @@
         app:layout_constraintTop_toBottomOf="@+id/text_view_item_name" />
 
     <ScrollView
+        android:id="@+id/scrollView2"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="95dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/btn_washed"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -41,7 +42,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/text_view_cost"
@@ -66,17 +67,100 @@
                 android:layout_height="wrap_content"
                 android:textSize="12sp" />
 
-            <TextView
-                android:id="@+id/text_view_clothes"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <TextView
-                android:id="@+id/text_view_clothes_state"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="12sp" />
         </LinearLayout>
 
     </ScrollView>
+
+    <ImageButton
+        android:id="@+id/btn_borrow_send"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="8dp"
+        android:background="@color/snow"
+        android:src="@drawable/ic_borrow_send"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btn_borrow_back"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageButton
+        android:id="@+id/btn_borrow_back"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/ic_borrow_back"
+        android:background="@color/snow"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_borrow_send"
+        app:layout_constraintEnd_toStartOf="@+id/btn_wash"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btn_borrow_send" />
+
+    <ImageButton
+        android:id="@+id/btn_wash"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/ic_wash"
+        android:background="@color/snow"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_borrow_send"
+        app:layout_constraintEnd_toStartOf="@+id/btn_washed"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btn_borrow_back" />
+
+    <ImageButton
+        android:id="@+id/btn_washed"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/ic_washed"
+        android:background="@color/snow"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_borrow_send"
+        app:layout_constraintEnd_toStartOf="@+id/btn_add_stock"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btn_wash" />
+
+    <ImageButton
+        android:id="@+id/btn_add_stock"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/ic_add_stock"
+        android:background="@color/snow"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_borrow_send"
+        app:layout_constraintEnd_toStartOf="@+id/btn_delete_stock"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btn_washed" />
+
+    <ImageButton
+        android:id="@+id/btn_delete_stock"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/ic_delete_stock"
+        android:background="@color/snow"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_borrow_send"
+        app:layout_constraintEnd_toStartOf="@+id/btn_rip"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btn_add_stock" />
+
+    <ImageButton
+        android:id="@+id/btn_rip"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/ic_rip"
+        android:background="@color/snow"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_borrow_send"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btn_delete_stock" />
+
 </android.support.constraint.ConstraintLayout>

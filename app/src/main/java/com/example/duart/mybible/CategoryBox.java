@@ -47,7 +47,7 @@ public class CategoryBox extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
                 String dataSelected = adapterView.getItemAtPosition(i).toString();
-                String stringQuery = "SELECT * FROM item WHERE category='" + dataSelected + "';";
+                String stringQuery = "SELECT * FROM item WHERE category='" + dataSelected + "' AND status!=3;";
                 Intent intent = new Intent(CategoryBox.this, ItemBox.class);
                 intent.putExtra("stringQuery", stringQuery);
                 startActivity( intent );

@@ -7,7 +7,12 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
@@ -32,8 +37,10 @@ public class ViewItemBox extends AppCompatActivity {
     private TextView textViewCostHistory;
     private TextView textViewConsumables;
     private TextView textViewConsumablesHistory;
-    private TextView textViewClothes;
-    private TextView textViewClothesState;
+    private ImageButton btnWash;
+    private ImageButton btnWashed;
+    private ImageButton btnAddStock;
+    private ImageButton btnDeleteStock;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,16 +52,45 @@ public class ViewItemBox extends AppCompatActivity {
         textViewCostHistory = (TextView) findViewById(R.id.text_view_cost_history);
         textViewConsumables = (TextView) findViewById(R.id.text_view_consumables);
         textViewConsumablesHistory = (TextView) findViewById(R.id.text_view_consumables_history);
-        textViewClothes = (TextView) findViewById(R.id.text_view_clothes);
-        textViewClothesState = (TextView) findViewById(R.id.text_view_clothes_state);
+        btnWash = (ImageButton) findViewById(R.id.btn_wash);
+        btnWashed = (ImageButton) findViewById(R.id.btn_washed);
+        btnAddStock = (ImageButton) findViewById(R.id.btn_add_stock);
+        btnDeleteStock = (ImageButton) findViewById(R.id.btn_delete_stock);
         dataBase = new mybibleDataBase(this);
 
         getIntentAndTransform();
         printItemInformation(itemId);
         printCostHistory(itemId);
         printConsumableSection(itemId);
-        printClothesSection(itemId);
+
+        btnWashClick(itemId);
+        btnWashedClick(itemId);
     }
+
+    //necessary to show buttons on action bar menu
+        @Override
+        public boolean onCreateOptionsMenu(Menu menu) {
+            getMenuInflater().inflate(R.menu.menu_view_item, menu);
+            return super.onCreateOptionsMenu(menu);
+        }
+
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item) {
+            switch (item.getItemId()) {
+
+                case R.id.action_edit:
+
+                    Intent intent = new Intent( ViewItemBox.this, EditItemBox.class );
+                    intent.putExtra("itemId", itemId);
+                    startActivity( intent );
+                    return true;
+
+                default:
+                    // If we got here, the user's action was not recognized.
+                    // Invoke the superclass to handle it.
+                    return super.onOptionsItemSelected(item);
+            }
+        }
 
     public String getIntentAndTransform(){
         //this gets the selected string from SeeAllWallet
@@ -123,28 +159,47 @@ public class ViewItemBox extends AppCompatActivity {
         Cursor itemConsumableHistory = sqLiteDatabase.rawQuery("SELECT * FROM consumables WHERE id_item=" + itemId + ";", null);
 
         sqLiteDatabase = dataBase.getReadableDatabase();
-        Cursor itemConsumableClothes = sqLiteDatabase.rawQuery("SELECT * FROM clothes WHERE id_item=" + itemId + ";", null);
+        Cursor itemCategory = sqLiteDatabase.rawQuery("SELECT category FROM item WHERE id=" + itemId + ";", null);
+        itemCategory.moveToFirst();
 
         //checks if item is a consumable or no consumable item
-        if( itemConsumableHistory.getCount() == 0 && itemConsumableClothes.getCount() == 0 ){
+        if( itemConsumableHistory.getCount() == 0 ){
             //if the item is no consumable...
 
             textViewConsumables.setText("estado");
             sqLiteDatabase = dataBase.getReadableDatabase();
-            Cursor itemState = sqLiteDatabase.rawQuery("SELECT state FROM noconsumables WHERE id_item=" + itemId + " ORDER BY state DESC LIMIT 1;", null);
+            Cursor itemState = sqLiteDatabase.rawQuery("SELECT state FROM noconsumables WHERE id_item=" + itemId + " ORDER BY date DESC LIMIT 1;", null);
             itemState.moveToFirst();
 
-            if( itemState.getString(0).equals("1") ){
-                textViewConsumablesHistory.setText( "pronto a usar\n" );
-            }else if( itemState.getString(0).equals("2") ){
-                textViewConsumablesHistory.setText( "não está pronto a usar\n" );
-            }else if( itemState.getString(0).equals("3") ){
-                textViewConsumablesHistory.setText( "emprestado\n" );
-            }else if( itemState.getString(0).equals("4") ){
-                textViewConsumablesHistory.setText( "morreu\n" );
+            if( itemCategory.getString(0).equals("roupa") ){
+                if ( itemState.getString(0).equals("1") ){
+                    textViewConsumablesHistory.setText( "pronto a usar\n" );
+                }else if ( itemState.getString(0).equals("2") ){
+                    textViewConsumablesHistory.setText( "a lavar\n" );
+                }else if ( itemState.getString(0).equals("3") ){
+                    textViewConsumablesHistory.setText( "emprestado\n" );
+                }else if ( itemState.getString(0).equals("4") ){
+                    textViewConsumablesHistory.setText( "morreu\n" );
+                }
+            }else{
+                if( itemState.getString(0).equals("1") ){
+                    textViewConsumablesHistory.setText( "pronto a usar\n" );
+                }else if( itemState.getString(0).equals("2") ){
+                    textViewConsumablesHistory.setText( "não está pronto a usar\n" );
+                }else if( itemState.getString(0).equals("3") ){
+                    textViewConsumablesHistory.setText( "emprestado\n" );
+                }else if( itemState.getString(0).equals("4") ){
+                    textViewConsumablesHistory.setText( "morreu\n" );
+                }
+
+                btnWash.setVisibility(View.GONE);
+                btnWashed.setVisibility(View.GONE);
             }
 
-        }else if ( itemConsumableHistory.getCount() != 0 && itemConsumableClothes.getCount() == 0 ){
+            btnAddStock.setVisibility(View.GONE);
+            btnDeleteStock.setVisibility(View.GONE);
+
+        }else if ( itemConsumableHistory.getCount() != 0 ){
             //if the item is consumable...
 
             textViewConsumables.setText("stock");
@@ -153,28 +208,10 @@ public class ViewItemBox extends AppCompatActivity {
             itemStock.moveToFirst();
             textViewConsumablesHistory.setText( itemStock.getString(0) + "\n" );
 
+            btnWash.setVisibility(View.GONE);
+            btnWashed.setVisibility(View.GONE);
+
         }
-    }
-
-    public void printClothesSection(String itemId){
-
-        //checks if item's id belongs to table clothes
-            sqLiteDatabase = dataBase.getReadableDatabase();
-            Cursor itemclothes = sqLiteDatabase.rawQuery("SELECT state FROM clothes WHERE id_item=" + itemId + " ORDER BY state DESC LIMIT 1;", null);
-            itemclothes.moveToFirst();
-
-            if ( itemclothes.getCount() !=0 ){
-                textViewClothes.setText( "roupa" );
-                if ( itemclothes.getString(0).equals("1") ){
-                    textViewClothesState.setText( "pronto a usar\n" );
-                }else if ( itemclothes.getString(0).equals("2") ){
-                    textViewClothesState.setText( "a lavar\n" );
-                }else if ( itemclothes.getString(0).equals("3") ){
-                    textViewClothesState.setText( "emprestado\n" );
-                }else if ( itemclothes.getString(0).equals("4") ){
-                    textViewClothesState.setText( "morreu\n" );
-                }
-            }
     }
 
     public ArrayList<String> getDate(ArrayList<String> array_input){
@@ -191,5 +228,27 @@ public class ViewItemBox extends AppCompatActivity {
         }
 
         return array_output;
+    }
+
+    public void btnWashClick(final String itemId){
+        btnWash.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sqLiteDatabase = dataBase.getWritableDatabase();
+                sqLiteDatabase.execSQL("INSERT INTO noconsumables (id_item, state, status) VALUES (" + itemId + ", 2, 2);");
+                startActivity(new Intent(ViewItemBox.this, Box.class));
+            }
+        });
+    }
+
+    public void btnWashedClick(final String itemId){
+        btnWashed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sqLiteDatabase = dataBase.getWritableDatabase();
+                sqLiteDatabase.execSQL("INSERT INTO noconsumables (id_item, state, status) VALUES (" + itemId + ", 1, 2);");
+                startActivity(new Intent(ViewItemBox.this, Box.class));
+            }
+        });
     }
 }

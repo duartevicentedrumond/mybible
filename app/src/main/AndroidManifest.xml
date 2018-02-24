@@ -59,7 +59,8 @@
             android:parentActivityName=".Box" />
         <activity android:name=".NewLocationBox" />
         <activity android:name=".ItemAndBoxBox" />
-        <activity android:name=".ViewItemBox"></activity>
+        <activity android:name=".ViewItemBox" />
+        <activity android:name=".EditItemBox"></activity>
     </application>
 
 </manifest>
