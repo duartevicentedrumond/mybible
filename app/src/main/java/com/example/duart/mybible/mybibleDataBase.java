@@ -39,7 +39,7 @@ public class mybibleDataBase extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(createTableLocationQuery);
 
         String createTableClothesQuery;
-        createTableClothesQuery = "CREATE TABLE clothes ( id_item INTEGER, utilization INTEGER, status INTEGER )";
+        createTableClothesQuery = "CREATE TABLE clothes ( id_item INTEGER, state INTEGER, status INTEGER )";
         sqLiteDatabase.execSQL(createTableClothesQuery);
 
         String createTableLinkClothesQuery;
