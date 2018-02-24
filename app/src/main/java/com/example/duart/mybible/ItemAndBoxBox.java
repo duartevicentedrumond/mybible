@@ -57,7 +57,7 @@ public class ItemAndBoxBox extends AppCompatActivity {
 
         //selects all items which are not inside any box but are inside the subdivision selected
             sqLiteDatabase = dataBase.getReadableDatabase();
-            Cursor itemWithoutBox = sqLiteDatabase.rawQuery("SELECT item.id, name, subdivision, id_box  FROM item LEFT JOIN (SELECT id, subdivision, id_item, id_box FROM subdivision LEFT JOIN location ON subdivision.id=location.id_subdivision) A ON item.id=A.id_item WHERE subdivision='" + stringLocation + "' AND id_box='';", null);
+            Cursor itemWithoutBox = sqLiteDatabase.rawQuery("SELECT item.id, name, subdivision, id_box  FROM item LEFT JOIN (SELECT id, subdivision, id_item, id_box FROM subdivision LEFT JOIN location ON subdivision.id=location.id_subdivision) A ON item.id=A.id_item WHERE subdivision='" + stringLocation + "' AND id_box='' AND item.status!=3;", null);
             if (itemWithoutBox.getCount()!=0){
                 while (itemWithoutBox.moveToNext()){
                     arrayListItemAndBox.add("#" + itemWithoutBox.getString(0) + " " + itemWithoutBox.getString(1));

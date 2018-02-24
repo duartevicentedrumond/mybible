@@ -42,7 +42,7 @@ public class Box extends AppCompatActivity {
                 String dataSelected = adapterView.getItemAtPosition(i).toString();
 
                 if(dataSelected.equals("items")){
-                    String stringQuery = "SELECT * FROM item";
+                    String stringQuery = "SELECT * FROM item WHERE status!=3";
                     Intent intent = new Intent(Box.this, ItemBox.class);
                     intent.putExtra("stringQuery", stringQuery);
                     startActivity( intent );

@@ -41,6 +41,7 @@ public class ViewItemBox extends AppCompatActivity {
     private ImageButton btnWashed;
     private ImageButton btnAddStock;
     private ImageButton btnDeleteStock;
+    private ImageButton btnRip;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +57,8 @@ public class ViewItemBox extends AppCompatActivity {
         btnWashed = (ImageButton) findViewById(R.id.btn_washed);
         btnAddStock = (ImageButton) findViewById(R.id.btn_add_stock);
         btnDeleteStock = (ImageButton) findViewById(R.id.btn_delete_stock);
+        btnRip = (ImageButton) findViewById(R.id.btn_rip);
+
         dataBase = new mybibleDataBase(this);
 
         getIntentAndTransform();
@@ -65,6 +68,9 @@ public class ViewItemBox extends AppCompatActivity {
 
         btnWashClick(itemId);
         btnWashedClick(itemId);
+        btnAddStockClick(itemId);
+        btnDeleteStockClick(itemId);
+        btnRipClick(itemId);
     }
 
     //necessary to show buttons on action bar menu
@@ -247,6 +253,39 @@ public class ViewItemBox extends AppCompatActivity {
             public void onClick(View v) {
                 sqLiteDatabase = dataBase.getWritableDatabase();
                 sqLiteDatabase.execSQL("INSERT INTO noconsumables (id_item, state, status) VALUES (" + itemId + ", 1, 2);");
+                startActivity(new Intent(ViewItemBox.this, Box.class));
+            }
+        });
+    }
+
+    public void btnAddStockClick(final String itemId){
+        btnWashed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sqLiteDatabase = dataBase.getWritableDatabase();
+                sqLiteDatabase.execSQL("INSERT INTO consumables (id_item, change_stock, status) VALUES (" + itemId + ", 1, 2);");
+                startActivity(new Intent(ViewItemBox.this, Box.class));
+            }
+        });
+    }
+
+    public void btnDeleteStockClick(final String itemId){
+        btnWashed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sqLiteDatabase = dataBase.getWritableDatabase();
+                sqLiteDatabase.execSQL("INSERT INTO consumables (id_item, change_stock, status) VALUES (" + itemId + ", -1, 2);");
+                startActivity(new Intent(ViewItemBox.this, Box.class));
+            }
+        });
+    }
+
+    public void btnRipClick(final String itemId){
+        btnRip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sqLiteDatabase = dataBase.getWritableDatabase();
+                sqLiteDatabase.execSQL("UPDATE item SET status=3 WHERE id=" + itemId + ";");
                 startActivity(new Intent(ViewItemBox.this, Box.class));
             }
         });
