@@ -8,12 +8,13 @@
 
     <ImageButton
         android:id="@+id/btn_wallet"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:background="@color/snow"
         android:onClick="moneyClick"
         android:src="@drawable/ic_wallet"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,12 +22,13 @@
 
     <ImageButton
         android:id="@+id/btn_box"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
+        android:background="@color/snow"
         android:onClick="boxClick"
         android:src="@drawable/ic_box"
         app:layout_constraintStart_toEndOf="@+id/btn_wallet"

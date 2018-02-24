@@ -42,7 +42,7 @@ public class ItemBox extends AppCompatActivity {
     //necessary to show buttons on action bar menu
         @Override
         public boolean onCreateOptionsMenu(Menu menu) {
-            getMenuInflater().inflate(R.menu.menu_box, menu);
+            getMenuInflater().inflate(R.menu.menu_item_box, menu);
             return super.onCreateOptionsMenu(menu);
         }
 
