@@ -615,7 +615,7 @@ public class Wallet extends AppCompatActivity {
     public void getDebtors(){
 
         sqLiteDatabase = dataBase.getReadableDatabase();
-        String findDebtorsQuery = "SELECT DISTINCT source_destination FROM wallet WHERE source_destination != '' AND repay='yes' AND status=3;";
+        String findDebtorsQuery = "SELECT DISTINCT source_destination FROM wallet WHERE source_destination != '' AND repay='yes' AND status!=3;";
         Cursor debtors = sqLiteDatabase.rawQuery(findDebtorsQuery, null);
 
         List debtorsList = new ArrayList();
@@ -628,7 +628,7 @@ public class Wallet extends AppCompatActivity {
             List showDebtorsList = new ArrayList();
 
             for (int i = 0; i < debtorsList.size(); i++){
-                String computeDebtQuery = "SELECT SUM( value ) FROM wallet WHERE source_destination='" + debtorsList.get(i).toString() + "' AND repay='yes' AND status=3;";
+                String computeDebtQuery = "SELECT SUM( value ) FROM wallet WHERE source_destination='" + debtorsList.get(i).toString() + "' AND repay='yes' AND status!=3;";
                 Cursor debtsSum = sqLiteDatabase.rawQuery(computeDebtQuery, null);
                 debtsSum.moveToFirst();
                 showDebtorsList.add(debtorsList.get(i).toString() + ": " + debtsSum.getString(0));
