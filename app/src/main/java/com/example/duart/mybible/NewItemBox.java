@@ -119,7 +119,7 @@ public class NewItemBox extends AppCompatActivity {
             sqLiteDatabase.execSQL("INSERT INTO cost (id_item, cost, status) VALUES (" + itemId + ",'" + editTextCost.getText().toString() + "', 0);");
 
         //inputs into clothes table or not
-            if( editTextCategory.getText().equals("roupa") ){
+            if( editTextCategory.getText().toString().equals("roupa") ){
                 sqLiteDatabase = dataBase.getWritableDatabase();
                 sqLiteDatabase.execSQL("INSERT INTO clothes (id_item, state, status) VALUES (" + itemId + ", 1, 0);");
             }

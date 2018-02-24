@@ -113,7 +113,7 @@ public class ViewItemBox extends AppCompatActivity {
         arrayListDateFinal = getDate(arrayListDate);
 
         for (int i = 0; i < arrayListDateFinal.size(); i++ ){
-            textViewCostHistory.append( arrayListDateFinal.get(i) + "     " + arrayListCost.get(i) + "\n" );
+            textViewCostHistory.append( arrayListDateFinal.get(i) + "     " + arrayListCost.get(i) + "€\n" );
         }
 
     }
@@ -122,8 +122,11 @@ public class ViewItemBox extends AppCompatActivity {
         sqLiteDatabase = dataBase.getReadableDatabase();
         Cursor itemConsumableHistory = sqLiteDatabase.rawQuery("SELECT * FROM consumables WHERE id_item=" + itemId + ";", null);
 
+        sqLiteDatabase = dataBase.getReadableDatabase();
+        Cursor itemConsumableClothes = sqLiteDatabase.rawQuery("SELECT * FROM clothes WHERE id_item=" + itemId + ";", null);
+
         //checks if item is a consumable or no consumable item
-        if( itemConsumableHistory.getCount() == 0 ){
+        if( itemConsumableHistory.getCount() == 0 && itemConsumableClothes.getCount() == 0 ){
             //if the item is no consumable...
 
             textViewConsumables.setText("estado");
@@ -141,7 +144,7 @@ public class ViewItemBox extends AppCompatActivity {
                 textViewConsumablesHistory.setText( "morreu\n" );
             }
 
-        }else{
+        }else if ( itemConsumableHistory.getCount() != 0 && itemConsumableClothes.getCount() == 0 ){
             //if the item is consumable...
 
             textViewConsumables.setText("stock");
@@ -162,7 +165,15 @@ public class ViewItemBox extends AppCompatActivity {
 
             if ( itemclothes.getCount() !=0 ){
                 textViewClothes.setText( "roupa" );
-                textViewClothesState.setText( itemclothes.getString(0) + "\n" );
+                if ( itemclothes.getString(0).equals("1") ){
+                    textViewClothesState.setText( "pronto a usar\n" );
+                }else if ( itemclothes.getString(0).equals("2") ){
+                    textViewClothesState.setText( "a lavar\n" );
+                }else if ( itemclothes.getString(0).equals("3") ){
+                    textViewClothesState.setText( "emprestado\n" );
+                }else if ( itemclothes.getString(0).equals("4") ){
+                    textViewClothesState.setText( "morreu\n" );
+                }
             }
     }
 
