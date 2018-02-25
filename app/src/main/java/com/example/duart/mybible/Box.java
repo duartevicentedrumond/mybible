@@ -1,8 +1,10 @@
 package com.example.duart.mybible;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,13 +23,24 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Box extends AppCompatActivity {
 
@@ -79,6 +92,7 @@ public class Box extends AppCompatActivity {
                     syncGetNewNoConsumablesBox();
                     syncGetNewCostBox();
                     syncGetNewBorrowBox();
+                    syncSendNewItemBox();
                     return true;
 
                 default:
@@ -565,6 +579,88 @@ public class Box extends AppCompatActivity {
         jsonArrayRequest.setTag(REQUESTTAG);
         mRequestQueue.add(jsonArrayRequest);
 
+    }
+
+    private void syncSendNewItemBox(){
+
+        sqLiteDatabase = dataBase.getReadableDatabase();
+        String getUnsyncData = "SELECT * FROM item WHERE status=0;";
+        Cursor unsyncData = sqLiteDatabase.rawQuery(getUnsyncData, null);
+
+        String url = "http://casa.localtunnel.me/android/sync_send_new_item_box_android.php";
+
+        ArrayList<String> arrayListId = new ArrayList<>();
+        ArrayList<String> arrayListName = new ArrayList<>();
+        ArrayList<String> arrayListCategory = new ArrayList<>();
+
+        while (unsyncData.moveToNext()){
+            arrayListId.add(unsyncData.getString(0));
+            arrayListName.add(unsyncData.getString(1));
+            arrayListCategory.add(unsyncData.getString(2));
+        }
+
+        for (int i = 0; i < arrayListId.size(); i++){
+            sendNewItemBox(
+                    arrayListId.get(i),
+                    arrayListName.get(i),
+                    arrayListCategory.get(i),
+                    "1",
+                    url);
+        }
+    }
+
+    private void sendNewItemBox( final String id, final String name, final String category, final String status, final String url){
+
+        class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
+            @Override
+            protected String doInBackground(String... params) {
+
+                List<NameValuePair> nameValuePairs = new ArrayList<>();
+
+                String idHolder = id;
+                String nameHolder = name;
+                String categoryHolder = category;
+                String statusHolder = status;
+
+                nameValuePairs.add(new BasicNameValuePair("id", idHolder));
+                nameValuePairs.add(new BasicNameValuePair("name", nameHolder));
+                nameValuePairs.add(new BasicNameValuePair("category", categoryHolder));
+                nameValuePairs.add(new BasicNameValuePair("status", statusHolder));
+
+                try {
+
+                    HttpClient httpClient = new DefaultHttpClient();
+
+                    HttpPost httpPost = new HttpPost(url);
+
+                    httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                    HttpResponse httpResponse = httpClient.execute(httpPost);
+
+                    HttpEntity httpEntity = httpResponse.getEntity();
+
+                } catch (ClientProtocolException e) {
+
+                } catch (IOException e) {
+
+                }
+
+                return "Data Inserted Successfully";
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+
+                super.onPostExecute(result);
+
+            }
+        }
+
+        SendPostReqAsyncTask sendPostReqAsyncTask = new SendPostReqAsyncTask();
+        sendPostReqAsyncTask.execute(id, name, category, status );
+        sqLiteDatabase = dataBase.getWritableDatabase();
+        String setStatusQuery = "UPDATE item SET status=1 WHERE id=" + id + ";";
+        sqLiteDatabase.execSQL(setStatusQuery);
     }
 
 }
