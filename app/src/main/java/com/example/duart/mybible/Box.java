@@ -76,6 +76,7 @@ public class Box extends AppCompatActivity {
                     syncGetNewLocationBox();
                     syncGetNewLinkBox();
                     syncGetNewConsumablesBox();
+                    syncGetNewNoConsumablesBox();
                     return true;
 
                 default:
@@ -387,7 +388,58 @@ public class Box extends AppCompatActivity {
                         Integer change_stock = Integer.parseInt(mysqlDataUnsync.getString("change_stock"));
 
                         sqLiteDatabase = dataBase.getWritableDatabase();
-                        sqLiteDatabase.execSQL("INSERT INTO link (id_item, date, change_stock, status) VALUES (" + id_item + ", '" + date + "', " + change_stock + ", 1 );");
+                        sqLiteDatabase.execSQL("INSERT INTO consumables (id_item, date, change_stock, status) VALUES (" + id_item + ", '" + date + "', " + change_stock + ", 1 );");
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                Log.i(TAG, "Error: " + error.toString());
+
+            }
+        });
+
+        jsonArrayRequest.setTag(REQUESTTAG);
+        mRequestQueue.add(jsonArrayRequest);
+
+    }
+
+    private void syncGetNewNoConsumablesBox(){
+
+        /**sqLiteDatabase = dataBase.getWritableDatabase();
+         String deleteQuery = "DELETE FROM wallet;";
+         sqLiteDatabase.execSQL(deleteQuery);**/
+
+        mRequestQueue = Volley.newRequestQueue(this);
+
+        String url = "http://casa.localtunnel.me/android/sync_get_new_noconsumables_box_android.php";
+
+        final DecimalFormat df = new DecimalFormat("#.##");
+        df.setRoundingMode(RoundingMode.CEILING);
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+
+                for (int i = 0; i < response.length(); i++) {
+
+                    try {
+
+                        JSONObject mysqlDataUnsync = response.getJSONObject(i);
+
+                        Integer id_item = Integer.parseInt(mysqlDataUnsync.getString("id_item"));
+                        String date = mysqlDataUnsync.getString("date");
+                        Integer state = Integer.parseInt(mysqlDataUnsync.getString("state"));
+
+                        sqLiteDatabase = dataBase.getWritableDatabase();
+                        sqLiteDatabase.execSQL("INSERT INTO noconsumables (id_item, date, change_stock, status) VALUES (" + id_item + ", '" + date + "', " + state + ", 1 );");
 
                     } catch (JSONException e) {
                         e.printStackTrace();
