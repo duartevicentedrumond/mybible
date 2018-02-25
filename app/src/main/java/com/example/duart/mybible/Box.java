@@ -102,6 +102,8 @@ public class Box extends AppCompatActivity {
                     syncSendNewCostBox();
                     syncSendNewBorrowBox();
                     syncSendEditedItemBox();
+                    syncSendEditedSubdivisionBox();
+                    syncSendEditedBoxBox();
                     return true;
 
                 default:
@@ -1396,8 +1398,163 @@ public class Box extends AppCompatActivity {
         SendPostReqAsyncTask sendPostReqAsyncTask = new SendPostReqAsyncTask();
         sendPostReqAsyncTask.execute(id, name, category, status );
         sqLiteDatabase = dataBase.getWritableDatabase();
-        String setStatusQuery = "UPDATE item SET status=2 WHERE id=" + id + ";";
+        String setStatusQuery = "UPDATE item SET status=1 WHERE id=" + id + ";";
         sqLiteDatabase.execSQL(setStatusQuery);
     }
+
+    private void syncSendEditedSubdivisionBox(){
+
+        sqLiteDatabase = dataBase.getReadableDatabase();
+        String getUnsyncData = "SELECT * FROM subdivision WHERE status=2;";
+        Cursor unsyncData = sqLiteDatabase.rawQuery(getUnsyncData, null);
+
+        String url = "http://casa.localtunnel.me/android/sync_send_edited_subdivision_box_android.php";
+
+        ArrayList<String> arrayListId = new ArrayList<>();
+        ArrayList<String> arrayListSubdivision = new ArrayList<>();
+
+        while (unsyncData.moveToNext()){
+            arrayListId.add(unsyncData.getString(0));
+            arrayListSubdivision.add(unsyncData.getString(1));
+        }
+
+        for (int i = 0; i < arrayListId.size(); i++){
+            sendEditedSubdivisionBox(
+                    arrayListId.get(i),
+                    arrayListSubdivision.get(i),
+                    "1",
+                    url);
+        }
+    }
+
+        private void sendEditedSubdivisionBox( final String id, final String subdivision, final String status, final String url){
+
+        class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
+            @Override
+            protected String doInBackground(String... params) {
+
+                List<NameValuePair> nameValuePairs = new ArrayList<>();
+
+                String idHolder = id;
+                String subdivisionHolder = subdivision;
+                String statusHolder = status;
+
+                nameValuePairs.add(new BasicNameValuePair("id", idHolder));
+                nameValuePairs.add(new BasicNameValuePair("subdivision", subdivisionHolder));
+                nameValuePairs.add(new BasicNameValuePair("status", statusHolder));
+
+                try {
+
+                    HttpClient httpClient = new DefaultHttpClient();
+
+                    HttpPost httpPost = new HttpPost(url);
+
+                    httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                    HttpResponse httpResponse = httpClient.execute(httpPost);
+
+                    HttpEntity httpEntity = httpResponse.getEntity();
+
+                } catch (ClientProtocolException e) {
+
+                } catch (IOException e) {
+
+                }
+
+                return "Data Inserted Successfully";
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+
+                super.onPostExecute(result);
+
+            }
+        }
+
+        SendPostReqAsyncTask sendPostReqAsyncTask = new SendPostReqAsyncTask();
+        sendPostReqAsyncTask.execute(id, subdivision, status );
+        sqLiteDatabase = dataBase.getWritableDatabase();
+        String setStatusQuery = "UPDATE subdivision SET status=1 WHERE id=" + id + ";";
+        sqLiteDatabase.execSQL(setStatusQuery);
+    }
+
+    private void syncSendEditedBoxBox(){
+
+        sqLiteDatabase = dataBase.getReadableDatabase();
+        String getUnsyncData = "SELECT * FROM box WHERE status=2;";
+        Cursor unsyncData = sqLiteDatabase.rawQuery(getUnsyncData, null);
+
+        String url = "http://casa.localtunnel.me/android/sync_send_edited_box_box_android.php";
+
+        ArrayList<String> arrayListId = new ArrayList<>();
+        ArrayList<String> arrayListBox = new ArrayList<>();
+
+        while (unsyncData.moveToNext()){
+            arrayListId.add(unsyncData.getString(0));
+            arrayListBox.add(unsyncData.getString(1));
+        }
+
+        for (int i = 0; i < arrayListId.size(); i++){
+            sendEditedBoxBox(
+                    arrayListId.get(i),
+                    arrayListBox.get(i),
+                    "1",
+                    url);
+        }
+    }
+
+        private void sendEditedBoxBox( final String id, final String box, final String status, final String url){
+
+        class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
+            @Override
+            protected String doInBackground(String... params) {
+
+                List<NameValuePair> nameValuePairs = new ArrayList<>();
+
+                String idHolder = id;
+                String boxHolder = box;
+                String statusHolder = status;
+
+                nameValuePairs.add(new BasicNameValuePair("id", idHolder));
+                nameValuePairs.add(new BasicNameValuePair("box", boxHolder));
+                nameValuePairs.add(new BasicNameValuePair("status", statusHolder));
+
+                try {
+
+                    HttpClient httpClient = new DefaultHttpClient();
+
+                    HttpPost httpPost = new HttpPost(url);
+
+                    httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                    HttpResponse httpResponse = httpClient.execute(httpPost);
+
+                    HttpEntity httpEntity = httpResponse.getEntity();
+
+                } catch (ClientProtocolException e) {
+
+                } catch (IOException e) {
+
+                }
+
+                return "Data Inserted Successfully";
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+
+                super.onPostExecute(result);
+
+            }
+        }
+
+        SendPostReqAsyncTask sendPostReqAsyncTask = new SendPostReqAsyncTask();
+        sendPostReqAsyncTask.execute(id, box, status );
+        sqLiteDatabase = dataBase.getWritableDatabase();
+        String setStatusQuery = "UPDATE box SET status=1 WHERE id=" + id + ";";
+        sqLiteDatabase.execSQL(setStatusQuery);
+    }
+
 
 }
