@@ -104,6 +104,7 @@ public class Box extends AppCompatActivity {
                     syncSendEditedItemBox();
                     syncSendEditedSubdivisionBox();
                     syncSendEditedBoxBox();
+                    syncSendEditedLocationBox();
                     return true;
 
                 default:
@@ -1556,5 +1557,86 @@ public class Box extends AppCompatActivity {
         sqLiteDatabase.execSQL(setStatusQuery);
     }
 
+    private void syncSendEditedLocationBox(){
+
+        sqLiteDatabase = dataBase.getReadableDatabase();
+        String getUnsyncData = "SELECT * FROM location WHERE status=2;";
+        Cursor unsyncData = sqLiteDatabase.rawQuery(getUnsyncData, null);
+
+        String url = "http://casa.localtunnel.me/android/sync_send_edited_location_box_android.php";
+
+        ArrayList<String> arrayListIdItem = new ArrayList<>();
+        ArrayList<String> arrayListIdSubdivision = new ArrayList<>();
+        ArrayList<String> arrayListIdBox = new ArrayList<>();
+
+        while (unsyncData.moveToNext()){
+            arrayListIdItem.add(unsyncData.getString(0));
+            arrayListIdSubdivision.add(unsyncData.getString(1));
+            arrayListIdBox.add(unsyncData.getString(2));
+        }
+
+        for (int i = 0; i < arrayListIdItem.size(); i++){
+            sendEditedLocationBox(
+                    arrayListIdItem.get(i),
+                    arrayListIdSubdivision.get(i),
+                    arrayListIdBox.get(i),
+                    "1",
+                    url);
+        }
+    }
+
+        private void sendEditedLocationBox( final String id_item, final String id_subdivision, final String id_box, final String status, final String url){
+
+        class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
+            @Override
+            protected String doInBackground(String... params) {
+
+                List<NameValuePair> nameValuePairs = new ArrayList<>();
+
+                String idItemHolder = id_item;
+                String idSubdivisionHolder = id_subdivision;
+                String idBoxHolder = id_box;
+                String statusHolder = status;
+
+                nameValuePairs.add(new BasicNameValuePair("id_item", idItemHolder));
+                nameValuePairs.add(new BasicNameValuePair("id_subdivision", idSubdivisionHolder));
+                nameValuePairs.add(new BasicNameValuePair("id_box", idBoxHolder));
+                nameValuePairs.add(new BasicNameValuePair("status", statusHolder));
+
+                try {
+
+                    HttpClient httpClient = new DefaultHttpClient();
+
+                    HttpPost httpPost = new HttpPost(url);
+
+                    httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                    HttpResponse httpResponse = httpClient.execute(httpPost);
+
+                    HttpEntity httpEntity = httpResponse.getEntity();
+
+                } catch (ClientProtocolException e) {
+
+                } catch (IOException e) {
+
+                }
+
+                return "Data Inserted Successfully";
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+
+                super.onPostExecute(result);
+
+            }
+        }
+
+        SendPostReqAsyncTask sendPostReqAsyncTask = new SendPostReqAsyncTask();
+        sendPostReqAsyncTask.execute(id_item, id_subdivision, id_box, status );
+        sqLiteDatabase = dataBase.getWritableDatabase();
+        String setStatusQuery = "UPDATE location SET status=1 WHERE id_item=" + id_item + ";";
+        sqLiteDatabase.execSQL(setStatusQuery);
+    }
 
 }
