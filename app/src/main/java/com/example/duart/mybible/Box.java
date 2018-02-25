@@ -74,6 +74,7 @@ public class Box extends AppCompatActivity {
                     syncGetNewSubdivisionBox();
                     syncGetNewBoxBox();
                     syncGetNewLocationBox();
+                    syncGetNewLinkBox();
                     return true;
 
                 default:
@@ -285,6 +286,56 @@ public class Box extends AppCompatActivity {
 
                         sqLiteDatabase = dataBase.getWritableDatabase();
                         sqLiteDatabase.execSQL("INSERT INTO location (id_item, id_subdivision, id_box, status) VALUES (" + id_item + ", " + id_subdivision + ", " + id_box + ", 1 );");
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                Log.i(TAG, "Error: " + error.toString());
+
+            }
+        });
+
+        jsonArrayRequest.setTag(REQUESTTAG);
+        mRequestQueue.add(jsonArrayRequest);
+
+    }
+
+    private void syncGetNewLinkBox(){
+
+        /**sqLiteDatabase = dataBase.getWritableDatabase();
+         String deleteQuery = "DELETE FROM wallet;";
+         sqLiteDatabase.execSQL(deleteQuery);**/
+
+        mRequestQueue = Volley.newRequestQueue(this);
+
+        String url = "http://casa.localtunnel.me/android/sync_get_new_link_box_android.php";
+
+        final DecimalFormat df = new DecimalFormat("#.##");
+        df.setRoundingMode(RoundingMode.CEILING);
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+
+                for (int i = 0; i < response.length(); i++) {
+
+                    try {
+
+                        JSONObject mysqlDataUnsync = response.getJSONObject(i);
+
+                        Integer id_item_1 = Integer.parseInt(mysqlDataUnsync.getString("id_item_1"));
+                        Integer id_item_2 = Integer.parseInt(mysqlDataUnsync.getString("id_item_2"));
+
+                        sqLiteDatabase = dataBase.getWritableDatabase();
+                        sqLiteDatabase.execSQL("INSERT INTO link (id_item_1, id_item_2, status) VALUES (" + id_item_1 + ", " + id_item_2 + ", 1 );");
 
                     } catch (JSONException e) {
                         e.printStackTrace();
