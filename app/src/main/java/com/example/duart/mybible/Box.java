@@ -96,6 +96,9 @@ public class Box extends AppCompatActivity {
                     syncSendNewSubdivisionBox();
                     syncSendNewBoxBox();
                     syncSendNewLocationBox();
+                    syncSendNewLinkBox();
+                    syncSendNewConsumablesBox();
+                    syncSendNewNoConsumablesBox();
                     return true;
 
                 default:
@@ -898,7 +901,248 @@ public class Box extends AppCompatActivity {
         SendPostReqAsyncTask sendPostReqAsyncTask = new SendPostReqAsyncTask();
         sendPostReqAsyncTask.execute(id_item, id_subdivision, id_box, status );
         sqLiteDatabase = dataBase.getWritableDatabase();
-        String setStatusQuery = "UPDATE location SET status=1 WHERE id=" + id_item + ";";
+        String setStatusQuery = "UPDATE location SET status=1 WHERE id_item=" + id_item + ";";
+        sqLiteDatabase.execSQL(setStatusQuery);
+    }
+
+    private void syncSendNewLinkBox(){
+
+        sqLiteDatabase = dataBase.getReadableDatabase();
+        String getUnsyncData = "SELECT * FROM link WHERE status=0;";
+        Cursor unsyncData = sqLiteDatabase.rawQuery(getUnsyncData, null);
+
+        String url = "http://casa.localtunnel.me/android/sync_send_new_link_box_android.php";
+
+        ArrayList<String> arrayListIdItem1 = new ArrayList<>();
+        ArrayList<String> arrayListIdItem2 = new ArrayList<>();
+
+        while (unsyncData.moveToNext()){
+            arrayListIdItem1.add(unsyncData.getString(0));
+            arrayListIdItem2.add(unsyncData.getString(1));
+        }
+
+        for (int i = 0; i < arrayListIdItem1.size(); i++){
+            sendNewLinkBox(
+                    arrayListIdItem1.get(i),
+                    arrayListIdItem2.get(i),
+                    "1",
+                    url);
+        }
+    }
+
+        private void sendNewLinkBox( final String id_item_1, final String id_item_2, final String status, final String url){
+
+        class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
+            @Override
+            protected String doInBackground(String... params) {
+
+                List<NameValuePair> nameValuePairs = new ArrayList<>();
+
+                String idItem1Holder = id_item_1;
+                String idItem2Holder = id_item_2;
+                String statusHolder = status;
+
+                nameValuePairs.add(new BasicNameValuePair("id_item_1", idItem1Holder));
+                nameValuePairs.add(new BasicNameValuePair("id_item_2", idItem2Holder));
+                nameValuePairs.add(new BasicNameValuePair("status", statusHolder));
+
+                try {
+
+                    HttpClient httpClient = new DefaultHttpClient();
+
+                    HttpPost httpPost = new HttpPost(url);
+
+                    httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                    HttpResponse httpResponse = httpClient.execute(httpPost);
+
+                    HttpEntity httpEntity = httpResponse.getEntity();
+
+                } catch (ClientProtocolException e) {
+
+                } catch (IOException e) {
+
+                }
+
+                return "Data Inserted Successfully";
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+
+                super.onPostExecute(result);
+
+            }
+        }
+
+        SendPostReqAsyncTask sendPostReqAsyncTask = new SendPostReqAsyncTask();
+        sendPostReqAsyncTask.execute(id_item_1, id_item_2, status );
+        sqLiteDatabase = dataBase.getWritableDatabase();
+        String setStatusQuery = "UPDATE link SET status=1 WHERE id_item_1=" + id_item_1 + " AND id_item_2=" + id_item_2 + ";";
+        sqLiteDatabase.execSQL(setStatusQuery);
+    }
+
+    private void syncSendNewConsumablesBox(){
+
+        sqLiteDatabase = dataBase.getReadableDatabase();
+        String getUnsyncData = "SELECT * FROM consumables WHERE status=0;";
+        Cursor unsyncData = sqLiteDatabase.rawQuery(getUnsyncData, null);
+
+        String url = "http://casa.localtunnel.me/android/sync_send_new_consumables_box_android.php";
+
+        ArrayList<String> arrayListIdItem = new ArrayList<>();
+        ArrayList<String> arrayListDate = new ArrayList<>();
+        ArrayList<String> arrayListChangeStock = new ArrayList<>();
+
+        while (unsyncData.moveToNext()){
+            arrayListIdItem.add(unsyncData.getString(0));
+            arrayListDate.add(unsyncData.getString(1));
+            arrayListChangeStock.add(unsyncData.getString(1));
+        }
+
+        for (int i = 0; i < arrayListIdItem.size(); i++){
+            sendNewConsumablesBox(
+                    arrayListIdItem.get(i),
+                    arrayListDate.get(i),
+                    arrayListChangeStock.get(i),
+                    "1",
+                    url);
+        }
+    }
+
+        private void sendNewConsumablesBox( final String id_item, final String date, final String change_stock, final String status, final String url){
+
+        class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
+            @Override
+            protected String doInBackground(String... params) {
+
+                List<NameValuePair> nameValuePairs = new ArrayList<>();
+
+                String idItemHolder = id_item;
+                String dateHolder = date;
+                String changeStockHolder = change_stock;
+                String statusHolder = status;
+
+                nameValuePairs.add(new BasicNameValuePair("id_item", idItemHolder));
+                nameValuePairs.add(new BasicNameValuePair("date", dateHolder));
+                nameValuePairs.add(new BasicNameValuePair("change_stock", changeStockHolder));
+                nameValuePairs.add(new BasicNameValuePair("status", statusHolder));
+
+                try {
+
+                    HttpClient httpClient = new DefaultHttpClient();
+
+                    HttpPost httpPost = new HttpPost(url);
+
+                    httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                    HttpResponse httpResponse = httpClient.execute(httpPost);
+
+                    HttpEntity httpEntity = httpResponse.getEntity();
+
+                } catch (ClientProtocolException e) {
+
+                } catch (IOException e) {
+
+                }
+
+                return "Data Inserted Successfully";
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+
+                super.onPostExecute(result);
+
+            }
+        }
+
+        SendPostReqAsyncTask sendPostReqAsyncTask = new SendPostReqAsyncTask();
+        sendPostReqAsyncTask.execute(id_item, date, change_stock, status );
+        sqLiteDatabase = dataBase.getWritableDatabase();
+        String setStatusQuery = "UPDATE consumables SET status=1 WHERE id_item=" + id_item + " AND status=0;";
+        sqLiteDatabase.execSQL(setStatusQuery);
+    }
+
+    private void syncSendNewNoConsumablesBox(){
+
+        sqLiteDatabase = dataBase.getReadableDatabase();
+        String getUnsyncData = "SELECT * FROM noconsumables WHERE status=0;";
+        Cursor unsyncData = sqLiteDatabase.rawQuery(getUnsyncData, null);
+
+        String url = "http://casa.localtunnel.me/android/sync_send_new_noconsumables_box_android.php";
+
+        ArrayList<String> arrayListIdItem = new ArrayList<>();
+        ArrayList<String> arrayListDate = new ArrayList<>();
+        ArrayList<String> arrayListState = new ArrayList<>();
+
+        while (unsyncData.moveToNext()){
+            arrayListIdItem.add(unsyncData.getString(0));
+            arrayListDate.add(unsyncData.getString(1));
+            arrayListState.add(unsyncData.getString(1));
+        }
+
+        for (int i = 0; i < arrayListIdItem.size(); i++){
+            sendNewNoConsumablesBox(
+                    arrayListIdItem.get(i),
+                    arrayListDate.get(i),
+                    arrayListState.get(i),
+                    "1",
+                    url);
+        }
+    }
+
+        private void sendNewNoConsumablesBox( final String id_item, final String date, final String state, final String status, final String url){
+
+        class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
+            @Override
+            protected String doInBackground(String... params) {
+
+                List<NameValuePair> nameValuePairs = new ArrayList<>();
+
+                String idItemHolder = id_item;
+                String dateHolder = date;
+                String stateHolder = state;
+                String statusHolder = status;
+
+                nameValuePairs.add(new BasicNameValuePair("id_item", idItemHolder));
+                nameValuePairs.add(new BasicNameValuePair("date", dateHolder));
+                nameValuePairs.add(new BasicNameValuePair("state", stateHolder));
+                nameValuePairs.add(new BasicNameValuePair("status", statusHolder));
+
+                try {
+
+                    HttpClient httpClient = new DefaultHttpClient();
+
+                    HttpPost httpPost = new HttpPost(url);
+
+                    httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                    HttpResponse httpResponse = httpClient.execute(httpPost);
+
+                    HttpEntity httpEntity = httpResponse.getEntity();
+
+                } catch (ClientProtocolException e) {
+
+                } catch (IOException e) {
+
+                }
+
+                return "Data Inserted Successfully";
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+
+                super.onPostExecute(result);
+
+            }
+        }
+
+        SendPostReqAsyncTask sendPostReqAsyncTask = new SendPostReqAsyncTask();
+        sendPostReqAsyncTask.execute(id_item, date, state, status );
+        sqLiteDatabase = dataBase.getWritableDatabase();
+        String setStatusQuery = "UPDATE noconsumables SET status=1 WHERE id_item=" + id_item + " AND status=0;";
         sqLiteDatabase.execSQL(setStatusQuery);
     }
 
