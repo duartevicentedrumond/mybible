@@ -93,6 +93,7 @@ public class Box extends AppCompatActivity {
                     syncGetNewCostBox();
                     syncGetNewBorrowBox();
                     syncSendNewItemBox();
+                    syncSendNewSubdivisionBox();
                     return true;
 
                 default:
@@ -609,7 +610,7 @@ public class Box extends AppCompatActivity {
         }
     }
 
-    private void sendNewItemBox( final String id, final String name, final String category, final String status, final String url){
+        private void sendNewItemBox( final String id, final String name, final String category, final String status, final String url){
 
         class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
             @Override
@@ -660,6 +661,83 @@ public class Box extends AppCompatActivity {
         sendPostReqAsyncTask.execute(id, name, category, status );
         sqLiteDatabase = dataBase.getWritableDatabase();
         String setStatusQuery = "UPDATE item SET status=1 WHERE id=" + id + ";";
+        sqLiteDatabase.execSQL(setStatusQuery);
+    }
+
+    private void syncSendNewSubdivisionBox(){
+
+        sqLiteDatabase = dataBase.getReadableDatabase();
+        String getUnsyncData = "SELECT * FROM subdivision WHERE status=0;";
+        Cursor unsyncData = sqLiteDatabase.rawQuery(getUnsyncData, null);
+
+        String url = "http://casa.localtunnel.me/android/sync_send_new_subdivision_box_android.php";
+
+        ArrayList<String> arrayListId = new ArrayList<>();
+        ArrayList<String> arrayListSubdivision = new ArrayList<>();
+
+        while (unsyncData.moveToNext()){
+            arrayListId.add(unsyncData.getString(0));
+            arrayListSubdivision.add(unsyncData.getString(1));
+        }
+
+        for (int i = 0; i < arrayListId.size(); i++){
+            sendNewSubdivisionBox(
+                    arrayListId.get(i),
+                    arrayListSubdivision.get(i),
+                    "1",
+                    url);
+        }
+    }
+
+        private void sendNewSubdivisionBox( final String id, final String subdivision, final String status, final String url){
+
+        class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
+            @Override
+            protected String doInBackground(String... params) {
+
+                List<NameValuePair> nameValuePairs = new ArrayList<>();
+
+                String idHolder = id;
+                String subdivisionHolder = subdivision;
+                String statusHolder = status;
+
+                nameValuePairs.add(new BasicNameValuePair("id", idHolder));
+                nameValuePairs.add(new BasicNameValuePair("subdivision", subdivisionHolder));
+                nameValuePairs.add(new BasicNameValuePair("status", statusHolder));
+
+                try {
+
+                    HttpClient httpClient = new DefaultHttpClient();
+
+                    HttpPost httpPost = new HttpPost(url);
+
+                    httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                    HttpResponse httpResponse = httpClient.execute(httpPost);
+
+                    HttpEntity httpEntity = httpResponse.getEntity();
+
+                } catch (ClientProtocolException e) {
+
+                } catch (IOException e) {
+
+                }
+
+                return "Data Inserted Successfully";
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+
+                super.onPostExecute(result);
+
+            }
+        }
+
+        SendPostReqAsyncTask sendPostReqAsyncTask = new SendPostReqAsyncTask();
+        sendPostReqAsyncTask.execute(id, subdivision, status );
+        sqLiteDatabase = dataBase.getWritableDatabase();
+        String setStatusQuery = "UPDATE subdivision SET status=1 WHERE id=" + id + ";";
         sqLiteDatabase.execSQL(setStatusQuery);
     }
 
