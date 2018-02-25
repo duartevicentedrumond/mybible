@@ -101,6 +101,7 @@ public class Box extends AppCompatActivity {
                     syncSendNewNoConsumablesBox();
                     syncSendNewCostBox();
                     syncSendNewBorrowBox();
+                    syncSendEditedItemBox();
                     return true;
 
                 default:
@@ -1314,6 +1315,88 @@ public class Box extends AppCompatActivity {
         sendPostReqAsyncTask.execute(id_item, date, state, person, status );
         sqLiteDatabase = dataBase.getWritableDatabase();
         String setStatusQuery = "UPDATE borrow SET status=1 WHERE id_item=" + id_item + " AND status=0;";
+        sqLiteDatabase.execSQL(setStatusQuery);
+    }
+
+    private void syncSendEditedItemBox(){
+
+        sqLiteDatabase = dataBase.getReadableDatabase();
+        String getUnsyncData = "SELECT * FROM item WHERE status=2;";
+        Cursor unsyncData = sqLiteDatabase.rawQuery(getUnsyncData, null);
+
+        String url = "http://casa.localtunnel.me/android/sync_send_edited_item_box_android.php";
+
+        ArrayList<String> arrayListId = new ArrayList<>();
+        ArrayList<String> arrayListName = new ArrayList<>();
+        ArrayList<String> arrayListCategory = new ArrayList<>();
+
+        while (unsyncData.moveToNext()){
+            arrayListId.add(unsyncData.getString(0));
+            arrayListName.add(unsyncData.getString(1));
+            arrayListCategory.add(unsyncData.getString(2));
+        }
+
+        for (int i = 0; i < arrayListId.size(); i++){
+            sendEditedItemBox(
+                    arrayListId.get(i),
+                    arrayListName.get(i),
+                    arrayListCategory.get(i),
+                    "1",
+                    url);
+        }
+    }
+
+        private void sendEditedItemBox( final String id, final String name, final String category, final String status, final String url){
+
+        class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
+            @Override
+            protected String doInBackground(String... params) {
+
+                List<NameValuePair> nameValuePairs = new ArrayList<>();
+
+                String idHolder = id;
+                String nameHolder = name;
+                String categoryHolder = category;
+                String statusHolder = status;
+
+                nameValuePairs.add(new BasicNameValuePair("id", idHolder));
+                nameValuePairs.add(new BasicNameValuePair("name", nameHolder));
+                nameValuePairs.add(new BasicNameValuePair("category", categoryHolder));
+                nameValuePairs.add(new BasicNameValuePair("status", statusHolder));
+
+                try {
+
+                    HttpClient httpClient = new DefaultHttpClient();
+
+                    HttpPost httpPost = new HttpPost(url);
+
+                    httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                    HttpResponse httpResponse = httpClient.execute(httpPost);
+
+                    HttpEntity httpEntity = httpResponse.getEntity();
+
+                } catch (ClientProtocolException e) {
+
+                } catch (IOException e) {
+
+                }
+
+                return "Data Inserted Successfully";
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+
+                super.onPostExecute(result);
+
+            }
+        }
+
+        SendPostReqAsyncTask sendPostReqAsyncTask = new SendPostReqAsyncTask();
+        sendPostReqAsyncTask.execute(id, name, category, status );
+        sqLiteDatabase = dataBase.getWritableDatabase();
+        String setStatusQuery = "UPDATE item SET status=2 WHERE id=" + id + ";";
         sqLiteDatabase.execSQL(setStatusQuery);
     }
 

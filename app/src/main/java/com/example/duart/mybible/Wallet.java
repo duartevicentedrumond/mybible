@@ -334,7 +334,7 @@ public class Wallet extends AppCompatActivity {
         }
     }
 
-    private void sendNewEntryWallet( final String id, final String date, final String description, final String value, final String source_destination, final String repay, final String repayment, final String type, final String status, final String url){
+        private void sendNewEntryWallet( final String id, final String date, final String description, final String value, final String source_destination, final String repay, final String repayment, final String type, final String status, final String url){
 
         class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
             @Override
@@ -440,7 +440,7 @@ public class Wallet extends AppCompatActivity {
         }
     }
 
-    private void sendEditedEntryWallet( final String id, final String date, final String description, final String value, final String source_destination, final String repay, final String repayment, final String type, final String status, final String url){
+        private void sendEditedEntryWallet( final String id, final String date, final String description, final String value, final String source_destination, final String repay, final String repayment, final String type, final String status, final String url){
 
         class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
             @Override
@@ -547,7 +547,7 @@ public class Wallet extends AppCompatActivity {
         }
     }
 
-    private void sendDeletedEntryWallet( final String id, final String date, final String description, final String value, final String source_destination, final String repay, final String repayment, final String type, final String status, final String url){
+        private void sendDeletedEntryWallet( final String id, final String date, final String description, final String value, final String source_destination, final String repay, final String repayment, final String type, final String status, final String url){
 
         class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
             @Override
