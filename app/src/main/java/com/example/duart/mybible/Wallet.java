@@ -54,6 +54,8 @@ public class Wallet extends AppCompatActivity {
 
     private RequestQueue mRequestQueue;
 
+    public String IpAddress = "http://192.168.1.9/";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,7 +112,7 @@ public class Wallet extends AppCompatActivity {
 
         mRequestQueue = Volley.newRequestQueue(this);
 
-        String url = "http://casa.localtunnel.me/android/sync_get_new_entry_wallet_android.php";
+        String url = IpAddress + "android/sync_get_new_entry_wallet_android.php";
 
         final DecimalFormat df = new DecimalFormat("#.##");
         df.setRoundingMode(RoundingMode.CEILING);
@@ -295,7 +297,7 @@ public class Wallet extends AppCompatActivity {
         String getUnsyncData = "SELECT * FROM wallet WHERE status=0;";
         Cursor unsyncData = sqLiteDatabase.rawQuery(getUnsyncData, null);
 
-        String url = "http://casa.localtunnel.me/android/sync_send_new_entry_wallet_android.php";
+        String url = IpAddress + "android/sync_send_new_entry_wallet_android.php";
 
         Log.i(TAG, "TAMANHO: " + unsyncData.getCount());
 
@@ -403,7 +405,7 @@ public class Wallet extends AppCompatActivity {
         String getEditedData = "SELECT * FROM wallet WHERE status=2;";
         Cursor editedData = sqLiteDatabase.rawQuery(getEditedData, null);
 
-        String url = "http://casa.localtunnel.me/android/sync_send_edited_entry_wallet_android.php";
+        String url = IpAddress + "android/sync_send_edited_entry_wallet_android.php";
 
         ArrayList<String> arrayListEditedDataId = new ArrayList<>();
         ArrayList<String> arrayListEditedDataDate = new ArrayList<>();
@@ -510,7 +512,7 @@ public class Wallet extends AppCompatActivity {
         String getDeletedData = "SELECT * FROM wallet WHERE status=3;";
         Cursor deletedData = sqLiteDatabase.rawQuery(getDeletedData, null);
 
-        String url = "http://casa.localtunnel.me/android/sync_send_deleted_entry_wallet_android.php";
+        String url = IpAddress + "android/sync_send_deleted_entry_wallet_android.php";
 
         ArrayList<String> arrayListDeletedDataId = new ArrayList<>();
         ArrayList<String> arrayListDeletedDataDate = new ArrayList<>();

@@ -50,6 +50,7 @@ public class Box extends AppCompatActivity {
     private SQLiteDatabase sqLiteDatabase;
     private static final String TAG = Box.class.getName();
     private static final String REQUESTTAG = "string get new item";
+    public String IpAddress = "http://192.168.1.9/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +58,7 @@ public class Box extends AppCompatActivity {
         setContentView(R.layout.activity_box);
 
         listView = (ListView) findViewById(R.id.list_view);
+        dataBase = new mybibleDataBase(this);
 
         final ArrayList<String> arrayList = new ArrayList<>();
         ListAdapter listAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, arrayList);
@@ -144,7 +146,7 @@ public class Box extends AppCompatActivity {
 
         mRequestQueue = Volley.newRequestQueue(this);
 
-        String url = "http://casa.localtunnel.me/android/sync_get_new_item_box_android.php";
+        String url = IpAddress + "android/sync_get_new_item_box_android.php";
 
         final DecimalFormat df = new DecimalFormat("#.##");
         df.setRoundingMode(RoundingMode.CEILING);
@@ -195,7 +197,7 @@ public class Box extends AppCompatActivity {
 
         mRequestQueue = Volley.newRequestQueue(this);
 
-        String url = "http://casa.localtunnel.me/android/sync_get_new_subdivision_box_android.php";
+        String url = IpAddress + "android/sync_get_new_subdivision_box_android.php";
 
         final DecimalFormat df = new DecimalFormat("#.##");
         df.setRoundingMode(RoundingMode.CEILING);
@@ -245,7 +247,7 @@ public class Box extends AppCompatActivity {
 
         mRequestQueue = Volley.newRequestQueue(this);
 
-        String url = "http://casa.localtunnel.me/android/sync_get_new_box_box_android.php";
+        String url = IpAddress + "android/sync_get_new_box_box_android.php";
 
         final DecimalFormat df = new DecimalFormat("#.##");
         df.setRoundingMode(RoundingMode.CEILING);
@@ -295,7 +297,7 @@ public class Box extends AppCompatActivity {
 
         mRequestQueue = Volley.newRequestQueue(this);
 
-        String url = "http://casa.localtunnel.me/android/sync_get_new_location_box_android.php";
+        String url = IpAddress + "android/sync_get_new_location_box_android.php";
 
         final DecimalFormat df = new DecimalFormat("#.##");
         df.setRoundingMode(RoundingMode.CEILING);
@@ -346,7 +348,7 @@ public class Box extends AppCompatActivity {
 
         mRequestQueue = Volley.newRequestQueue(this);
 
-        String url = "http://casa.localtunnel.me/android/sync_get_new_link_box_android.php";
+        String url = IpAddress + "android/sync_get_new_link_box_android.php";
 
         final DecimalFormat df = new DecimalFormat("#.##");
         df.setRoundingMode(RoundingMode.CEILING);
@@ -396,7 +398,7 @@ public class Box extends AppCompatActivity {
 
         mRequestQueue = Volley.newRequestQueue(this);
 
-        String url = "http://casa.localtunnel.me/android/sync_get_new_consumables_box_android.php";
+        String url = IpAddress + "android/sync_get_new_consumables_box_android.php";
 
         final DecimalFormat df = new DecimalFormat("#.##");
         df.setRoundingMode(RoundingMode.CEILING);
@@ -447,7 +449,7 @@ public class Box extends AppCompatActivity {
 
         mRequestQueue = Volley.newRequestQueue(this);
 
-        String url = "http://casa.localtunnel.me/android/sync_get_new_noconsumables_box_android.php";
+        String url = IpAddress + "android/sync_get_new_noconsumables_box_android.php";
 
         final DecimalFormat df = new DecimalFormat("#.##");
         df.setRoundingMode(RoundingMode.CEILING);
@@ -498,7 +500,7 @@ public class Box extends AppCompatActivity {
 
         mRequestQueue = Volley.newRequestQueue(this);
 
-        String url = "http://casa.localtunnel.me/android/sync_get_new_cost_box_android.php";
+        String url = IpAddress + "android/sync_get_new_cost_box_android.php";
 
         final DecimalFormat df = new DecimalFormat("#.##");
         df.setRoundingMode(RoundingMode.CEILING);
@@ -549,7 +551,7 @@ public class Box extends AppCompatActivity {
 
         mRequestQueue = Volley.newRequestQueue(this);
 
-        String url = "http://casa.localtunnel.me/android/sync_get_new_borrow_box_android.php";
+        String url = IpAddress + "android/sync_get_new_borrow_box_android.php";
 
         final DecimalFormat df = new DecimalFormat("#.##");
         df.setRoundingMode(RoundingMode.CEILING);
@@ -599,7 +601,7 @@ public class Box extends AppCompatActivity {
         String getUnsyncData = "SELECT * FROM item WHERE status=0;";
         Cursor unsyncData = sqLiteDatabase.rawQuery(getUnsyncData, null);
 
-        String url = "http://casa.localtunnel.me/android/sync_send_new_item_box_android.php";
+        String url = IpAddress + "android/sync_send_new_item_box_android.php";
 
         ArrayList<String> arrayListId = new ArrayList<>();
         ArrayList<String> arrayListName = new ArrayList<>();
@@ -681,7 +683,7 @@ public class Box extends AppCompatActivity {
         String getUnsyncData = "SELECT * FROM subdivision WHERE status=0;";
         Cursor unsyncData = sqLiteDatabase.rawQuery(getUnsyncData, null);
 
-        String url = "http://casa.localtunnel.me/android/sync_send_new_subdivision_box_android.php";
+        String url = IpAddress + "android/sync_send_new_subdivision_box_android.php";
 
         ArrayList<String> arrayListId = new ArrayList<>();
         ArrayList<String> arrayListSubdivision = new ArrayList<>();
@@ -758,7 +760,7 @@ public class Box extends AppCompatActivity {
         String getUnsyncData = "SELECT * FROM box WHERE status=0;";
         Cursor unsyncData = sqLiteDatabase.rawQuery(getUnsyncData, null);
 
-        String url = "http://casa.localtunnel.me/android/sync_send_new_box_box_android.php";
+        String url = IpAddress + "android/sync_send_new_box_box_android.php";
 
         ArrayList<String> arrayListId = new ArrayList<>();
         ArrayList<String> arrayListBox = new ArrayList<>();
@@ -835,7 +837,7 @@ public class Box extends AppCompatActivity {
         String getUnsyncData = "SELECT * FROM location WHERE status=0;";
         Cursor unsyncData = sqLiteDatabase.rawQuery(getUnsyncData, null);
 
-        String url = "http://casa.localtunnel.me/android/sync_send_new_location_box_android.php";
+        String url = IpAddress + "android/sync_send_new_location_box_android.php";
 
         ArrayList<String> arrayListIdItem = new ArrayList<>();
         ArrayList<String> arrayListIdSubdivision = new ArrayList<>();
@@ -917,7 +919,7 @@ public class Box extends AppCompatActivity {
         String getUnsyncData = "SELECT * FROM link WHERE status=0;";
         Cursor unsyncData = sqLiteDatabase.rawQuery(getUnsyncData, null);
 
-        String url = "http://casa.localtunnel.me/android/sync_send_new_link_box_android.php";
+        String url = IpAddress + "android/sync_send_new_link_box_android.php";
 
         ArrayList<String> arrayListIdItem1 = new ArrayList<>();
         ArrayList<String> arrayListIdItem2 = new ArrayList<>();
@@ -994,7 +996,7 @@ public class Box extends AppCompatActivity {
         String getUnsyncData = "SELECT * FROM consumables WHERE status=0;";
         Cursor unsyncData = sqLiteDatabase.rawQuery(getUnsyncData, null);
 
-        String url = "http://casa.localtunnel.me/android/sync_send_new_consumables_box_android.php";
+        String url = IpAddress + "android/sync_send_new_consumables_box_android.php";
 
         ArrayList<String> arrayListIdItem = new ArrayList<>();
         ArrayList<String> arrayListDate = new ArrayList<>();
@@ -1076,7 +1078,7 @@ public class Box extends AppCompatActivity {
         String getUnsyncData = "SELECT * FROM noconsumables WHERE status=0;";
         Cursor unsyncData = sqLiteDatabase.rawQuery(getUnsyncData, null);
 
-        String url = "http://casa.localtunnel.me/android/sync_send_new_noconsumables_box_android.php";
+        String url = IpAddress + "android/sync_send_new_noconsumables_box_android.php";
 
         ArrayList<String> arrayListIdItem = new ArrayList<>();
         ArrayList<String> arrayListDate = new ArrayList<>();
@@ -1158,7 +1160,7 @@ public class Box extends AppCompatActivity {
         String getUnsyncData = "SELECT * FROM cost WHERE status=0;";
         Cursor unsyncData = sqLiteDatabase.rawQuery(getUnsyncData, null);
 
-        String url = "http://casa.localtunnel.me/android/sync_send_new_cost_box_android.php";
+        String url = IpAddress + "android/sync_send_new_cost_box_android.php";
 
         ArrayList<String> arrayListIdItem = new ArrayList<>();
         ArrayList<String> arrayListDate = new ArrayList<>();
@@ -1240,7 +1242,7 @@ public class Box extends AppCompatActivity {
         String getUnsyncData = "SELECT * FROM borrow WHERE status=0;";
         Cursor unsyncData = sqLiteDatabase.rawQuery(getUnsyncData, null);
 
-        String url = "http://casa.localtunnel.me/android/sync_send_new_borrow_box_android.php";
+        String url = IpAddress + "android/sync_send_new_borrow_box_android.php";
 
         ArrayList<String> arrayListIdItem = new ArrayList<>();
         ArrayList<String> arrayListDate = new ArrayList<>();
@@ -1327,7 +1329,7 @@ public class Box extends AppCompatActivity {
         String getUnsyncData = "SELECT * FROM item WHERE status=2;";
         Cursor unsyncData = sqLiteDatabase.rawQuery(getUnsyncData, null);
 
-        String url = "http://casa.localtunnel.me/android/sync_send_edited_item_box_android.php";
+        String url = IpAddress + "android/sync_send_edited_item_box_android.php";
 
         ArrayList<String> arrayListId = new ArrayList<>();
         ArrayList<String> arrayListName = new ArrayList<>();
@@ -1409,7 +1411,7 @@ public class Box extends AppCompatActivity {
         String getUnsyncData = "SELECT * FROM subdivision WHERE status=2;";
         Cursor unsyncData = sqLiteDatabase.rawQuery(getUnsyncData, null);
 
-        String url = "http://casa.localtunnel.me/android/sync_send_edited_subdivision_box_android.php";
+        String url = IpAddress + "android/sync_send_edited_subdivision_box_android.php";
 
         ArrayList<String> arrayListId = new ArrayList<>();
         ArrayList<String> arrayListSubdivision = new ArrayList<>();
@@ -1486,7 +1488,7 @@ public class Box extends AppCompatActivity {
         String getUnsyncData = "SELECT * FROM box WHERE status=2;";
         Cursor unsyncData = sqLiteDatabase.rawQuery(getUnsyncData, null);
 
-        String url = "http://casa.localtunnel.me/android/sync_send_edited_box_box_android.php";
+        String url = IpAddress + "android/sync_send_edited_box_box_android.php";
 
         ArrayList<String> arrayListId = new ArrayList<>();
         ArrayList<String> arrayListBox = new ArrayList<>();
@@ -1563,7 +1565,7 @@ public class Box extends AppCompatActivity {
         String getUnsyncData = "SELECT * FROM location WHERE status=2;";
         Cursor unsyncData = sqLiteDatabase.rawQuery(getUnsyncData, null);
 
-        String url = "http://casa.localtunnel.me/android/sync_send_edited_location_box_android.php";
+        String url = IpAddress + "android/sync_send_edited_location_box_android.php";
 
         ArrayList<String> arrayListIdItem = new ArrayList<>();
         ArrayList<String> arrayListIdSubdivision = new ArrayList<>();
