@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context="com.example.duart.mybible.NewEntryWallet">
 
-    <EditText
+    <AutoCompleteTextView
         android:id="@+id/edit_text_description"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -37,16 +37,6 @@
         app:layout_constraintStart_toStartOf="@+id/spinner_repay"
         app:layout_constraintTop_toBottomOf="@+id/spinner_repay" />
 
-    <Spinner
-        android:id="@+id/spinner_type"
-        android:layout_width="0dp"
-        android:layout_height="46dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/spinner_repayment"
-        app:layout_constraintTop_toBottomOf="@+id/spinner_repayment" />
-
     <EditText
         android:id="@+id/edit_text_value"
         android:layout_width="0dp"
@@ -58,7 +48,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edit_text_description" />
 
-    <EditText
+    <AutoCompleteTextView
         android:id="@+id/edit_text_source_destination"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -150,8 +140,16 @@
         android:layout_marginEnd="8dp"
         android:text="@string/text_view_type"
         android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/spinner_type"
-        app:layout_constraintEnd_toStartOf="@+id/spinner_type"
-        app:layout_constraintTop_toTopOf="@+id/spinner_type" />
+        app:layout_constraintBaseline_toBaselineOf="@+id/edit_text_type"
+        app:layout_constraintEnd_toStartOf="@+id/edit_text_type" />
+
+    <AutoCompleteTextView
+        android:id="@+id/edit_text_type"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="@+id/spinner_repayment"
+        app:layout_constraintStart_toStartOf="@+id/spinner_repayment"
+        app:layout_constraintTop_toBottomOf="@+id/spinner_repayment" />
 
 </android.support.constraint.ConstraintLayout>

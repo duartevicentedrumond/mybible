@@ -37,7 +37,7 @@ public class LocationBox extends AppCompatActivity {
     //necessary to show buttons on action bar menu
         @Override
         public boolean onCreateOptionsMenu(Menu menu) {
-            getMenuInflater().inflate(R.menu.menu_box, menu);
+            getMenuInflater().inflate(R.menu.menu_location_box, menu);
             return super.onCreateOptionsMenu(menu);
         }
 
@@ -45,7 +45,7 @@ public class LocationBox extends AppCompatActivity {
         public boolean onOptionsItemSelected(MenuItem item) {
             switch (item.getItemId()) {
 
-                case R.id.action_add_new_item:
+                case R.id.action_add:
                     startActivity( new Intent( LocationBox.this, NewLocationBox.class ) );
                     return true;
 

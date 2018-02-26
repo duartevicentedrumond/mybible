@@ -54,7 +54,7 @@ public class Wallet extends AppCompatActivity {
 
     private RequestQueue mRequestQueue;
 
-    public String IpAddress = "http://192.168.1.9/";
+    public String IpAddress = "http://incubo.serveo.net/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

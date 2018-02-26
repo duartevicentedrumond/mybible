@@ -50,7 +50,7 @@ public class Box extends AppCompatActivity {
     private SQLiteDatabase sqLiteDatabase;
     private static final String TAG = Box.class.getName();
     private static final String REQUESTTAG = "string get new item";
-    public String IpAddress = "http://192.168.1.9/";
+    public String IpAddress = "http://incubo.serveo.net/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

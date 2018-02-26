@@ -1,6 +1,7 @@
 package com.example.duart.mybible;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.v7.app.AppCompatActivity;
@@ -8,16 +9,22 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import java.util.ArrayList;
+
 public class NewEntryWallet extends AppCompatActivity {
 
-    private Spinner spinnerRepay, spinnerRepayment, spinnerType;
-    private EditText editTextDate, editTextDescription, editTextValue, editTextSourceDestination;
+    private Spinner spinnerRepay, spinnerRepayment;
+    private EditText editTextDate, editTextValue;
     String date, description, value, sourceDestination, repay, repayment, type;
     private SQLiteOpenHelper dataBase;
     private SQLiteDatabase sqLiteDatabase;
+    private AutoCompleteTextView editTextDescription;
+    private AutoCompleteTextView editTextSourceDestination;
+    private AutoCompleteTextView editTextType;
 
 
     @Override
@@ -30,26 +37,20 @@ public class NewEntryWallet extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
         editTextDate = (EditText) findViewById(R.id.edit_text_date);
-        editTextDescription = (EditText) findViewById(R.id.edit_text_description);
+        editTextDescription = (AutoCompleteTextView) findViewById(R.id.edit_text_description);
         editTextValue = (EditText) findViewById(R.id.edit_text_value);
-        editTextSourceDestination = (EditText) findViewById(R.id.edit_text_source_destination);
+        editTextSourceDestination = (AutoCompleteTextView) findViewById(R.id.edit_text_source_destination);
+        editTextType = (AutoCompleteTextView) findViewById(R.id.edit_text_type);
+        spinnerRepay = (Spinner) findViewById(R.id.spinner_repay);
+        spinnerRepayment = (Spinner) findViewById(R.id.spinner_repayment);
         dataBase = new mybibleDataBase(this);
 
-        //defines dropdown's entries
-            String[] arraySpinnerRepay = new String[] {"sim", "não"};
-            spinnerRepay = (Spinner) findViewById(R.id.spinner_repay);
-            final ArrayAdapter<String> adapterSpinnerRepay = new ArrayAdapter(this, android.R.layout.simple_spinner_item, arraySpinnerRepay);
-            spinnerRepay.setAdapter(adapterSpinnerRepay);
+        getDescriptionAutoComplete();
+        getSourceDestinationAutoComplete();
+        getTypeAutoComplete();
 
-            String[] arraySpinnerRepayment = new String[] {"sim", "não"};
-            spinnerRepayment = (Spinner) findViewById(R.id.spinner_repayment);
-            final ArrayAdapter<String> adapterSpinnerRepayment = new ArrayAdapter(this, android.R.layout.simple_spinner_item, arraySpinnerRepayment);
-            spinnerRepayment.setAdapter(adapterSpinnerRepayment);
-
-            String[] arraySpinnerType = new String[] {"dinheiro", "cartão"};
-            spinnerType = (Spinner) findViewById(R.id.spinner_type);
-            final ArrayAdapter<String> adapterSpinnerType = new ArrayAdapter(this, android.R.layout.simple_spinner_item, arraySpinnerType);
-            spinnerType.setAdapter(adapterSpinnerType);
+        getRepaySpinner();
+        getRepaymentSpinner();
 
     }
 
@@ -84,17 +85,9 @@ public class NewEntryWallet extends AppCompatActivity {
         description = editTextDescription.getText().toString();
         value = editTextValue.getText().toString();
         sourceDestination = editTextSourceDestination.getText().toString();
-        if (spinnerRepay.getSelectedItem().toString().equals("sim")){
-            repay = "yes";
-        } else if (spinnerRepay.getSelectedItem().toString().equals("não")){
-            repay = "no";
-        }
-        if (spinnerRepayment.getSelectedItem().toString().equals("sim")){
-            repayment = "yes";
-        } else if (spinnerRepayment.getSelectedItem().toString().equals("não")){
-            repayment = "no";
-        }
-        type = spinnerType.getSelectedItem().toString();
+        repay = spinnerRepay.getSelectedItem().toString();
+        repayment = spinnerRepayment.getSelectedItem().toString();
+        type = editTextType.getText().toString();
 
     }
 
@@ -112,6 +105,66 @@ public class NewEntryWallet extends AppCompatActivity {
                 sqLiteDatabase.execSQL(insertNewEntryQuery);
             }
 
+    }
+
+    public void getRepaySpinner(){
+        ArrayList<String> arrayList = new ArrayList<>();
+        final ArrayAdapter<String> adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, arrayList);
+
+        sqLiteDatabase = dataBase.getReadableDatabase();
+        Cursor data = sqLiteDatabase.rawQuery("SELECT DISTINCT repay FROM wallet;", null);
+        while (data.moveToNext()){
+            arrayList.add(data.getString(0));
+        }
+        spinnerRepay.setAdapter(adapter);
+    }
+
+    public void getRepaymentSpinner(){
+        ArrayList<String> arrayList = new ArrayList<>();
+        final ArrayAdapter<String> adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, arrayList);
+
+        sqLiteDatabase = dataBase.getReadableDatabase();
+        Cursor data = sqLiteDatabase.rawQuery("SELECT DISTINCT repayment FROM wallet;", null);
+        while (data.moveToNext()){
+            arrayList.add(data.getString(0));
+        }
+        spinnerRepayment.setAdapter(adapter);
+    }
+
+    public void getDescriptionAutoComplete(){
+        ArrayList<String> arrayList = new ArrayList<>();
+        ArrayAdapter<String> adapter  = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, arrayList);
+
+        sqLiteDatabase = dataBase.getReadableDatabase();
+        Cursor data = sqLiteDatabase.rawQuery("SELECT DISTINCT description FROM wallet;", null);
+        while (data.moveToNext()){
+            arrayList.add(data.getString(0));
+        }
+        editTextDescription.setAdapter(adapter);
+    }
+
+    public void getSourceDestinationAutoComplete(){
+        ArrayList<String> arrayList = new ArrayList<>();
+        ArrayAdapter<String> adapter  = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, arrayList);
+
+        sqLiteDatabase = dataBase.getReadableDatabase();
+        Cursor data = sqLiteDatabase.rawQuery("SELECT DISTINCT source_destination FROM wallet;", null);
+        while (data.moveToNext()){
+            arrayList.add(data.getString(0));
+        }
+        editTextSourceDestination.setAdapter(adapter);
+    }
+
+    public void getTypeAutoComplete(){
+        ArrayList<String> arrayList = new ArrayList<>();
+        ArrayAdapter<String> adapter  = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, arrayList);
+
+        sqLiteDatabase = dataBase.getReadableDatabase();
+        Cursor data = sqLiteDatabase.rawQuery("SELECT DISTINCT type FROM wallet;", null);
+        while (data.moveToNext()){
+            arrayList.add(data.getString(0));
+        }
+        editTextType.setAdapter(adapter);
     }
 
 }

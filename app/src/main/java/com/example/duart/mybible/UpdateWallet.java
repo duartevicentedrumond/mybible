@@ -40,7 +40,6 @@ public class UpdateWallet extends AppCompatActivity {
         editTextType = (EditText) findViewById(R.id.edit_text_type);
         spinnerRepay = (Spinner) findViewById(R.id.spinner_repay);
         spinnerRepayment = (Spinner) findViewById(R.id.spinner_repayment);
-        spinnerType = (Spinner) findViewById(R.id.spinner_type);
         dataBase = new mybibleDataBase(this);
 
         getIntentAndTransform();
