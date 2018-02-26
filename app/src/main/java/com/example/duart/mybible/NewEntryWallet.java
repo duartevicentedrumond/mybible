@@ -80,7 +80,6 @@ public class NewEntryWallet extends AppCompatActivity {
         }
 
     private void getData() {
-
         date = editTextDate.getText().toString();
         description = editTextDescription.getText().toString();
         value = editTextValue.getText().toString();
@@ -88,9 +87,7 @@ public class NewEntryWallet extends AppCompatActivity {
         repay = spinnerRepay.getSelectedItem().toString();
         repayment = spinnerRepayment.getSelectedItem().toString();
         type = editTextType.getText().toString();
-
     }
-
 
     public void insertData(final String date, final String description, final String value, final String sourceDestination, final String repay, final String repayment, final String type ){
 
