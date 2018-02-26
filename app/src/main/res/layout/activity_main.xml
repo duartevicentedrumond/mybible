@@ -13,10 +13,10 @@
         android:layout_marginBottom="16dp"
         android:ems="10"
         android:fontFamily="@font/open_sans"
+        android:hint="@string/password"
         android:inputType="textPassword"
         android:textAlignment="center"
         android:textSize="14sp"
-        android:hint="@string/password"
         app:layout_constraintBottom_toTopOf="@+id/button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -45,6 +45,8 @@
         android:layout_marginBottom="32dp"
         android:textColor="@color/deep_carmine"
         app:layout_constraintBottom_toTopOf="@+id/password_edittext"
-        tools:layout_editor_absoluteX="192dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

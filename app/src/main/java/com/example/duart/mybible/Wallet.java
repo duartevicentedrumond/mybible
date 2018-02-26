@@ -131,15 +131,31 @@ public class Wallet extends AppCompatActivity {
                         String date = mysqlDataUnsync.getString("date");
                         String description = mysqlDataUnsync.getString("description");
                         Double value = Double.parseDouble(mysqlDataUnsync.getString("value"));
-                        String source_destination = mysqlDataUnsync.getString("source_destination");
+                        Integer id_person = Integer.parseInt(mysqlDataUnsync.getString("id_person"));
+                        Integer id_gift = Integer.parseInt(mysqlDataUnsync.getString("id_gift"));
                         String repay = mysqlDataUnsync.getString("repay");
-                        String repayment = mysqlDataUnsync.getString("repayment");
                         String type = mysqlDataUnsync.getString("type");
 
-                        balanceClass balanceClassObject = new balanceClass(id, date, description, value, source_destination, repay, repayment, type, 1 );
-
                         sqLiteDatabase = dataBase.getWritableDatabase();
-                        String insertQuery = "INSERT INTO wallet (id, date, description, value, source_destination, repay, repayment, type, status ) Values (" + balanceClassObject.getId() + ", '" + balanceClassObject.getDate() + "', '" + balanceClassObject.getDescription() + "', '" + balanceClassObject.getValue() + "', '" + balanceClassObject.getSourceDestination() + "', '" + balanceClassObject.getRepay() + "', '" + balanceClassObject.getRepayment() + "', '" + balanceClassObject.getType() + "', " + 1 + ");";
+                        String insertQuery = "INSERT INTO wallet (id, date, description, value, id_person, id_gift, repay, type, status ) VALUES ("
+                                + id
+                                + ", '"
+                                + date
+                                + "', '"
+                                + description
+                                + "', '"
+                                + value
+                                + "', '"
+                                + id_person
+                                + "', '"
+                                + id_gift
+                                + "', '"
+                                + repay
+                                + "', '"
+                                + type
+                                + "', "
+                                + 1
+                                + ");";
                         Log.i(TAG, "MYSQL: " + insertQuery);
                         sqLiteDatabase.execSQL(insertQuery);
 
@@ -305,9 +321,9 @@ public class Wallet extends AppCompatActivity {
         ArrayList<String> arrayListUnsyncDataDate = new ArrayList<>();
         ArrayList<String> arrayListUnsyncDataDescription = new ArrayList<>();
         ArrayList<String> arrayListUnsyncDataValue = new ArrayList<>();
-        ArrayList<String> arrayListUnsyncDataSourceDestination = new ArrayList<>();
+        ArrayList<String> arrayListUnsyncDataIdPerson = new ArrayList<>();
+        ArrayList<String> arrayListUnsyncDataIdGift = new ArrayList<>();
         ArrayList<String> arrayListUnsyncDataRepay = new ArrayList<>();
-        ArrayList<String> arrayListUnsyncDataRepayment = new ArrayList<>();
         ArrayList<String> arrayListUnsyncDataType = new ArrayList<>();
 
         while (unsyncData.moveToNext()){
@@ -315,9 +331,9 @@ public class Wallet extends AppCompatActivity {
             arrayListUnsyncDataDate.add(unsyncData.getString(1));
             arrayListUnsyncDataDescription.add(unsyncData.getString(2));
             arrayListUnsyncDataValue.add(unsyncData.getString(3));
-            arrayListUnsyncDataSourceDestination.add(unsyncData.getString(4));
-            arrayListUnsyncDataRepay.add(unsyncData.getString(5));
-            arrayListUnsyncDataRepayment.add(unsyncData.getString(6));
+            arrayListUnsyncDataIdPerson.add(unsyncData.getString(4));
+            arrayListUnsyncDataIdGift.add(unsyncData.getString(5));
+            arrayListUnsyncDataRepay.add(unsyncData.getString(6));
             arrayListUnsyncDataType.add(unsyncData.getString(7));
         }
 
@@ -327,16 +343,16 @@ public class Wallet extends AppCompatActivity {
                     arrayListUnsyncDataDate.get(i),
                     arrayListUnsyncDataDescription.get(i),
                     arrayListUnsyncDataValue.get(i),
-                    arrayListUnsyncDataSourceDestination.get(i),
+                    arrayListUnsyncDataIdPerson.get(i),
+                    arrayListUnsyncDataIdGift.get(i),
                     arrayListUnsyncDataRepay.get(i),
-                    arrayListUnsyncDataRepayment.get(i),
                     arrayListUnsyncDataType.get(i),
                     "1",
                     url);
         }
     }
 
-        private void sendNewEntryWallet( final String id, final String date, final String description, final String value, final String source_destination, final String repay, final String repayment, final String type, final String status, final String url){
+        private void sendNewEntryWallet( final String id, final String date, final String description, final String value, final String id_person, final String id_gift, final String repay, final String type, final String status, final String url){
 
         class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
             @Override
@@ -348,9 +364,9 @@ public class Wallet extends AppCompatActivity {
                 String dateHolder = date;
                 String descriptionHolder = description;
                 String valueHolder = value;
-                String source_destinationHolder = source_destination;
+                String idPersonHolder = id_person;
+                String idGiftHolder = id_gift;
                 String repayHolder = repay;
-                String repaymentHolder = repayment;
                 String typeHolder = type;
                 String statusHolder = status;
 
@@ -358,9 +374,9 @@ public class Wallet extends AppCompatActivity {
                 nameValuePairs.add(new BasicNameValuePair("date", dateHolder));
                 nameValuePairs.add(new BasicNameValuePair("description", descriptionHolder));
                 nameValuePairs.add(new BasicNameValuePair("value", valueHolder));
-                nameValuePairs.add(new BasicNameValuePair("source_destination", source_destinationHolder));
+                nameValuePairs.add(new BasicNameValuePair("id_person", idPersonHolder));
+                nameValuePairs.add(new BasicNameValuePair("id_gift", idGiftHolder));
                 nameValuePairs.add(new BasicNameValuePair("repay", repayHolder));
-                nameValuePairs.add(new BasicNameValuePair("repayment", repaymentHolder));
                 nameValuePairs.add(new BasicNameValuePair("type", typeHolder));
                 nameValuePairs.add(new BasicNameValuePair("status", statusHolder));
 
@@ -394,7 +410,7 @@ public class Wallet extends AppCompatActivity {
         }
 
         SendPostReqAsyncTask sendPostReqAsyncTask = new SendPostReqAsyncTask();
-        sendPostReqAsyncTask.execute(id, date, description, value, source_destination, repay, repayment, type, status );
+        sendPostReqAsyncTask.execute(id, date, description, value, id_person, id_gift, repay, type, status );
         sqLiteDatabase = dataBase.getWritableDatabase();
         String setStatusQuery = "UPDATE wallet SET status=1 WHERE status=0 AND id=" + id + ";";
         sqLiteDatabase.execSQL(setStatusQuery);
@@ -411,9 +427,9 @@ public class Wallet extends AppCompatActivity {
         ArrayList<String> arrayListEditedDataDate = new ArrayList<>();
         ArrayList<String> arrayListEditedDataDescription = new ArrayList<>();
         ArrayList<String> arrayListEditedDataValue = new ArrayList<>();
-        ArrayList<String> arrayListEditedDataSourceDestination = new ArrayList<>();
+        ArrayList<String> arrayListEditedDataIdPerson = new ArrayList<>();
+        ArrayList<String> arrayListEditedDataIdGift = new ArrayList<>();
         ArrayList<String> arrayListEditedDataRepay = new ArrayList<>();
-        ArrayList<String> arrayListEditedDataRepayment = new ArrayList<>();
         ArrayList<String> arrayListEditedDataType = new ArrayList<>();
 
         while (editedData.moveToNext()){
@@ -421,9 +437,9 @@ public class Wallet extends AppCompatActivity {
             arrayListEditedDataDate.add(editedData.getString(1));
             arrayListEditedDataDescription.add(editedData.getString(2));
             arrayListEditedDataValue.add(editedData.getString(3));
-            arrayListEditedDataSourceDestination.add(editedData.getString(4));
-            arrayListEditedDataRepay.add(editedData.getString(5));
-            arrayListEditedDataRepayment.add(editedData.getString(6));
+            arrayListEditedDataIdPerson.add(editedData.getString(4));
+            arrayListEditedDataIdGift.add(editedData.getString(5));
+            arrayListEditedDataRepay.add(editedData.getString(6));
             arrayListEditedDataType.add(editedData.getString(7));
         }
 
@@ -433,16 +449,16 @@ public class Wallet extends AppCompatActivity {
                     arrayListEditedDataDate.get(i),
                     arrayListEditedDataDescription.get(i),
                     arrayListEditedDataValue.get(i),
-                    arrayListEditedDataSourceDestination.get(i),
+                    arrayListEditedDataIdPerson.get(i),
+                    arrayListEditedDataIdGift.get(i),
                     arrayListEditedDataRepay.get(i),
-                    arrayListEditedDataRepayment.get(i),
                     arrayListEditedDataType.get(i),
                     "1",
                     url);
         }
     }
 
-        private void sendEditedEntryWallet( final String id, final String date, final String description, final String value, final String source_destination, final String repay, final String repayment, final String type, final String status, final String url){
+        private void sendEditedEntryWallet( final String id, final String date, final String description, final String value, final String id_person, final String id_gift, final String repay, final String type, final String status, final String url){
 
         class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
             @Override
@@ -454,9 +470,9 @@ public class Wallet extends AppCompatActivity {
                 String dateHolder = date;
                 String descriptionHolder = description;
                 String valueHolder = value;
-                String source_destinationHolder = source_destination;
+                String idPersonHolder = id_person;
+                String idGiftHolder = id_gift;
                 String repayHolder = repay;
-                String repaymentHolder = repayment;
                 String typeHolder = type;
                 String statusHolder = status;
 
@@ -464,9 +480,9 @@ public class Wallet extends AppCompatActivity {
                 nameValuePairs.add(new BasicNameValuePair("date", dateHolder));
                 nameValuePairs.add(new BasicNameValuePair("description", descriptionHolder));
                 nameValuePairs.add(new BasicNameValuePair("value", valueHolder));
-                nameValuePairs.add(new BasicNameValuePair("source_destination", source_destinationHolder));
+                nameValuePairs.add(new BasicNameValuePair("id_person", idPersonHolder));
+                nameValuePairs.add(new BasicNameValuePair("id_gift", idGiftHolder));
                 nameValuePairs.add(new BasicNameValuePair("repay", repayHolder));
-                nameValuePairs.add(new BasicNameValuePair("repayment", repaymentHolder));
                 nameValuePairs.add(new BasicNameValuePair("type", typeHolder));
                 nameValuePairs.add(new BasicNameValuePair("status", statusHolder));
 
@@ -500,7 +516,7 @@ public class Wallet extends AppCompatActivity {
         }
 
         SendPostReqAsyncTask sendPostReqAsyncTask = new SendPostReqAsyncTask();
-        sendPostReqAsyncTask.execute(id, date, description, value, source_destination, repay, repayment, type, status );
+        sendPostReqAsyncTask.execute(id, date, description, value, id_person, id_gift, repay, type, status );
 
         sqLiteDatabase = dataBase.getWritableDatabase();
         String setStatusQuery = "UPDATE wallet SET status=1 WHERE status=2 AND id=" + id + ";";
@@ -518,9 +534,9 @@ public class Wallet extends AppCompatActivity {
         ArrayList<String> arrayListDeletedDataDate = new ArrayList<>();
         ArrayList<String> arrayListDeletedDataDescription = new ArrayList<>();
         ArrayList<String> arrayListDeletedDataValue = new ArrayList<>();
-        ArrayList<String> arrayListDeletedDataSourceDestination = new ArrayList<>();
+        ArrayList<String> arrayListDeletedDataIdPerson = new ArrayList<>();
+        ArrayList<String> arrayListDeletedDataIdGift = new ArrayList<>();
         ArrayList<String> arrayListDeletedDataRepay = new ArrayList<>();
-        ArrayList<String> arrayListDeletedDataRepayment = new ArrayList<>();
         ArrayList<String> arrayListDeletedDataType = new ArrayList<>();
 
         while (deletedData.moveToNext()){
@@ -528,9 +544,9 @@ public class Wallet extends AppCompatActivity {
             arrayListDeletedDataDate.add(deletedData.getString(1));
             arrayListDeletedDataDescription.add(deletedData.getString(2));
             arrayListDeletedDataValue.add(deletedData.getString(3));
-            arrayListDeletedDataSourceDestination.add(deletedData.getString(4));
-            arrayListDeletedDataRepay.add(deletedData.getString(5));
-            arrayListDeletedDataRepayment.add(deletedData.getString(6));
+            arrayListDeletedDataIdPerson.add(deletedData.getString(4));
+            arrayListDeletedDataIdGift.add(deletedData.getString(5));
+            arrayListDeletedDataRepay.add(deletedData.getString(6));
             arrayListDeletedDataType.add(deletedData.getString(7));
         }
 
@@ -540,16 +556,16 @@ public class Wallet extends AppCompatActivity {
                     arrayListDeletedDataDate.get(i),
                     arrayListDeletedDataDescription.get(i),
                     arrayListDeletedDataValue.get(i),
-                    arrayListDeletedDataSourceDestination.get(i),
+                    arrayListDeletedDataIdPerson.get(i),
+                    arrayListDeletedDataIdGift.get(i),
                     arrayListDeletedDataRepay.get(i),
-                    arrayListDeletedDataRepayment.get(i),
                     arrayListDeletedDataType.get(i),
                     "1",
                     url);
         }
     }
 
-        private void sendDeletedEntryWallet( final String id, final String date, final String description, final String value, final String source_destination, final String repay, final String repayment, final String type, final String status, final String url){
+        private void sendDeletedEntryWallet( final String id, final String date, final String description, final String value, final String id_person, final String id_gift, final String repay, final String type, final String status, final String url){
 
         class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
             @Override
@@ -561,9 +577,9 @@ public class Wallet extends AppCompatActivity {
                 String dateHolder = date;
                 String descriptionHolder = description;
                 String valueHolder = value;
-                String source_destinationHolder = source_destination;
+                String idPersonHolder = id_person;
+                String idGiftHolder = id_gift;
                 String repayHolder = repay;
-                String repaymentHolder = repayment;
                 String typeHolder = type;
                 String statusHolder = status;
 
@@ -571,9 +587,9 @@ public class Wallet extends AppCompatActivity {
                 nameValuePairs.add(new BasicNameValuePair("date", dateHolder));
                 nameValuePairs.add(new BasicNameValuePair("description", descriptionHolder));
                 nameValuePairs.add(new BasicNameValuePair("value", valueHolder));
-                nameValuePairs.add(new BasicNameValuePair("source_destination", source_destinationHolder));
+                nameValuePairs.add(new BasicNameValuePair("id_person", idPersonHolder));
+                nameValuePairs.add(new BasicNameValuePair("id_gift", idGiftHolder));
                 nameValuePairs.add(new BasicNameValuePair("repay", repayHolder));
-                nameValuePairs.add(new BasicNameValuePair("repayment", repaymentHolder));
                 nameValuePairs.add(new BasicNameValuePair("type", typeHolder));
                 nameValuePairs.add(new BasicNameValuePair("status", statusHolder));
 
@@ -607,7 +623,7 @@ public class Wallet extends AppCompatActivity {
         }
 
         SendPostReqAsyncTask sendPostReqAsyncTask = new SendPostReqAsyncTask();
-        sendPostReqAsyncTask.execute(id, date, description, value, source_destination, repay, repayment, type, status );
+        sendPostReqAsyncTask.execute(id, date, description, value, id_person, id_gift, repay, type, status );
 
         sqLiteDatabase = dataBase.getWritableDatabase();
         String deleteQuery = "DELETE FROM wallet WHERE status=3 AND id=" + id + ";";
@@ -617,7 +633,7 @@ public class Wallet extends AppCompatActivity {
     public void getDebtors(){
 
         sqLiteDatabase = dataBase.getReadableDatabase();
-        String findDebtorsQuery = "SELECT DISTINCT source_destination FROM wallet WHERE source_destination != '' AND repay='sim' AND status!=3;";
+        String findDebtorsQuery = "SELECT DISTINCT id_person FROM wallet WHERE id_person != 0 AND repay='sim' AND status!=3;";
         Cursor debtors = sqLiteDatabase.rawQuery(findDebtorsQuery, null);
 
         List debtorsList = new ArrayList();

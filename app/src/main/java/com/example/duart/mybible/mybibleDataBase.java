@@ -19,8 +19,28 @@ public class mybibleDataBase extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         String createTableWalletQuery;
-        createTableWalletQuery = "CREATE TABLE wallet ( id INTEGER PRIMARY KEY, date DATETIME DEFAULT CURRENT_TIMESTAMP, description TEXT, value TEXT, source_destination TEXT, repay TEXT, repayment TEXT, type TEXT, status INTEGER)";
+        createTableWalletQuery = "CREATE TABLE wallet ( id INTEGER PRIMARY KEY, date DATETIME DEFAULT CURRENT_TIMESTAMP, description TEXT, value TEXT, id_person INTEGER, id_gift INTEGER, repay TEXT, type TEXT, status INTEGER)";
         sqLiteDatabase.execSQL(createTableWalletQuery);
+
+        String createTablePersonQuery;
+        createTablePersonQuery = "CREATE TABLE person ( id INTEGER PRIMARY KEY, name TEXT, complete_name TEXT, status INTEGER)";
+        sqLiteDatabase.execSQL(createTablePersonQuery);
+
+        String createTableBirthdayQuery;
+        createTableBirthdayQuery = "CREATE TABLE birthday ( id_person INTEGER, date DATE, status INTEGER)";
+        sqLiteDatabase.execSQL(createTableBirthdayQuery);
+
+        String createTableEmailQuery;
+        createTableEmailQuery = "CREATE TABLE email ( id_person INTEGER, email TEXT, category TEXT, status INTEGER)";
+        sqLiteDatabase.execSQL(createTableEmailQuery);
+
+        String createTablePhoneQuery;
+        createTablePhoneQuery = "CREATE TABLE phone ( id_person INTEGER, number TEXT, category TEXT, status INTEGER)";
+        sqLiteDatabase.execSQL(createTablePhoneQuery);
+
+        String createTableGiftQuery;
+        createTableGiftQuery = "CREATE TABLE gift ( id INTEGER PRIMARY KEY, id_item INTEGER, id_wallet INTEGER, id_person INTEGER, date DATE, category TEXT, status INTEGER)";
+        sqLiteDatabase.execSQL(createTableGiftQuery);
 
         String createTableItemQuery;
         createTableItemQuery = "CREATE TABLE item ( id INTEGER PRIMARY KEY, name TEXT, category TEXT, status INTEGER)";

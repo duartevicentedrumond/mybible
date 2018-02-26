@@ -33,4 +33,19 @@
         android:src="@drawable/ic_box"
         app:layout_constraintStart_toEndOf="@+id/btn_wallet"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/btn_contact"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/snow"
+        android:onClick="contactClick"
+        android:src="@drawable/ic_contact"
+        app:layout_constraintStart_toEndOf="@+id/btn_box"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </android.support.constraint.ConstraintLayout>

@@ -59,16 +59,19 @@
             android:parentActivityName=".Box" />
         <activity
             android:name=".NewLocationBox"
-            android:parentActivityName=".Box"/>
+            android:parentActivityName=".Box" />
         <activity
             android:name=".ItemAndBoxBox"
-            android:parentActivityName=".Box"/>
+            android:parentActivityName=".Box" />
         <activity
             android:name=".ViewItemBox"
-            android:parentActivityName=".Box"/>
+            android:parentActivityName=".Box" />
         <activity
             android:name=".EditItemBox"
             android:parentActivityName=".Box" />
+        <activity android:name=".Person" />
+        <activity android:name=".NewPerson" />
+        <activity android:name=".ViewPerson"></activity>
     </application>
 
 </manifest>
