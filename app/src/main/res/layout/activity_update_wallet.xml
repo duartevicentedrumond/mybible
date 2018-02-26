@@ -10,38 +10,38 @@
         android:id="@+id/edit_text_description"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
         android:layout_marginTop="8dp"
         android:ems="10"
         android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/edit_text_date"
+        app:layout_constraintStart_toStartOf="@+id/edit_text_date"
         app:layout_constraintTop_toBottomOf="@+id/edit_text_date" />
 
     <EditText
         android:id="@+id/edit_text_value"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
         android:layout_marginTop="8dp"
         android:ems="10"
         android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/edit_text_description"
+        app:layout_constraintStart_toStartOf="@+id/edit_text_description"
         app:layout_constraintTop_toBottomOf="@+id/edit_text_description" />
 
     <EditText
         android:id="@+id/edit_text_source_destination"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
         android:layout_marginTop="8dp"
         android:ems="10"
         android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/edit_text_value"
+        app:layout_constraintStart_toStartOf="@+id/edit_text_value"
         app:layout_constraintTop_toBottomOf="@+id/edit_text_value" />
 
     <EditText
         android:id="@+id/edit_text_date"
-        android:layout_width="0dp"
+        android:layout_width="250sp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginTop="8dp"
@@ -50,107 +50,107 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:text="@string/text_view_date"
-        android:textSize="18sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/edit_text_date"
-        app:layout_constraintEnd_toStartOf="@+id/edit_text_date" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:text="@string/text_view_description"
-        android:textSize="18sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/edit_text_description"
-        app:layout_constraintEnd_toStartOf="@+id/edit_text_description" />
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:text="@string/text_view_value"
-        android:textSize="18sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/edit_text_value"
-        app:layout_constraintEnd_toStartOf="@+id/edit_text_value" />
-
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:text="@string/text_view_source_destination"
-        android:textSize="18sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/edit_text_source_destination"
-        app:layout_constraintEnd_toStartOf="@+id/edit_text_source_destination" />
-
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:text="@string/text_view_repay"
-        android:textSize="18sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/edit_text_repay"
-        app:layout_constraintEnd_toStartOf="@+id/edit_text_repay" />
-
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:text="@string/text_view_repayment"
-        android:textSize="18sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/edit_text_repayment"
-        app:layout_constraintEnd_toStartOf="@+id/edit_text_repayment" />
-
-    <TextView
-        android:id="@+id/textView7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:text="@string/text_view_type"
-        android:textSize="18sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/edit_text_type"
-        app:layout_constraintEnd_toStartOf="@+id/edit_text_type" />
-
     <EditText
         android:id="@+id/edit_text_repay"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
         android:layout_marginTop="8dp"
         android:ems="10"
         android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/edit_text_source_destination"
+        app:layout_constraintStart_toStartOf="@+id/edit_text_source_destination"
         app:layout_constraintTop_toBottomOf="@+id/edit_text_source_destination" />
 
     <EditText
         android:id="@+id/edit_text_repayment"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
         android:layout_marginTop="8dp"
         android:ems="10"
         android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_text_repay"/>
+        app:layout_constraintEnd_toEndOf="@+id/edit_text_repay"
+        app:layout_constraintStart_toStartOf="@+id/edit_text_repay"
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_repay" />
 
     <EditText
         android:id="@+id/edit_text_type"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="46dp"
-        android:layout_marginEnd="16dp"
         android:layout_marginTop="8dp"
         android:ems="10"
         android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/edit_text_repayment"
+        app:layout_constraintStart_toStartOf="@+id/edit_text_repayment"
         app:layout_constraintTop_toBottomOf="@+id/edit_text_repayment" />
+
+    <ImageView
+        android:id="@+id/image_view_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/edit_text_date"
+        app:layout_constraintEnd_toStartOf="@+id/edit_text_date"
+        app:srcCompat="@drawable/ic_day_time" />
+
+    <ImageView
+        android:id="@+id/image_view_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/edit_text_description"
+        app:layout_constraintEnd_toStartOf="@+id/edit_text_description"
+        app:srcCompat="@drawable/ic_text" />
+
+    <ImageView
+        android:id="@+id/image_view_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/edit_text_value"
+        app:layout_constraintEnd_toStartOf="@+id/edit_text_value"
+        app:srcCompat="@drawable/ic_coins" />
+
+    <ImageView
+        android:id="@+id/image_view_source_destination"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/edit_text_source_destination"
+        app:layout_constraintEnd_toStartOf="@+id/edit_text_source_destination"
+        app:srcCompat="@drawable/ic_person" />
+
+    <ImageView
+        android:id="@+id/image_view_repay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/edit_text_repay"
+        app:layout_constraintEnd_toStartOf="@+id/edit_text_repay"
+        app:srcCompat="@drawable/ic_money_exchange" />
+
+    <ImageView
+        android:id="@+id/image_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/edit_text_repayment"
+        app:layout_constraintEnd_toStartOf="@+id/edit_text_repayment"
+        app:srcCompat="@drawable/ic_money_back" />
+
+    <ImageView
+        android:id="@+id/image_view_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/edit_text_type"
+        app:layout_constraintEnd_toStartOf="@+id/edit_text_type"
+        app:srcCompat="@drawable/ic_money_carrier" />
 
 </android.support.constraint.ConstraintLayout>
