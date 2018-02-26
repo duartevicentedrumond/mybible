@@ -8,7 +8,7 @@
 
     <EditText
         android:id="@+id/edit_text_new_box"
-        android:layout_width="wrap_content"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginTop="16dp"
@@ -21,30 +21,30 @@
         android:id="@+id/edit_text_new_location"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="@+id/edit_text_new_box"
         app:layout_constraintStart_toStartOf="@+id/edit_text_new_box"
         app:layout_constraintTop_toBottomOf="@+id/edit_text_new_box" />
 
-    <TextView
-        android:id="@+id/textView8"
+    <ImageView
+        android:id="@+id/image_view_box"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
-        android:text="@string/edit_text_new_box"
-        android:textSize="18sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/edit_text_new_box"
-        app:layout_constraintEnd_toStartOf="@+id/edit_text_new_box" />
+        app:layout_constraintBottom_toBottomOf="@+id/edit_text_new_box"
+        app:layout_constraintEnd_toStartOf="@+id/edit_text_new_box"
+        app:srcCompat="@drawable/ic_box_2" />
 
-    <TextView
-        android:id="@+id/textView9"
+    <ImageView
+        android:id="@+id/image_view_location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
-        android:text="@string/edit_text_new_location"
-        android:textSize="18sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/edit_text_new_location"
-        app:layout_constraintEnd_toStartOf="@+id/edit_text_new_location" />
+        app:layout_constraintBottom_toBottomOf="@+id/edit_text_new_location"
+        app:layout_constraintEnd_toStartOf="@+id/edit_text_new_location"
+        app:srcCompat="@drawable/ic_location" />
 
 
 </android.support.constraint.ConstraintLayout>
