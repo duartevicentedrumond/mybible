@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.duart.mybible.NewPerson">
+    tools:context="com.example.duart.mybible.EditPerson">
 
     <EditText
         android:id="@+id/edit_text_name"
@@ -84,7 +84,7 @@
         app:layout_constraintTop_toBottomOf="@+id/edit_text_work" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/image_view_birthday"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -94,7 +94,7 @@
         app:srcCompat="@drawable/ic_balloons" />
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/image_view_mobile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -104,7 +104,7 @@
         app:srcCompat="@drawable/ic_phone_mobile" />
 
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/image_view_home"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -114,7 +114,7 @@
         app:srcCompat="@drawable/ic_phone_fix" />
 
     <ImageView
-        android:id="@+id/imageView4"
+        android:id="@+id/image_view_work"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -124,7 +124,7 @@
         app:srcCompat="@drawable/ic_work" />
 
     <ImageView
-        android:id="@+id/imageView5"
+        android:id="@+id/image_view_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"

@@ -62,7 +62,7 @@ public class LocationBox extends AppCompatActivity {
         ListAdapter listAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, arrayListLocation);
 
         sqLiteDatabase = dataBase.getReadableDatabase();
-        Cursor data = sqLiteDatabase.rawQuery("SELECT DISTINCT subdivision FROM subdivision;", null);
+        Cursor data = sqLiteDatabase.rawQuery("SELECT DISTINCT subdivision FROM subdivision WHERE status!=3;", null);
 
         while (data.moveToNext()){
             arrayListLocation.add(data.getString(0));

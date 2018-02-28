@@ -87,13 +87,19 @@ public class NewItemBox extends AppCompatActivity {
             itemData.moveToFirst();
             String itemId = itemData.getString(0);
 
-            sqLiteDatabase = dataBase.getReadableDatabase();
-            Cursor subdivisionData = sqLiteDatabase.rawQuery("SELECT id FROM subdivision WHERE subdivision='" + editTextLocation.getText() + "';", null);
-            subdivisionData.moveToFirst();
-            String subdivisionId = subdivisionData.getString(0);
+            String subdivisionId;
+            if (editTextLocation.getText().toString().equals("")){
+                subdivisionId = "0";
+            }else {
+                sqLiteDatabase = dataBase.getReadableDatabase();
+                Cursor subdivisionData = sqLiteDatabase.rawQuery("SELECT id FROM subdivision WHERE subdivision='" + editTextLocation.getText() + "';", null);
+                subdivisionData.moveToFirst();
+                subdivisionId = subdivisionData.getString(0);
+            }
 
-            String boxId="";
+            String boxId;
             if (editTextBox.getText().toString().equals("")){
+                boxId = "0";
             }else {
                 sqLiteDatabase = dataBase.getReadableDatabase();
                 Cursor boxData = sqLiteDatabase.rawQuery("SELECT id FROM box WHERE box='" + editTextBox.getText() + "';", null);
@@ -108,7 +114,7 @@ public class NewItemBox extends AppCompatActivity {
             if( editTextConsumable.getText().toString().equals("sim") ){
                 sqLiteDatabase = dataBase.getWritableDatabase();
                 sqLiteDatabase.execSQL("INSERT INTO consumables (id_item, change_stock, status) VALUES (" + itemId + ", 1, 0);");
-            }else if ( editTextConsumable.getText().toString().equals("nao")){
+            }else if ( editTextConsumable.getText().toString().equals("não")){
                 sqLiteDatabase = dataBase.getWritableDatabase();
                 sqLiteDatabase.execSQL("INSERT INTO noconsumables (id_item, state, status) VALUES (" + itemId + ", 1, 0);");
             }
@@ -168,7 +174,7 @@ public class NewItemBox extends AppCompatActivity {
         ArrayAdapter<String> adapter  = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, arrayListConsumable);
 
         arrayListConsumable.add("sim");
-        arrayListConsumable.add("nao");
+        arrayListConsumable.add("não");
 
         editTextConsumable.setAdapter(adapter);
     }

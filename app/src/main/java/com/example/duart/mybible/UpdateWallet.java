@@ -5,23 +5,18 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 public class UpdateWallet extends AppCompatActivity {
 
-    private static final String TAG = UpdateWallet.class.getName();
     private String id;
     private android.database.sqlite.SQLiteDatabase sqLiteDatabase;
     private SQLiteOpenHelper dataBase;
-    private Spinner spinnerRepay, spinnerRepayment, spinnerType;
-    private EditText editTextDate, editTextDescription, editTextValue, editTextSourceDestination, editTextRepay, editTextRepayment, editTextType;
-
-    String date, description, value, sourceDestination, repay, repayment, type;
+    private EditText editTextDate, editTextDescription, editTextValue, editTextPersonName, editTextRepay, editTextType;
+    private String personId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,12 +29,9 @@ public class UpdateWallet extends AppCompatActivity {
         editTextDate = (EditText) findViewById(R.id.edit_text_date);
         editTextDescription = (EditText) findViewById(R.id.edit_text_description);
         editTextValue = (EditText) findViewById(R.id.edit_text_value);
-        editTextSourceDestination = (EditText) findViewById(R.id.edit_text_source_destination);
+        editTextPersonName = (EditText) findViewById(R.id.edit_text_person);
         editTextRepay = (EditText) findViewById(R.id.edit_text_repay);
-        editTextRepayment = (EditText) findViewById(R.id.edit_text_repayment);
         editTextType = (EditText) findViewById(R.id.edit_text_type);
-        spinnerRepay = (Spinner) findViewById(R.id.spinner_repay);
-        spinnerRepayment = (Spinner) findViewById(R.id.spinner_repayment);
         dataBase = new mybibleDataBase(this);
 
         getIntentAndTransform();
@@ -60,8 +52,7 @@ public class UpdateWallet extends AppCompatActivity {
             switch (item.getItemId()) {
 
                 case R.id.action_edit:
-                    getData();
-                    insertEditedData(id, date, description, value, sourceDestination, repay, repayment, type);
+                    insertEditedData(id);
                     startActivity( new Intent( UpdateWallet.this, SeeAllWallet.class ) );
                     return true;
 
@@ -104,30 +95,37 @@ public class UpdateWallet extends AppCompatActivity {
             editTextDate.setText( selectedData.getString(1).toString() );
             editTextDescription.setText( selectedData.getString(2).toString() );
             editTextValue.setText( selectedData.getString(3).toString() );
-            editTextSourceDestination.setText( selectedData.getString(4).toString() );
-            editTextRepay.setText( selectedData.getString(5).toString() );
-            editTextRepayment.setText( selectedData.getString(6).toString() );
+
+            sqLiteDatabase = dataBase.getReadableDatabase();
+            Cursor personNameData = sqLiteDatabase.rawQuery("SELECT name FROM person WHERE id=" + selectedData.getString(4) + ";", null);
+            personNameData.moveToFirst();
+            editTextPersonName.setText( personNameData.getString(0) );
+
+            editTextRepay.setText( selectedData.getString(6).toString() );
             editTextType.setText( selectedData.getString(7).toString() );
 
     }
 
-    private void getData() {
+    public void insertEditedData(String id){
 
-        date = editTextDate.getText().toString();
-        description = editTextDescription.getText().toString();
-        value = editTextValue.getText().toString();
-        sourceDestination = editTextSourceDestination.getText().toString();
-        repay = editTextRepay.getText().toString();
-        repayment = editTextRepayment.getText().toString();
-        type = editTextType.getText().toString();
+        String date = editTextDate.getText().toString();
+        String description = editTextDescription.getText().toString();
+        String value = editTextValue.getText().toString();
 
-    }
+        if (editTextPersonName.getText().toString().equals("")){
+            personId = "0";
+        }else {
+            sqLiteDatabase = dataBase.getWritableDatabase();
+            Cursor personIdData = sqLiteDatabase.rawQuery("SELECT id FROM person WHERE name='" + editTextPersonName.getText().toString() + "';", null);
+            personIdData.moveToFirst();
+            personId = personIdData.getString(0);
+        }
 
-    public void insertEditedData(String id, final String date, final String description, final String value, final String sourceDestination, final String repay, final String repayment, final String type){
+        String repay = editTextRepay.getText().toString();
+        String type = editTextType.getText().toString();
 
         sqLiteDatabase = dataBase.getWritableDatabase();
-
-        String insertNewEntryQuery = "UPDATE wallet SET date='" + date + "', description='" + description + "', value='" + value + "', source_destination='" + sourceDestination + "', repay='" + repay + "', repayment='" + repayment + "', type='" + type + "', status=" + 2 + " WHERE id=" + id + ";";
+        String insertNewEntryQuery = "UPDATE wallet SET date='" + date + "', description='" + description + "', value='" + value + "', id_person='" + personId + "', repay='" + repay + "', type='" + type + "', status=2 WHERE id=" + id + ";";
         sqLiteDatabase.execSQL(insertNewEntryQuery);
 
     }

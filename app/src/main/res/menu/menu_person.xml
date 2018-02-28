@@ -3,15 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_list"
-        android:icon="@drawable/ic_list"
-        android:title="list"
+        android:id="@+id/action_add_new_item"
+        android:icon="@drawable/ic_add"
+        android:title="add_new_item"
         app:showAsAction="always"/>
 
     <item
-        android:id="@+id/action_add"
-        android:icon="@drawable/ic_add"
-        android:title="add"
+        android:id="@+id/action_sync"
+        android:icon="@drawable/ic_sync"
+        android:title="@string/sync"
         app:showAsAction="always"/>
+
 
 </menu>

@@ -29,7 +29,7 @@
         app:layout_constraintTop_toBottomOf="@+id/edit_text_description" />
 
     <EditText
-        android:id="@+id/edit_text_source_destination"
+        android:id="@+id/edit_text_person"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -57,20 +57,9 @@
         android:layout_marginTop="8dp"
         android:ems="10"
         android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="@+id/edit_text_source_destination"
-        app:layout_constraintStart_toStartOf="@+id/edit_text_source_destination"
-        app:layout_constraintTop_toBottomOf="@+id/edit_text_source_destination" />
-
-    <EditText
-        android:id="@+id/edit_text_repayment"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="@+id/edit_text_repay"
-        app:layout_constraintStart_toStartOf="@+id/edit_text_repay"
-        app:layout_constraintTop_toBottomOf="@+id/edit_text_repay" />
+        app:layout_constraintEnd_toEndOf="@+id/edit_text_person"
+        app:layout_constraintStart_toStartOf="@+id/edit_text_person"
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_person" />
 
     <EditText
         android:id="@+id/edit_text_type"
@@ -79,9 +68,9 @@
         android:layout_marginTop="8dp"
         android:ems="10"
         android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="@+id/edit_text_repayment"
-        app:layout_constraintStart_toStartOf="@+id/edit_text_repayment"
-        app:layout_constraintTop_toBottomOf="@+id/edit_text_repayment" />
+        app:layout_constraintEnd_toEndOf="@+id/edit_text_repay"
+        app:layout_constraintStart_toStartOf="@+id/edit_text_repay"
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_repay" />
 
     <ImageView
         android:id="@+id/image_view_date"
@@ -114,13 +103,13 @@
         app:srcCompat="@drawable/ic_coins" />
 
     <ImageView
-        android:id="@+id/image_view_source_destination"
+        android:id="@+id/image_view_person"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/edit_text_source_destination"
-        app:layout_constraintEnd_toStartOf="@+id/edit_text_source_destination"
+        app:layout_constraintBottom_toBottomOf="@+id/edit_text_person"
+        app:layout_constraintEnd_toStartOf="@+id/edit_text_person"
         app:srcCompat="@drawable/ic_person" />
 
     <ImageView
@@ -132,16 +121,6 @@
         app:layout_constraintBottom_toBottomOf="@+id/edit_text_repay"
         app:layout_constraintEnd_toStartOf="@+id/edit_text_repay"
         app:srcCompat="@drawable/ic_money_exchange" />
-
-    <ImageView
-        android:id="@+id/image_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/edit_text_repayment"
-        app:layout_constraintEnd_toStartOf="@+id/edit_text_repayment"
-        app:srcCompat="@drawable/ic_money_back" />
 
     <ImageView
         android:id="@+id/image_view_type"

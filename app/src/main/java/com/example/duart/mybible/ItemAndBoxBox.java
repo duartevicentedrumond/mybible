@@ -50,7 +50,7 @@ public class ItemAndBoxBox extends AppCompatActivity {
 
         //selects all boxes inside the subdivision selected
             sqLiteDatabase = dataBase.getReadableDatabase();
-            Cursor data = sqLiteDatabase.rawQuery("SELECT box, subdivision FROM box LEFT JOIN subdivision ON box.id_subdivision=subdivision.id WHERE subdivision='" + stringLocation + "';", null);
+            Cursor data = sqLiteDatabase.rawQuery("SELECT box, subdivision FROM box LEFT JOIN subdivision ON box.id_subdivision=subdivision.id WHERE subdivision='" + stringLocation + "' AND box.status!=3;", null);
             while (data.moveToNext()){
                 arrayListItemAndBox.add(data.getString(0));
             }
@@ -77,7 +77,7 @@ public class ItemAndBoxBox extends AppCompatActivity {
 
                 //checks if the selected list item belongs to table item
                     sqLiteDatabase = dataBase.getReadableDatabase();
-                    Cursor item = sqLiteDatabase.rawQuery("SELECT * FROM box WHERE box='" + itemSelected + "';", null);
+                    Cursor item = sqLiteDatabase.rawQuery("SELECT * FROM box WHERE box='" + itemSelected + "' AND status!=3;", null);
                     Log.i("TAG", "SIZE: " + item.getCount());
                     if ( item.getCount()!=0 ){
                         //if the selected element is not an item

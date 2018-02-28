@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.duart.mybible.ViewGift">
+
+    <TextView
+        android:id="@+id/text_view_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="id"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/text_view_item_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="@string/text_view_name"
+        app:layout_constraintBottom_toBottomOf="@+id/image_view_item_name"
+        app:layout_constraintStart_toEndOf="@+id/image_view_item_name"
+        app:layout_constraintTop_toTopOf="@+id/image_view_item_name" />
+
+    <ImageView
+        android:id="@+id/image_view_item_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_id"
+        app:srcCompat="@drawable/ic_tag" />
+
+    <ImageView
+        android:id="@+id/image_view_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/image_view_item_name"
+        app:srcCompat="@drawable/ic_coins" />
+
+    <TextView
+        android:id="@+id/text_view_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="@string/text_view_value"
+        app:layout_constraintBottom_toBottomOf="@+id/image_view_value"
+        app:layout_constraintStart_toEndOf="@+id/image_view_value"
+        app:layout_constraintTop_toTopOf="@+id/image_view_value" />
+
+    <ImageView
+        android:id="@+id/image_view_person"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="@+id/image_view_value"
+        app:layout_constraintTop_toBottomOf="@+id/image_view_value"
+        app:srcCompat="@drawable/ic_person" />
+
+    <TextView
+        android:id="@+id/text_view_person"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="person"
+        app:layout_constraintBottom_toBottomOf="@+id/image_view_person"
+        app:layout_constraintStart_toEndOf="@+id/image_view_person"
+        app:layout_constraintTop_toTopOf="@+id/image_view_person" />
+
+    <ImageView
+        android:id="@+id/image_view_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="@+id/image_view_person"
+        app:layout_constraintTop_toBottomOf="@+id/image_view_person"
+        app:srcCompat="@drawable/ic_text" />
+
+    <TextView
+        android:id="@+id/text_view_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="descrição"
+        app:layout_constraintBottom_toBottomOf="@+id/image_view_description"
+        app:layout_constraintStart_toEndOf="@+id/image_view_description"
+        app:layout_constraintTop_toTopOf="@+id/image_view_description" />
+
+    <ImageView
+        android:id="@+id/image_view_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="@+id/image_view_description"
+        app:layout_constraintTop_toBottomOf="@+id/image_view_description"
+        app:srcCompat="@drawable/ic_day_time" />
+
+    <TextView
+        android:id="@+id/text_view_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="data"
+        app:layout_constraintBottom_toBottomOf="@+id/image_view_date"
+        app:layout_constraintStart_toEndOf="@+id/image_view_date"
+        app:layout_constraintTop_toTopOf="@+id/image_view_date" />
+
+    <ImageView
+        android:id="@+id/image_view_category"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="@+id/image_view_date"
+        app:layout_constraintTop_toBottomOf="@+id/image_view_date"
+        app:srcCompat="@drawable/ic_category" />
+
+    <TextView
+        android:id="@+id/text_view_category"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="categoria"
+        app:layout_constraintBottom_toBottomOf="@+id/image_view_category"
+        app:layout_constraintStart_toEndOf="@+id/image_view_category"
+        app:layout_constraintTop_toTopOf="@+id/image_view_category" />
+</android.support.constraint.ConstraintLayout>

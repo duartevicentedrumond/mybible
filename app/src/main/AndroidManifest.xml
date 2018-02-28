@@ -69,9 +69,24 @@
         <activity
             android:name=".EditItemBox"
             android:parentActivityName=".Box" />
-        <activity android:name=".Person" />
-        <activity android:name=".NewPerson" />
-        <activity android:name=".ViewPerson"></activity>
+        <activity
+            android:name=".Person"
+            android:parentActivityName=".MainMenu"/>
+        <activity
+            android:name=".NewPerson"
+            android:parentActivityName=".Person"/>
+        <activity
+            android:name=".ViewPerson"
+            android:parentActivityName=".Person"/>
+        <activity
+            android:name=".EditPerson"
+            android:parentActivityName=".ViewPerson"/>
+        <activity
+            android:name=".Gift"
+            android:parentActivityName=".MainMenu"/>
+        <activity
+            android:name=".ViewGift"
+            android:parentActivityName=".Gift"/>
     </application>
 
 </manifest>

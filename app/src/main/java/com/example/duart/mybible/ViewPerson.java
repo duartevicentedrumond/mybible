@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -61,6 +62,31 @@ public class ViewPerson extends AppCompatActivity {
 
     }
 
+    //necessary to show buttons on action bar menu
+        @Override
+        public boolean onCreateOptionsMenu(Menu menu) {
+            getMenuInflater().inflate(R.menu.menu_view_item, menu);
+            return super.onCreateOptionsMenu(menu);
+        }
+
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item) {
+            switch (item.getItemId()) {
+
+                case R.id.action_edit:
+
+                    Intent intent = new Intent( ViewPerson.this, EditPerson.class );
+                    intent.putExtra("personId", personId);
+                    startActivity( intent );
+                    return true;
+
+                default:
+                    // If we got here, the user's action was not recognized.
+                    // Invoke the superclass to handle it.
+                    return super.onOptionsItemSelected(item);
+            }
+        }
+
     public String getIntentAndTransform(){
         //this gets the selected string from SeeAllWallet
             Intent intent = getIntent();
@@ -114,7 +140,9 @@ public class ViewPerson extends AppCompatActivity {
 
     public void printHomeNumber(String id){
         sqLiteDatabase = dataBase.getReadableDatabase();
-        Cursor personHomeNumberData = sqLiteDatabase.rawQuery("SELECT number FROM phone WHERE category='casa' AND id_person=" + id + ";", null);
+        Cursor personHomeNumberData = sqLiteDatabase.rawQuery("SELECT number FROM phone WHERE category='telefone' AND id_person=" + id + ";", null);
+
+        Log.i("TAG", "SIZE: " + personHomeNumberData.getCount());
 
         if (personHomeNumberData.getCount()!=0){
             while (personHomeNumberData.moveToNext()){

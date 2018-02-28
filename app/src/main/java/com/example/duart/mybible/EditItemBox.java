@@ -141,23 +141,35 @@ public class EditItemBox extends AppCompatActivity {
         });
     }
 
-    public void updateItem(String string){
+    public void updateItem(String id){
         //updates item's name
             sqLiteDatabase = dataBase.getWritableDatabase();
-            sqLiteDatabase.execSQL("UPDATE item SET name='" + editTextItemName.getText() + "', status=2 WHERE id=" + string + ";");
+            sqLiteDatabase.execSQL("UPDATE item SET name='" + editTextItemName.getText() + "', status=2 WHERE id=" + id + ";");
 
         //updates item's location
-            sqLiteDatabase = dataBase.getReadableDatabase();
-            Cursor idSubdivision = sqLiteDatabase.rawQuery("SELECT id FROM subdivision WHERE subdivision='" + editTextItemLocation.getText() + "';", null);
-            idSubdivision.moveToFirst();
-            sqLiteDatabase = dataBase.getReadableDatabase();
-            Cursor idBox = sqLiteDatabase.rawQuery("SELECT id FROM box WHERE box='" + editTextItemBox.getText() + "';", null);
-            String stringIdBox = "";
-            if ( idBox.getCount()!=0 ){
-                idBox.moveToFirst();
-                stringIdBox = idBox.getString(0);
+        String id_subdivision;
+        String id_box;
+            if (editTextItemLocation.getText().toString().equals("")){
+                id_subdivision = "0";
+                id_box = "0";
+            }else {
+                sqLiteDatabase = dataBase.getReadableDatabase();
+                Cursor idSubdivision = sqLiteDatabase.rawQuery("SELECT id FROM subdivision WHERE subdivision='" + editTextItemLocation.getText() + "';", null);
+                idSubdivision.moveToFirst();
+                id_subdivision = idSubdivision.getString(0);
+
+                sqLiteDatabase = dataBase.getReadableDatabase();
+                Cursor idBox = sqLiteDatabase.rawQuery("SELECT id FROM box WHERE box='" + editTextItemBox.getText() + "';", null);
+                if ( idBox.getCount()!=0 ){
+                    idBox.moveToFirst();
+                    id_box = idBox.getString(0);
+                }else {
+                    id_box = "0";
+                }
             }
+
             sqLiteDatabase = dataBase.getWritableDatabase();
-            sqLiteDatabase.execSQL("UPDATE location SET id_subdivision=" + idSubdivision.getString(0) + ", id_box='" + stringIdBox + "', status=2  WHERE id_item=" + string + ";");
+            sqLiteDatabase.execSQL("UPDATE location SET id_subdivision=" + id_subdivision + ", id_box=" + id_box + ", status=2  WHERE id_item=" + id + ";");
+
     }
 }

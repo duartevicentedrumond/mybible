@@ -39,7 +39,7 @@ public class mybibleDataBase extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(createTablePhoneQuery);
 
         String createTableGiftQuery;
-        createTableGiftQuery = "CREATE TABLE gift ( id INTEGER PRIMARY KEY, id_item INTEGER, id_wallet INTEGER, id_person INTEGER, date DATE, category TEXT, status INTEGER)";
+        createTableGiftQuery = "CREATE TABLE gift ( id INTEGER PRIMARY KEY, id_item INTEGER, id_wallet INTEGER, id_person INTEGER, date DATE, description TEXT, category TEXT, status INTEGER)";
         sqLiteDatabase.execSQL(createTableGiftQuery);
 
         String createTableItemQuery;
@@ -75,7 +75,7 @@ public class mybibleDataBase extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(createTableCostQuery);
 
         String createTableBorrowQuery;
-        createTableBorrowQuery = "CREATE TABLE borrow ( id_item INTEGER, date DATETIME DEFAULT CURRENT_TIMESTAMP, state INTEGER, person TEXT, status INTEGER )";
+        createTableBorrowQuery = "CREATE TABLE borrow ( id_item INTEGER, date DATETIME DEFAULT CURRENT_TIMESTAMP, state INTEGER, id_person INTEGER, status INTEGER )";
         sqLiteDatabase.execSQL(createTableBorrowQuery);
     }
 

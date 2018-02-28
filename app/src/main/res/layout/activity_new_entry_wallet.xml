@@ -22,18 +22,9 @@
         android:layout_width="0dp"
         android:layout_height="46dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toEndOf="@+id/edit_text_source_destination"
-        app:layout_constraintStart_toStartOf="@+id/edit_text_source_destination"
-        app:layout_constraintTop_toBottomOf="@+id/edit_text_source_destination" />
-
-    <Spinner
-        android:id="@+id/spinner_repayment"
-        android:layout_width="0dp"
-        android:layout_height="46dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toEndOf="@+id/spinner_repay"
-        app:layout_constraintStart_toStartOf="@+id/spinner_repay"
-        app:layout_constraintTop_toBottomOf="@+id/spinner_repay" />
+        app:layout_constraintEnd_toEndOf="@+id/edit_text_person"
+        app:layout_constraintStart_toStartOf="@+id/edit_text_person"
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_person" />
 
     <EditText
         android:id="@+id/edit_text_value"
@@ -47,7 +38,7 @@
         app:layout_constraintTop_toBottomOf="@+id/edit_text_description" />
 
     <AutoCompleteTextView
-        android:id="@+id/edit_text_source_destination"
+        android:id="@+id/edit_text_person"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -74,9 +65,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toEndOf="@+id/spinner_repayment"
-        app:layout_constraintStart_toStartOf="@+id/spinner_repayment"
-        app:layout_constraintTop_toBottomOf="@+id/spinner_repayment" />
+        app:layout_constraintEnd_toEndOf="@+id/spinner_repay"
+        app:layout_constraintStart_toStartOf="@+id/spinner_repay"
+        app:layout_constraintTop_toBottomOf="@+id/spinner_repay" />
 
     <ImageView
         android:id="@+id/image_view_day_time"
@@ -119,13 +110,13 @@
         app:srcCompat="@drawable/ic_money_carrier" />
 
     <ImageView
-        android:id="@+id/image_view_source_destination"
+        android:id="@+id/image_view_person"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/edit_text_source_destination"
-        app:layout_constraintEnd_toStartOf="@+id/edit_text_source_destination"
+        app:layout_constraintBottom_toBottomOf="@+id/edit_text_person"
+        app:layout_constraintEnd_toStartOf="@+id/edit_text_person"
         app:srcCompat="@drawable/ic_person" />
 
     <ImageView
@@ -139,13 +130,65 @@
         app:srcCompat="@drawable/ic_money_exchange" />
 
     <ImageView
-        android:id="@+id/image_view_repayment"
+        android:id="@+id/image_view_gift"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/spinner_gift"
+        app:layout_constraintEnd_toStartOf="@+id/spinner_gift"
+        app:layout_constraintTop_toTopOf="@+id/spinner_gift"
+        app:srcCompat="@drawable/ic_gift" />
+
+    <Spinner
+        android:id="@+id/spinner_gift"
+        android:layout_width="0dp"
+        android:layout_height="46dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="@+id/edit_text_type"
+        app:layout_constraintStart_toStartOf="@+id/edit_text_type"
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_type" />
+
+    <ImageView
+        android:id="@+id/image_view_person_gift"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/spinner_repayment"
-        app:layout_constraintEnd_toStartOf="@+id/spinner_repayment"
-        app:srcCompat="@drawable/ic_money_back" />
+        app:layout_constraintBottom_toBottomOf="@+id/edit_text_person_gift"
+        app:layout_constraintStart_toStartOf="@+id/image_view_gift"
+        app:srcCompat="@drawable/ic_person" />
+
+    <ImageView
+        android:id="@+id/image_view_category_gift"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/edit_text_category_gift"
+        app:layout_constraintEnd_toStartOf="@+id/edit_text_category_gift"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/edit_text_person_gift"
+        app:srcCompat="@drawable/ic_category" />
+
+    <AutoCompleteTextView
+        android:id="@+id/edit_text_person_gift"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/image_view_category_gift"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/image_view_person_gift"
+        app:layout_constraintTop_toBottomOf="@+id/spinner_gift" />
+
+    <AutoCompleteTextView
+        android:id="@+id/edit_text_category_gift"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="@+id/spinner_gift"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/image_view_category_gift"
+        app:layout_constraintTop_toBottomOf="@+id/spinner_gift" />
 
 </android.support.constraint.ConstraintLayout>
