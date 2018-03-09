@@ -71,22 +71,23 @@
             android:parentActivityName=".Box" />
         <activity
             android:name=".Person"
-            android:parentActivityName=".MainMenu"/>
+            android:parentActivityName=".MainMenu" />
         <activity
             android:name=".NewPerson"
-            android:parentActivityName=".Person"/>
+            android:parentActivityName=".Person" />
         <activity
             android:name=".ViewPerson"
-            android:parentActivityName=".Person"/>
+            android:parentActivityName=".Person" />
         <activity
             android:name=".EditPerson"
-            android:parentActivityName=".ViewPerson"/>
+            android:parentActivityName=".ViewPerson" />
         <activity
             android:name=".Gift"
-            android:parentActivityName=".MainMenu"/>
+            android:parentActivityName=".MainMenu" />
         <activity
             android:name=".ViewGift"
-            android:parentActivityName=".Gift"/>
+            android:parentActivityName=".Gift" />
+        <activity android:name=".AddStock"></activity>
     </application>
 
 </manifest>

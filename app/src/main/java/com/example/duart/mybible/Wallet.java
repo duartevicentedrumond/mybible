@@ -83,6 +83,10 @@ public class Wallet extends AppCompatActivity {
                 startActivity( new Intent( Wallet.this, SeeAllWallet.class ) );
                 return true;
 
+            case R.id.action_sync:
+                startActivity( new Intent( Wallet.this, SeeAllWallet.class ) );
+                return true;
+
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.
@@ -92,6 +96,9 @@ public class Wallet extends AppCompatActivity {
     }
 
     public void getDebtors(){
+
+        final DecimalFormat df = new DecimalFormat("#.##");
+        df.setRoundingMode(RoundingMode.CEILING);
 
         sqLiteDatabase = dataBase.getReadableDatabase();
         String findDebtorsQuery = "SELECT DISTINCT id_person FROM wallet WHERE id_person !=0 AND repay='sim' AND status!=3;";
@@ -117,10 +124,10 @@ public class Wallet extends AppCompatActivity {
                 personName.moveToFirst();
 
                 showDebtorsList.add(personName.getString(0) + ": " + debtsSum.getString(0));
-                if ( Double.parseDouble(debtsSum.getString(0)) < 0 ){
-                    textViewBalanceDebt.append(showDebtorsList.get(i) + " €\n");
-                } else if ( Double.parseDouble(debtsSum.getString(0)) > 0 ){
-                    textViewBalancePay.append(showDebtorsList.get(i) + " €\n");
+                if ( Double.valueOf(debtsSum.getString(0)) < 0 ){
+                    textViewBalanceDebt.append(showDebtorsList.get(i).toString() + " €\n");
+                } else if ( Double.valueOf(df.format(Double.valueOf(debtsSum.getString(0)))) > 0 ){
+                    textViewBalancePay.append(df.format(showDebtorsList.get(i)) + " €\n");
                 }
 
             }

@@ -114,7 +114,12 @@ public class ViewPerson extends AppCompatActivity {
 
         if (personBirthdayData.getCount()!=0){
             while (personBirthdayData.moveToNext()){
-                textViewBirthday.setText(personBirthdayData.getString(0));
+                if (!personBirthdayData.getString(0).equals("")){
+                    textViewBirthday.setText(personBirthdayData.getString(0));
+                }else {
+                    textViewBirthday.setVisibility(View.GONE);
+                    imageViewBirthday.setVisibility(View.GONE);
+                }
             }
         }else {
             textViewBirthday.setVisibility(View.GONE);
@@ -125,7 +130,7 @@ public class ViewPerson extends AppCompatActivity {
 
     public void printMobileNumber(String id){
         sqLiteDatabase = dataBase.getReadableDatabase();
-        Cursor personMobileNumberData = sqLiteDatabase.rawQuery("SELECT number FROM phone WHERE category='telemóvel' AND id_person=" + id + ";", null);
+        Cursor personMobileNumberData = sqLiteDatabase.rawQuery("SELECT number FROM phone WHERE category='telemóvel' AND id_person=" + id + " AND status!=3;", null);
 
         if (personMobileNumberData.getCount()!=0){
             while (personMobileNumberData.moveToNext()){
@@ -140,7 +145,7 @@ public class ViewPerson extends AppCompatActivity {
 
     public void printHomeNumber(String id){
         sqLiteDatabase = dataBase.getReadableDatabase();
-        Cursor personHomeNumberData = sqLiteDatabase.rawQuery("SELECT number FROM phone WHERE category='telefone' AND id_person=" + id + ";", null);
+        Cursor personHomeNumberData = sqLiteDatabase.rawQuery("SELECT number FROM phone WHERE category='telefone' AND id_person=" + id + " AND status!=3;", null);
 
         Log.i("TAG", "SIZE: " + personHomeNumberData.getCount());
 
@@ -157,7 +162,7 @@ public class ViewPerson extends AppCompatActivity {
 
     public void printWorkNumber(String id){
         sqLiteDatabase = dataBase.getReadableDatabase();
-        Cursor personWorkNumberData = sqLiteDatabase.rawQuery("SELECT number FROM phone WHERE category='trabalho' AND id_person=" + id + ";", null);
+        Cursor personWorkNumberData = sqLiteDatabase.rawQuery("SELECT number FROM phone WHERE category='trabalho' AND id_person=" + id + " AND status!=3;", null);
 
         if (personWorkNumberData.getCount()!=0){
             while (personWorkNumberData.moveToNext()){
@@ -172,7 +177,7 @@ public class ViewPerson extends AppCompatActivity {
 
     public void printEmailNumber(String id){
         sqLiteDatabase = dataBase.getReadableDatabase();
-        Cursor personEmailData = sqLiteDatabase.rawQuery("SELECT email FROM email WHERE id_person=" + id + ";", null);
+        Cursor personEmailData = sqLiteDatabase.rawQuery("SELECT email FROM email WHERE id_person=" + id + " AND status!=3;", null);
 
         if (personEmailData.getCount()!=0){
             while (personEmailData.moveToNext()){

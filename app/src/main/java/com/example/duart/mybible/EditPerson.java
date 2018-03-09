@@ -97,28 +97,28 @@ public class EditPerson extends AppCompatActivity {
         if (editTextMobile.getText().equals("")){
         }else {
             sqLiteDatabase = dataBase.getWritableDatabase();
-            sqLiteDatabase.execSQL("UPDATE phone SET number='" + editTextMobile.getText() + "', status=2 WHERE id_person=" + id + " AND category='telemóvel';");
+            sqLiteDatabase.execSQL("UPDATE phone SET number='" + editTextMobile.getText() + "', status=2 WHERE id_person=" + id + " AND category='telemóvel' AND status!=3;");
         }
 
         //updates person's home number
         if (editTextHome.getText().equals("")){
         }else {
             sqLiteDatabase = dataBase.getWritableDatabase();
-            sqLiteDatabase.execSQL("UPDATE phone SET number='" + editTextHome.getText() + "', status=2 WHERE id_person=" + id + " AND category='telefone';");
+            sqLiteDatabase.execSQL("UPDATE phone SET number='" + editTextHome.getText() + "', status=2 WHERE id_person=" + id + " AND category='telefone' AND status!=3;");
         }
 
         //updates person's work number
         if (editTextWork.getText().equals("")){
         }else {
             sqLiteDatabase = dataBase.getWritableDatabase();
-            sqLiteDatabase.execSQL("UPDATE phone SET number='" + editTextWork.getText() + "', status=2 WHERE id_person=" + id + " AND category='trabalho';");
+            sqLiteDatabase.execSQL("UPDATE phone SET number='" + editTextWork.getText() + "', status=2 WHERE id_person=" + id + " AND category='trabalho' AND status!=3;");
         }
 
         //updates person's email number
         if (editTextEmail.getText().equals("")){
         }else {
             sqLiteDatabase = dataBase.getWritableDatabase();
-            sqLiteDatabase.execSQL("UPDATE email SET email='" + editTextEmail.getText() + "', status=2 WHERE id_person=" + id + ";");
+            sqLiteDatabase.execSQL("UPDATE email SET email='" + editTextEmail.getText() + "', status=2 WHERE id_person=" + id + " AND status!=3;");
         }
     }
 
@@ -150,7 +150,7 @@ public class EditPerson extends AppCompatActivity {
 
     public void printMobileNumber(String id){
         sqLiteDatabase = dataBase.getReadableDatabase();
-        Cursor personMobileNumberData = sqLiteDatabase.rawQuery("SELECT number FROM phone WHERE category='telemóvel' AND id_person=" + id + ";", null);
+        Cursor personMobileNumberData = sqLiteDatabase.rawQuery("SELECT number FROM phone WHERE category='telemóvel' AND id_person=" + id + " AND status!=3;", null);
 
         if (personMobileNumberData.getCount()!=0){
             while (personMobileNumberData.moveToNext()){
@@ -162,7 +162,7 @@ public class EditPerson extends AppCompatActivity {
 
     public void printHomeNumber(String id){
         sqLiteDatabase = dataBase.getReadableDatabase();
-        Cursor personHomeNumberData = sqLiteDatabase.rawQuery("SELECT number FROM phone WHERE category='casa' AND id_person=" + id + ";", null);
+        Cursor personHomeNumberData = sqLiteDatabase.rawQuery("SELECT number FROM phone WHERE category='casa' AND id_person=" + id + " AND status!=3;", null);
 
         if (personHomeNumberData.getCount()!=0){
             while (personHomeNumberData.moveToNext()){
@@ -174,7 +174,7 @@ public class EditPerson extends AppCompatActivity {
 
     public void printWorkNumber(String id){
         sqLiteDatabase = dataBase.getReadableDatabase();
-        Cursor personWorkNumberData = sqLiteDatabase.rawQuery("SELECT number FROM phone WHERE category='trabalho' AND id_person=" + id + ";", null);
+        Cursor personWorkNumberData = sqLiteDatabase.rawQuery("SELECT number FROM phone WHERE category='trabalho' AND id_person=" + id + " AND status!=3;", null);
 
         if (personWorkNumberData.getCount()!=0){
             while (personWorkNumberData.moveToNext()){
@@ -186,7 +186,7 @@ public class EditPerson extends AppCompatActivity {
 
     public void printEmailNumber(String id){
         sqLiteDatabase = dataBase.getReadableDatabase();
-        Cursor personEmailData = sqLiteDatabase.rawQuery("SELECT email FROM email WHERE id_person=" + id + ";", null);
+        Cursor personEmailData = sqLiteDatabase.rawQuery("SELECT email FROM email WHERE id_person=" + id + " AND status!=3;", null);
 
         if (personEmailData.getCount()!=0){
             while (personEmailData.moveToNext()){

@@ -92,9 +92,12 @@ public class NewEntryWallet extends AppCompatActivity {
         }
 
     private String getPersonId() {
-        if (editTextPerson.getText().equals("")){
+        //checks if there is person's name inserted
+        if (editTextPerson.getText().toString().equals("")){
+            //if there is not...
             personId = "0";
         }else{
+            //if there is...
             sqLiteDatabase = dataBase.getReadableDatabase();
             String insertNewEntryQuery = "SELECT id FROM person WHERE name='" + editTextPerson.getText() + "';";
             Cursor data = sqLiteDatabase.rawQuery(insertNewEntryQuery, null);
@@ -105,7 +108,9 @@ public class NewEntryWallet extends AppCompatActivity {
     }
 
     private String getPersonGiftId() {
+        //checks if new entry is a gift or not
         if (spinnerGift.getSelectedItem().toString().equals("sim")){
+            //if it is...
             sqLiteDatabase = dataBase.getReadableDatabase();
             String insertNewEntryQuery = "SELECT id FROM person WHERE name='" + editTextPersonGift.getText() + "';";
             Cursor data = sqLiteDatabase.rawQuery(insertNewEntryQuery, null);
@@ -113,6 +118,7 @@ public class NewEntryWallet extends AppCompatActivity {
             personGiftId = data.getString(0);
         }
         else{
+            //if it is not...
             personGiftId = "0";
         }
         return personGiftId;
@@ -127,42 +133,43 @@ public class NewEntryWallet extends AppCompatActivity {
         type = editTextType.getText().toString();
         categoryGift = editTextCategoryGift.getText().toString();
 
-
+        //checks if the inserted data is a gift or not
         if (personGiftId.equals("0")){
-            sqLiteDatabase = dataBase.getWritableDatabase();
-
-            //chooses which query should be used and inserts the query chosen
-            if ( date.equals("") ){
-                String insertNewEntryQuery = "INSERT INTO wallet (description, value, id_person, id_gift, repay, type, status) Values ('" + description + "', '" + value + "', " + personId + ", 0, '" + repay + "', '" + type + "', " + 0 + ");";
-                sqLiteDatabase.execSQL(insertNewEntryQuery);
-            } else {
-                String insertNewEntryQuery = "INSERT INTO wallet (date, description, value, id_person, id_gift, repay, type, status) VALUES ('" + date + "', '" + description + "', '" + value + "', " + personId + ", 0, '" + repay + "', '" + type + "', " + 0 + ");";
-                sqLiteDatabase.execSQL(insertNewEntryQuery);
-            }
+            //if it is not...
+            id_gift = "0";
         }else{
+            //if the inserted data is a gift...
             sqLiteDatabase = dataBase.getReadableDatabase();
             Cursor idGiftData = sqLiteDatabase.rawQuery("SELECT id FROM gift ORDER BY id DESC LIMIT 1;", null);
 
+            //checks if the gift is the first one or not
             if (idGiftData.getCount()==0){
+                //if it is the first gift inserted...
                 id_gift = "1";
             }else {
+                //if there are already more gifts...
                 idGiftData.moveToFirst();
                 String stringIdGift = idGiftData.getString(0);
                 Integer idGift = Integer.parseInt(stringIdGift) + 1;
                 id_gift = String.valueOf(idGift);
             }
+        }
 
-            sqLiteDatabase = dataBase.getWritableDatabase();
+        sqLiteDatabase = dataBase.getWritableDatabase();
 
-            //chooses which query should be used and inserts the query chosen
-            if ( date.equals("") ){
-                String insertNewEntryQuery = "INSERT INTO wallet (description, value, id_person, id_gift, repay, type, status) VALUES ('" + description + "', '" + value + "', " + personId + "," + id_gift + ", '" + repay + "', '" + type + "', " + 0 + ");";
-                sqLiteDatabase.execSQL(insertNewEntryQuery);
-            } else {
-                String insertNewEntryQuery = "INSERT INTO wallet (date, description, value, id_person, id_gift, repay, type, status) VALUES ('" + date + "', '" + description + "', '" + value + "', " + personId + "," + id_gift + ", '" + repay + "', '" + type + "', " + 0 + ");";
-                sqLiteDatabase.execSQL(insertNewEntryQuery);
-            }
+        //chooses which query should be used depending if it is inputted a date or not and inserts the query chosen
+        if ( date.equals("") ){
+            //if user doesn't input date...
+            String insertNewEntryQuery = "INSERT INTO wallet (description, value, id_person, id_gift, repay, type, status) VALUES ('" + description + "', '" + value + "', " + personId + "," + id_gift + ", '" + repay + "', '" + type + "', " + 0 + ");";
+            sqLiteDatabase.execSQL(insertNewEntryQuery);
+        } else {
+            //if user inputs date...
+            String insertNewEntryQuery = "INSERT INTO wallet (date, description, value, id_person, id_gift, repay, type, status) VALUES ('" + date + "', '" + description + "', '" + value + "', " + personId + "," + id_gift + ", '" + repay + "', '" + type + "', " + 0 + ");";
+            sqLiteDatabase.execSQL(insertNewEntryQuery);
+        }
 
+        //if the new entry is a gift, it will be inputted into gift table
+        if (!id_gift.equals("0")){
             sqLiteDatabase = dataBase.getReadableDatabase();
             Cursor idWalletData = sqLiteDatabase.rawQuery("SELECT id, date FROM wallet WHERE id_gift=" + id_gift + ";", null);
             idWalletData.moveToFirst();

@@ -73,11 +73,8 @@ public class NewPerson extends AppCompatActivity {
         String id = personId.getString(0);
 
         //insert person's birthday
-        if (editTextBirthday.getText().toString().equals("")){
-        }else {
             sqLiteDatabase = dataBase.getWritableDatabase();
             sqLiteDatabase.execSQL("INSERT INTO birthday (id_person, date, status) VALUES (" + id + ", '" + editTextBirthday.getText().toString() + "', 0);");
-        }
 
         //insert person's mobile number
         if (editTextMobile.getText().toString().equals("")){

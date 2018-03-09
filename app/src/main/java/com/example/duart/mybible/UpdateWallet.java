@@ -96,11 +96,17 @@ public class UpdateWallet extends AppCompatActivity {
             editTextDescription.setText( selectedData.getString(2).toString() );
             editTextValue.setText( selectedData.getString(3).toString() );
 
-            sqLiteDatabase = dataBase.getReadableDatabase();
-            Cursor personNameData = sqLiteDatabase.rawQuery("SELECT name FROM person WHERE id=" + selectedData.getString(4) + ";", null);
-            personNameData.moveToFirst();
-            editTextPersonName.setText( personNameData.getString(0) );
+            String person_name;
+            if (!selectedData.getString(4).equals("0")){
+                sqLiteDatabase = dataBase.getReadableDatabase();
+                Cursor personNameData = sqLiteDatabase.rawQuery("SELECT name FROM person WHERE id=" + selectedData.getString(4) + ";", null);
+                personNameData.moveToFirst();
+                person_name = personNameData.getString(0);
+            }else {
+                person_name = "";
+            }
 
+            editTextPersonName.setText( person_name );
             editTextRepay.setText( selectedData.getString(6).toString() );
             editTextType.setText( selectedData.getString(7).toString() );
 

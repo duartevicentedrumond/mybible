@@ -268,9 +268,9 @@ public class ViewItemBox extends AppCompatActivity {
         btnAddStock.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sqLiteDatabase = dataBase.getWritableDatabase();
-                sqLiteDatabase.execSQL("INSERT INTO consumables (id_item, change_stock, status) VALUES (" + itemId + ", 1, 0);");
-                startActivity(new Intent(ViewItemBox.this, Box.class));
+                Intent intent = new Intent( ViewItemBox.this, AddStock.class );
+                intent.putExtra("itemId", itemId);
+                startActivity( intent );
             }
         });
     }

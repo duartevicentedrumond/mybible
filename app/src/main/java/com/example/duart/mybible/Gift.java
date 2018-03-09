@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,13 +23,24 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Gift extends AppCompatActivity {
 
@@ -38,7 +50,7 @@ public class Gift extends AppCompatActivity {
     private RequestQueue mRequestQueue;
     private static final String TAG = Gift.class.getName();
     private static final String REQUESTTAG = "string get new item";
-    public String IpAddress = "http://dpvdda.localtunnel.me/";
+    public String IpAddress = "http://192.168.1.9/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +67,7 @@ public class Gift extends AppCompatActivity {
     //necessary to show buttons on action bar menu
         @Override
         public boolean onCreateOptionsMenu(Menu menu) {
-            getMenuInflater().inflate(R.menu.menu_person, menu);
+            getMenuInflater().inflate(R.menu.menu_gift, menu);
             return super.onCreateOptionsMenu(menu);
         }
 
@@ -64,10 +76,6 @@ public class Gift extends AppCompatActivity {
         switch (item.getItemId()) {
 
             case R.id.action_add_new_item:
-                return true;
-
-            case R.id.action_sync:
-                syncGetNewGift();
                 return true;
 
             default:
@@ -107,58 +115,4 @@ public class Gift extends AppCompatActivity {
         });
     }
 
-    private void syncGetNewGift() {
-
-        /**sqLiteDatabase = dataBase.getWritableDatabase();
-         String deleteQuery = "DELETE FROM wallet;";
-         sqLiteDatabase.execSQL(deleteQuery);**/
-
-        mRequestQueue = Volley.newRequestQueue(this);
-
-        String url = IpAddress + "android/sync_get_new_gift_android.php";
-
-        final DecimalFormat df = new DecimalFormat("#.##");
-        df.setRoundingMode(RoundingMode.CEILING);
-
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-
-                for (int i = 0; i < response.length(); i++) {
-
-                    try {
-
-                        JSONObject mysqlDataUnsync = response.getJSONObject(i);
-
-                        Integer id = Integer.parseInt(mysqlDataUnsync.getString("id"));
-                        Integer id_item = Integer.parseInt(mysqlDataUnsync.getString("id_item"));
-                        Integer id_wallet = Integer.parseInt(mysqlDataUnsync.getString("id_wallet"));
-                        Integer id_person = Integer.parseInt(mysqlDataUnsync.getString("id_person"));
-                        String date = mysqlDataUnsync.getString("date");
-                        String description = mysqlDataUnsync.getString("description");
-                        String category = mysqlDataUnsync.getString("category");
-
-                        sqLiteDatabase = dataBase.getWritableDatabase();
-                        sqLiteDatabase.execSQL("INSERT INTO gift (id, id_item, id_wallet, id_person, date, description, category, status) VALUES (" + id + ", " + id_item + ", " + id_wallet + ", " + id_person + ", '" + date + "', '" +  description + "', '" + category + "', 1 );");
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-                Log.i(TAG, "Error: " + error.toString());
-
-            }
-        });
-
-        jsonArrayRequest.setTag(REQUESTTAG);
-        mRequestQueue.add(jsonArrayRequest);
-
-    }
 }

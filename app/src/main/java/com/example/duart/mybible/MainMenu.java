@@ -47,7 +47,7 @@ public class MainMenu extends AppCompatActivity {
 
     private RequestQueue mRequestQueue;
 
-    public String IpAddress = "http://dpvdda.localtunnel.me/";
+    public String IpAddress = "http://192.168.1.6:80/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +72,11 @@ public class MainMenu extends AppCompatActivity {
             switch (item.getItemId()) {
 
                 case R.id.action_sync:
+                    syncGetNewBirthday();
+                    syncGetEditedBirthday();
+                    syncSendNewBirthday();
+                    syncSendEditedBirthday();
+
                     syncGetNewBoxBox();
                     syncGetEditedBoxBox();
                     syncGetDeletedBoxBox();
@@ -88,6 +93,17 @@ public class MainMenu extends AppCompatActivity {
                     syncGetDeletedCostBox();
                     syncSendNewCostBox();
 
+                    syncGetNewEmail();
+                    syncGetEditedEmail();
+                    syncGetDeletedEmail();
+                    syncSendNewEmail();
+                    syncSendEditedEmail();
+
+                    syncGetNewGift();
+                    syncGetEditedGift();
+                    syncGetDeletedGift();
+                    syncSendNewGift();
+
                     syncGetNewItemBox();
                     syncGetEditedItemBox();
                     syncGetDeletedItemBox();
@@ -98,11 +114,25 @@ public class MainMenu extends AppCompatActivity {
                     syncGetEditedLocationBox();
                     syncGetDeletedLocationBox();
                     syncSendNewLocationBox();
+                    syncSendEditedLocationBox();
 
                     syncGetNewNoConsumablesBox();
                     syncGetEditedNoConsumablesBox();
                     syncGetDeletedNoConsumablesBox();
                     syncSendNewNoConsumablesBox();
+
+                    syncGetNewPerson();
+                    syncGetEditedPerson();
+                    syncGetDeletedPerson();
+                    syncSendNewPerson();
+                    syncSendEditedPerson();
+                    syncSendDeletedPerson();
+
+                    syncGetNewPhoneNumber();
+                    syncGetEditedPhoneNumber();
+                    syncGetDeletedPhoneNumber();
+                    syncSendNewPhoneNumber();
+                    syncSendEditedPhoneNumber();
 
                     syncGetNewSubdivisionBox();
                     syncGetEditedSubdivisionBox();
@@ -138,6 +168,277 @@ public class MainMenu extends AppCompatActivity {
 
     public void giftClick(View view){
         startActivity( new Intent( MainMenu.this, Gift.class ) );
+    }
+
+
+
+
+    private void syncGetNewBirthday() {
+
+        /**sqLiteDatabase = dataBase.getWritableDatabase();
+         String deleteQuery = "UPDATE wallet SET status=0";
+         sqLiteDatabase.execSQL(deleteQuery);**/
+
+        mRequestQueue = Volley.newRequestQueue(this);
+
+        String url = IpAddress + "android/sync_get_new_birthday_android.php";
+
+        final DecimalFormat df = new DecimalFormat("#.##");
+        df.setRoundingMode(RoundingMode.CEILING);
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+
+                for (int i = 0; i < response.length(); i++) {
+
+                    try {
+
+                        JSONObject mysqlDataUnsync = response.getJSONObject(i);
+
+                        Integer id_person = Integer.parseInt(mysqlDataUnsync.getString("id_person"));
+                        String date = mysqlDataUnsync.getString("date");
+
+                        sqLiteDatabase = dataBase.getWritableDatabase();
+                        String insertQuery = "INSERT INTO birthday (id_person, date, status ) VALUES ("
+                                + id_person
+                                + ", '"
+                                + date
+                                + "', "
+                                + 1
+                                + ");";
+                        sqLiteDatabase.execSQL(insertQuery);
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                Log.i(TAG, "Error: " + error.toString());
+
+            }
+        });
+
+        jsonArrayRequest.setTag(REQUESTTAG);
+        mRequestQueue.add(jsonArrayRequest);
+
+    }
+
+    private void syncGetEditedBirthday() {
+
+        /**sqLiteDatabase = dataBase.getWritableDatabase();
+         String deleteQuery = "DELETE FROM wallet;";
+         sqLiteDatabase.execSQL(deleteQuery);**/
+
+        mRequestQueue = Volley.newRequestQueue(this);
+
+        String url = IpAddress + "android/sync_get_edited_birthday_android.php";
+
+        final DecimalFormat df = new DecimalFormat("#.##");
+        df.setRoundingMode(RoundingMode.CEILING);
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+
+                for (int i = 0; i < response.length(); i++) {
+
+                    try {
+
+                        JSONObject mysqlDataUnsync = response.getJSONObject(i);
+
+                        Integer id_person = Integer.parseInt(mysqlDataUnsync.getString("id_person"));
+                        String date = mysqlDataUnsync.getString("date");
+
+                        sqLiteDatabase = dataBase.getWritableDatabase();
+                        String insertQuery = "UPDATE birthday SET date='"
+                                + date
+                                + "', status=1 WHERE id_person="
+                                + id_person
+                                + ";";
+                        sqLiteDatabase.execSQL(insertQuery);
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                Log.i(TAG, "Error: " + error.toString());
+
+            }
+        });
+
+        jsonArrayRequest.setTag(REQUESTTAG);
+        mRequestQueue.add(jsonArrayRequest);
+
+    }
+
+    private void syncSendNewBirthday() {
+
+        sqLiteDatabase = dataBase.getReadableDatabase();
+        String getUnsyncData = "SELECT * FROM birthday WHERE status=0;";
+        Cursor unsyncData = sqLiteDatabase.rawQuery(getUnsyncData, null);
+
+        String url = IpAddress + "android/sync_send_new_birthday_android.php";
+
+        ArrayList<String> arrayListIdPerson = new ArrayList<>();
+        ArrayList<String> arrayListDate = new ArrayList<>();
+
+        while (unsyncData.moveToNext()){
+            arrayListIdPerson.add(unsyncData.getString(0));
+            arrayListDate.add(unsyncData.getString(1));
+        }
+
+        for (int i = 0; i < arrayListIdPerson.size(); i++){
+            sendNewBirthday(
+                    arrayListIdPerson.get(i),
+                    arrayListDate.get(i),
+                    "1",
+                    url);
+        }
+
+    }
+
+        private void sendNewBirthday( final String id_person, final String date, final String status, final String url){
+
+        class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
+            @Override
+            protected String doInBackground(String... params) {
+
+                List<NameValuePair> nameValuePairs = new ArrayList<>();
+
+                String idPersonHolder = id_person;
+                String dateHolder = date;
+                String statusHolder = status;
+
+                nameValuePairs.add(new BasicNameValuePair("id_person", idPersonHolder));
+                nameValuePairs.add(new BasicNameValuePair("date", dateHolder));
+                nameValuePairs.add(new BasicNameValuePair("status", statusHolder));
+
+                try {
+
+                    HttpClient httpClient = new DefaultHttpClient();
+
+                    HttpPost httpPost = new HttpPost(url);
+
+                    httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                    HttpResponse httpResponse = httpClient.execute(httpPost);
+
+                    HttpEntity httpEntity = httpResponse.getEntity();
+
+                } catch (ClientProtocolException e) {
+
+                } catch (IOException e) {
+
+                }
+
+                return "Data Inserted Successfully";
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+
+                super.onPostExecute(result);
+
+            }
+        }
+
+        SendPostReqAsyncTask sendPostReqAsyncTask = new SendPostReqAsyncTask();
+        sendPostReqAsyncTask.execute(id_person, date, status );
+        sqLiteDatabase = dataBase.getWritableDatabase();
+        String setStatusQuery = "UPDATE birthday SET status=1 WHERE status=0 AND id_person=" + id_person + ";";
+        sqLiteDatabase.execSQL(setStatusQuery);
+    }
+
+    private void syncSendEditedBirthday() {
+
+        sqLiteDatabase = dataBase.getReadableDatabase();
+        String getUnsyncData = "SELECT * FROM birthday WHERE status=2;";
+        Cursor unsyncData = sqLiteDatabase.rawQuery(getUnsyncData, null);
+
+        String url = IpAddress + "android/sync_send_edited_birthday_android.php";
+
+        ArrayList<String> arrayListIdPerson = new ArrayList<>();
+        ArrayList<String> arrayListDate = new ArrayList<>();
+
+        while (unsyncData.moveToNext()){
+            arrayListIdPerson.add(unsyncData.getString(0));
+            arrayListDate.add(unsyncData.getString(1));
+        }
+
+        for (int i = 0; i < arrayListIdPerson.size(); i++){
+            sendEditedBirthday(
+                    arrayListIdPerson.get(i),
+                    arrayListDate.get(i),
+                    "1",
+                    url);
+        }
+
+    }
+
+        private void sendEditedBirthday( final String id_person, final String date, final String status, final String url){
+
+        class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
+            @Override
+            protected String doInBackground(String... params) {
+
+                List<NameValuePair> nameValuePairs = new ArrayList<>();
+
+                String idPersonHolder = id_person;
+                String dateHolder = date;
+                String statusHolder = status;
+
+                nameValuePairs.add(new BasicNameValuePair("id_person", idPersonHolder));
+                nameValuePairs.add(new BasicNameValuePair("date", dateHolder));
+                nameValuePairs.add(new BasicNameValuePair("status", statusHolder));
+
+                try {
+
+                    HttpClient httpClient = new DefaultHttpClient();
+
+                    HttpPost httpPost = new HttpPost(url);
+
+                    httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                    HttpResponse httpResponse = httpClient.execute(httpPost);
+
+                    HttpEntity httpEntity = httpResponse.getEntity();
+
+                } catch (ClientProtocolException e) {
+
+                } catch (IOException e) {
+
+                }
+
+                return "Data Inserted Successfully";
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+
+                super.onPostExecute(result);
+
+            }
+        }
+
+        SendPostReqAsyncTask sendPostReqAsyncTask = new SendPostReqAsyncTask();
+        sendPostReqAsyncTask.execute(id_person, date, status );
+        sqLiteDatabase = dataBase.getWritableDatabase();
+        String setStatusQuery = "UPDATE birthday SET status=1 WHERE status=2 AND id_person=" + id_person + ";";
+        sqLiteDatabase.execSQL(setStatusQuery);
     }
 
 
@@ -1066,6 +1367,798 @@ public class MainMenu extends AppCompatActivity {
         sqLiteDatabase.execSQL(setStatusQuery);
     }
 
+
+
+
+    private void syncGetNewEmail() {
+
+        /**sqLiteDatabase = dataBase.getWritableDatabase();
+         String deleteQuery = "DELETE FROM wallet;";
+         sqLiteDatabase.execSQL(deleteQuery);**/
+
+        mRequestQueue = Volley.newRequestQueue(this);
+
+        String url = IpAddress + "android/sync_get_new_email_android.php";
+
+        final DecimalFormat df = new DecimalFormat("#.##");
+        df.setRoundingMode(RoundingMode.CEILING);
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+
+                for (int i = 0; i < response.length(); i++) {
+
+                    try {
+
+                        JSONObject mysqlDataUnsync = response.getJSONObject(i);
+
+                        Integer id_person = Integer.parseInt(mysqlDataUnsync.getString("id_person"));
+                        String email = mysqlDataUnsync.getString("email");
+                        String category = mysqlDataUnsync.getString("category");
+
+                        sqLiteDatabase = dataBase.getWritableDatabase();
+                        String insertQuery = "INSERT INTO email (id_person, email, category, status) VALUES ("
+                                + id_person
+                                + ", '"
+                                + email
+                                + "', '"
+                                + category
+                                + "', 1);";
+                        sqLiteDatabase.execSQL(insertQuery);
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                Log.i(TAG, "Error: " + error.toString());
+
+            }
+        });
+
+        jsonArrayRequest.setTag(REQUESTTAG);
+        mRequestQueue.add(jsonArrayRequest);
+
+    }
+
+    private void syncGetEditedEmail() {
+
+        /**sqLiteDatabase = dataBase.getWritableDatabase();
+         String deleteQuery = "DELETE FROM wallet;";
+         sqLiteDatabase.execSQL(deleteQuery);**/
+
+        mRequestQueue = Volley.newRequestQueue(this);
+
+        String url = IpAddress + "android/sync_get_edited_email_android.php";
+
+        final DecimalFormat df = new DecimalFormat("#.##");
+        df.setRoundingMode(RoundingMode.CEILING);
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+
+                for (int i = 0; i < response.length(); i++) {
+
+                    try {
+
+                        JSONObject mysqlDataUnsync = response.getJSONObject(i);
+
+                        Integer id_person = Integer.parseInt(mysqlDataUnsync.getString("id_person"));
+                        String email = mysqlDataUnsync.getString("email");
+                        String category = mysqlDataUnsync.getString("category");
+
+                        sqLiteDatabase = dataBase.getWritableDatabase();
+                        String insertQuery = "UPDATE email SET email='"
+                                + email
+                                + "', category='"
+                                + category
+                                + "', status=1 WHERE id_person="
+                                + id_person
+                                + ";";
+                        sqLiteDatabase.execSQL(insertQuery);
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                Log.i(TAG, "Error: " + error.toString());
+
+            }
+        });
+
+        jsonArrayRequest.setTag(REQUESTTAG);
+        mRequestQueue.add(jsonArrayRequest);
+
+    }
+
+    private void syncGetDeletedEmail() {
+
+        /**sqLiteDatabase = dataBase.getWritableDatabase();
+         String deleteQuery = "DELETE FROM wallet;";
+         sqLiteDatabase.execSQL(deleteQuery);**/
+
+        mRequestQueue = Volley.newRequestQueue(this);
+
+        String url = IpAddress + "android/sync_get_deleted_email_android.php";
+
+        final DecimalFormat df = new DecimalFormat("#.##");
+        df.setRoundingMode(RoundingMode.CEILING);
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+
+                for (int i = 0; i < response.length(); i++) {
+
+                    try {
+
+                        JSONObject mysqlDataUnsync = response.getJSONObject(i);
+
+                        Integer id_person = Integer.parseInt(mysqlDataUnsync.getString("id_person"));
+
+                        sqLiteDatabase = dataBase.getWritableDatabase();
+                        String insertQuery = "UPDATE email SET status=3 WHERE id_person="
+                                + id_person
+                                + ";";
+                        sqLiteDatabase.execSQL(insertQuery);
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                Log.i(TAG, "Error: " + error.toString());
+
+            }
+        });
+
+        jsonArrayRequest.setTag(REQUESTTAG);
+        mRequestQueue.add(jsonArrayRequest);
+
+    }
+
+    private void syncSendNewEmail() {
+
+        sqLiteDatabase = dataBase.getReadableDatabase();
+        String getUnsyncData = "SELECT * FROM email WHERE status=0;";
+        Cursor unsyncData = sqLiteDatabase.rawQuery(getUnsyncData, null);
+
+        String url = IpAddress + "android/sync_send_new_email_android.php";
+
+        ArrayList<String> arrayListIdPerson = new ArrayList<>();
+        ArrayList<String> arrayListEmail = new ArrayList<>();
+        ArrayList<String> arrayListCategory = new ArrayList<>();
+
+        while (unsyncData.moveToNext()){
+            arrayListIdPerson.add(unsyncData.getString(0));
+            arrayListEmail.add(unsyncData.getString(1));
+            arrayListCategory.add(unsyncData.getString(2));
+        }
+
+        for (int i = 0; i < arrayListIdPerson.size(); i++){
+            sendNewEmail(
+                    arrayListIdPerson.get(i),
+                    arrayListEmail.get(i),
+                    arrayListCategory.get(i),
+                    "1",
+                    url);
+        }
+
+    }
+
+        private void sendNewEmail( final String id_person, final String email, final String category, final String status, final String url){
+
+        class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
+            @Override
+            protected String doInBackground(String... params) {
+
+                List<NameValuePair> nameValuePairs = new ArrayList<>();
+
+                String idPersonHolder = id_person;
+                String emailHolder = email;
+                String categoryHolder = category;
+                String statusHolder = status;
+
+                nameValuePairs.add(new BasicNameValuePair("id_person", idPersonHolder));
+                nameValuePairs.add(new BasicNameValuePair("email", emailHolder));
+                nameValuePairs.add(new BasicNameValuePair("category", categoryHolder));
+                nameValuePairs.add(new BasicNameValuePair("status", statusHolder));
+
+                try {
+
+                    HttpClient httpClient = new DefaultHttpClient();
+
+                    HttpPost httpPost = new HttpPost(url);
+
+                    httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                    HttpResponse httpResponse = httpClient.execute(httpPost);
+
+                    HttpEntity httpEntity = httpResponse.getEntity();
+
+                } catch (ClientProtocolException e) {
+
+                } catch (IOException e) {
+
+                }
+
+                return "Data Inserted Successfully";
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+
+                super.onPostExecute(result);
+
+            }
+        }
+
+        SendPostReqAsyncTask sendPostReqAsyncTask = new SendPostReqAsyncTask();
+        sendPostReqAsyncTask.execute(id_person, email, category, status );
+        sqLiteDatabase = dataBase.getWritableDatabase();
+        String setStatusQuery = "UPDATE email SET status=1 WHERE status=0 AND id_person=" + id_person + ";";
+        sqLiteDatabase.execSQL(setStatusQuery);
+    }
+
+    private void syncSendEditedEmail() {
+
+        sqLiteDatabase = dataBase.getReadableDatabase();
+        String getUnsyncData = "SELECT * FROM email WHERE status=2;";
+        Cursor unsyncData = sqLiteDatabase.rawQuery(getUnsyncData, null);
+
+        String url = IpAddress + "android/sync_send_edited_email_android.php";
+
+        ArrayList<String> arrayListIdPerson = new ArrayList<>();
+        ArrayList<String> arrayListEmail = new ArrayList<>();
+        ArrayList<String> arrayListCategory = new ArrayList<>();
+
+        while (unsyncData.moveToNext()){
+            arrayListIdPerson.add(unsyncData.getString(0));
+            arrayListEmail.add(unsyncData.getString(1));
+            arrayListCategory.add(unsyncData.getString(2));
+        }
+
+        for (int i = 0; i < arrayListIdPerson.size(); i++){
+            sendEditedEmail(
+                    arrayListIdPerson.get(i),
+                    arrayListEmail.get(i),
+                    arrayListCategory.get(i),
+                    "1",
+                    url);
+        }
+
+    }
+
+        private void sendEditedEmail( final String id_person, final String email, final String category, final String status, final String url){
+
+        class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
+            @Override
+            protected String doInBackground(String... params) {
+
+                List<NameValuePair> nameValuePairs = new ArrayList<>();
+
+                String idPersonHolder = id_person;
+                String emailHolder = email;
+                String categoryHolder = category;
+                String statusHolder = status;
+
+                nameValuePairs.add(new BasicNameValuePair("id_person", idPersonHolder));
+                nameValuePairs.add(new BasicNameValuePair("email", emailHolder));
+                nameValuePairs.add(new BasicNameValuePair("category", categoryHolder));
+                nameValuePairs.add(new BasicNameValuePair("status", statusHolder));
+
+                try {
+
+                    HttpClient httpClient = new DefaultHttpClient();
+
+                    HttpPost httpPost = new HttpPost(url);
+
+                    httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                    HttpResponse httpResponse = httpClient.execute(httpPost);
+
+                    HttpEntity httpEntity = httpResponse.getEntity();
+
+                } catch (ClientProtocolException e) {
+
+                } catch (IOException e) {
+
+                }
+
+                return "Data Inserted Successfully";
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+
+                super.onPostExecute(result);
+
+            }
+        }
+
+        SendPostReqAsyncTask sendPostReqAsyncTask = new SendPostReqAsyncTask();
+        sendPostReqAsyncTask.execute(id_person, email, category, status );
+        sqLiteDatabase = dataBase.getWritableDatabase();
+        String setStatusQuery = "UPDATE email SET status=1 WHERE status=2 AND id_person=" + id_person + ";";
+        sqLiteDatabase.execSQL(setStatusQuery);
+    }
+
+    private void syncSendDeletedEmail() {
+
+        sqLiteDatabase = dataBase.getReadableDatabase();
+        String getUnsyncData = "SELECT * FROM email WHERE status=3;";
+        Cursor unsyncData = sqLiteDatabase.rawQuery(getUnsyncData, null);
+
+        String url = IpAddress + "android/sync_send_deleted_email_android.php";
+
+        ArrayList<String> arrayListIdPerson = new ArrayList<>();
+        ArrayList<String> arrayListEmail = new ArrayList<>();
+        ArrayList<String> arrayListCategory = new ArrayList<>();
+
+        while (unsyncData.moveToNext()){
+            arrayListIdPerson.add(unsyncData.getString(0));
+            arrayListEmail.add(unsyncData.getString(1));
+            arrayListCategory.add(unsyncData.getString(2));
+        }
+
+        for (int i = 0; i < arrayListIdPerson.size(); i++){
+            sendDeletedEmail(
+                    arrayListIdPerson.get(i),
+                    arrayListEmail.get(i),
+                    arrayListCategory.get(i),
+                    "1",
+                    url);
+        }
+
+    }
+
+        private void sendDeletedEmail( final String id_person, final String email, final String category, final String status, final String url){
+
+        class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
+            @Override
+            protected String doInBackground(String... params) {
+
+                List<NameValuePair> nameValuePairs = new ArrayList<>();
+
+                String idPersonHolder = id_person;
+                String emailHolder = email;
+                String categoryHolder = category;
+                String statusHolder = status;
+
+                nameValuePairs.add(new BasicNameValuePair("id_person", idPersonHolder));
+                nameValuePairs.add(new BasicNameValuePair("email", emailHolder));
+                nameValuePairs.add(new BasicNameValuePair("category", categoryHolder));
+                nameValuePairs.add(new BasicNameValuePair("status", statusHolder));
+
+                try {
+
+                    HttpClient httpClient = new DefaultHttpClient();
+
+                    HttpPost httpPost = new HttpPost(url);
+
+                    httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                    HttpResponse httpResponse = httpClient.execute(httpPost);
+
+                    HttpEntity httpEntity = httpResponse.getEntity();
+
+                } catch (ClientProtocolException e) {
+
+                } catch (IOException e) {
+
+                }
+
+                return "Data Inserted Successfully";
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+
+                super.onPostExecute(result);
+
+            }
+        }
+
+        SendPostReqAsyncTask sendPostReqAsyncTask = new SendPostReqAsyncTask();
+        sendPostReqAsyncTask.execute(id_person, email, category, status );
+        sqLiteDatabase = dataBase.getWritableDatabase();
+        String setStatusQuery = "DELETE FROM email WHERE status=3 AND id_person=" + id_person + " AND category='" + category + "';";
+        sqLiteDatabase.execSQL(setStatusQuery);
+    }
+
+
+
+
+    private void syncGetNewGift() {
+
+        /**sqLiteDatabase = dataBase.getWritableDatabase();
+         String deleteQuery = "DELETE FROM wallet;";
+         sqLiteDatabase.execSQL(deleteQuery);**/
+
+        mRequestQueue = Volley.newRequestQueue(this);
+
+        String url = IpAddress + "android/sync_get_new_gift_android.php";
+
+        final DecimalFormat df = new DecimalFormat("#.##");
+        df.setRoundingMode(RoundingMode.CEILING);
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+
+                for (int i = 0; i < response.length(); i++) {
+
+                    try {
+
+                        JSONObject mysqlDataUnsync = response.getJSONObject(i);
+
+                        Integer id = Integer.parseInt(mysqlDataUnsync.getString("id"));
+                        Integer id_item = Integer.parseInt(mysqlDataUnsync.getString("id_item"));
+                        Integer id_wallet = Integer.parseInt(mysqlDataUnsync.getString("id_wallet"));
+                        Integer id_person = Integer.parseInt(mysqlDataUnsync.getString("id_person"));
+                        String date = mysqlDataUnsync.getString("date");
+                        String description = mysqlDataUnsync.getString("description");
+                        String category = mysqlDataUnsync.getString("category");
+
+                        sqLiteDatabase = dataBase.getWritableDatabase();
+                        sqLiteDatabase.execSQL("INSERT INTO gift (id, id_item, id_wallet, id_person, date, description, category, status) VALUES ("
+                                + id
+                                + ", "
+                                + id_item
+                                + ", "
+                                + id_wallet
+                                + ", "
+                                + id_person
+                                + ", '"
+                                + date
+                                + "', '"
+                                +  description
+                                + "', '"
+                                + category
+                                + "', 1 );");
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                Log.i(TAG, "Error: " + error.toString());
+
+            }
+        });
+
+        jsonArrayRequest.setTag(REQUESTTAG);
+        mRequestQueue.add(jsonArrayRequest);
+
+    }
+
+    private void syncGetEditedGift() {
+
+        /**sqLiteDatabase = dataBase.getWritableDatabase();
+         String deleteQuery = "DELETE FROM wallet;";
+         sqLiteDatabase.execSQL(deleteQuery);**/
+
+        mRequestQueue = Volley.newRequestQueue(this);
+
+        String url = IpAddress + "android/sync_get_edited_gift_android.php";
+
+        final DecimalFormat df = new DecimalFormat("#.##");
+        df.setRoundingMode(RoundingMode.CEILING);
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+
+                for (int i = 0; i < response.length(); i++) {
+
+                    try {
+
+                        JSONObject mysqlDataUnsync = response.getJSONObject(i);
+
+                        Integer id = Integer.parseInt(mysqlDataUnsync.getString("id"));
+                        Integer id_item = Integer.parseInt(mysqlDataUnsync.getString("id_item"));
+                        Integer id_wallet = Integer.parseInt(mysqlDataUnsync.getString("id_wallet"));
+                        Integer id_person = Integer.parseInt(mysqlDataUnsync.getString("id_person"));
+                        String date = mysqlDataUnsync.getString("date");
+                        String description = mysqlDataUnsync.getString("description");
+                        String category = mysqlDataUnsync.getString("category");
+
+                        sqLiteDatabase = dataBase.getWritableDatabase();
+                        sqLiteDatabase.execSQL("UPDATE gift SET id_item="
+                                + id_item
+                                + ", id_wallet="
+                                + id_wallet
+                                + ", id_person="
+                                + id_person
+                                + ", date='"
+                                + date
+                                + "', description='"
+                                +  description
+                                + "', category='"
+                                + category
+                                + "', status=1 WHERE id="
+                                + id
+                                + ";");
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                Log.i(TAG, "Error: " + error.toString());
+
+            }
+        });
+
+        jsonArrayRequest.setTag(REQUESTTAG);
+        mRequestQueue.add(jsonArrayRequest);
+
+    }
+
+    private void syncGetDeletedGift() {
+
+        /**sqLiteDatabase = dataBase.getWritableDatabase();
+         String deleteQuery = "DELETE FROM wallet;";
+         sqLiteDatabase.execSQL(deleteQuery);**/
+
+        mRequestQueue = Volley.newRequestQueue(this);
+
+        String url = IpAddress + "android/sync_get_deleted_gift_android.php";
+
+        final DecimalFormat df = new DecimalFormat("#.##");
+        df.setRoundingMode(RoundingMode.CEILING);
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+
+                for (int i = 0; i < response.length(); i++) {
+
+                    try {
+
+                        JSONObject mysqlDataUnsync = response.getJSONObject(i);
+
+                        Integer id = Integer.parseInt(mysqlDataUnsync.getString("id"));
+
+                        sqLiteDatabase = dataBase.getWritableDatabase();
+                        sqLiteDatabase.execSQL("UPDATE gift SET status=3 WHERE id="
+                                + id
+                                + ";");
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                Log.i(TAG, "Error: " + error.toString());
+
+            }
+        });
+
+        jsonArrayRequest.setTag(REQUESTTAG);
+        mRequestQueue.add(jsonArrayRequest);
+
+    }
+
+    private void syncSendNewGift() {
+
+        sqLiteDatabase = dataBase.getReadableDatabase();
+        String getUnsyncData = "SELECT * FROM gift WHERE status=0;";
+        Cursor unsyncData = sqLiteDatabase.rawQuery(getUnsyncData, null);
+
+        String url = IpAddress + "android/sync_send_new_gift_android.php";
+
+        ArrayList<String> arrayListId = new ArrayList<>();
+        ArrayList<String> arrayListIdItem = new ArrayList<>();
+        ArrayList<String> arrayListIdWallet = new ArrayList<>();
+        ArrayList<String> arrayListIdPerson = new ArrayList<>();
+        ArrayList<String> arrayListDate = new ArrayList<>();
+        ArrayList<String> arrayListDescription = new ArrayList<>();
+        ArrayList<String> arrayListCategory = new ArrayList<>();
+
+        while (unsyncData.moveToNext()){
+            arrayListId.add(unsyncData.getString(0));
+            arrayListIdItem.add(unsyncData.getString(1));
+            arrayListIdWallet.add(unsyncData.getString(2));
+            arrayListIdPerson.add(unsyncData.getString(3));
+            arrayListDate.add(unsyncData.getString(4));
+            arrayListDescription.add(unsyncData.getString(5));
+            arrayListCategory.add(unsyncData.getString(6));
+        }
+
+        for (int i = 0; i < arrayListIdPerson.size(); i++){
+            sendNewGift(
+                    arrayListId.get(i),
+                    arrayListIdItem.get(i),
+                    arrayListIdWallet.get(i),
+                    arrayListIdPerson.get(i),
+                    arrayListDate.get(i),
+                    arrayListDescription.get(i),
+                    arrayListCategory.get(i),
+                    "1",
+                    url);
+        }
+
+    }
+
+        private void sendNewGift( final String id, final String id_item, final String id_wallet, final String id_person, final String date, final String description, final String category, final String status, final String url){
+
+        class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
+            @Override
+            protected String doInBackground(String... params) {
+
+                List<NameValuePair> nameValuePairs = new ArrayList<>();
+
+                String idHolder = id;
+                String idItemHolder = id_item;
+                String idWalletHolder = id_wallet;
+                String idPersonHolder = id_person;
+                String dateHolder = date;
+                String descriptionHolder = description;
+                String categoryHolder = category;
+                String statusHolder = status;
+
+                nameValuePairs.add(new BasicNameValuePair("id", idHolder));
+                nameValuePairs.add(new BasicNameValuePair("id_item", idItemHolder));
+                nameValuePairs.add(new BasicNameValuePair("id_wallet", idWalletHolder));
+                nameValuePairs.add(new BasicNameValuePair("id_person", idPersonHolder));
+                nameValuePairs.add(new BasicNameValuePair("date", dateHolder));
+                nameValuePairs.add(new BasicNameValuePair("description", descriptionHolder));
+                nameValuePairs.add(new BasicNameValuePair("category", categoryHolder));
+                nameValuePairs.add(new BasicNameValuePair("status", statusHolder));
+
+                try {
+
+                    HttpClient httpClient = new DefaultHttpClient();
+
+                    HttpPost httpPost = new HttpPost(url);
+
+                    httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                    HttpResponse httpResponse = httpClient.execute(httpPost);
+
+                    HttpEntity httpEntity = httpResponse.getEntity();
+
+                } catch (ClientProtocolException e) {
+
+                } catch (IOException e) {
+
+                }
+
+                return "Data Inserted Successfully";
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+
+                super.onPostExecute(result);
+
+            }
+        }
+
+        SendPostReqAsyncTask sendPostReqAsyncTask = new SendPostReqAsyncTask();
+        sendPostReqAsyncTask.execute(id, id_item, id_wallet, id_person, date, description, category, status );
+        sqLiteDatabase = dataBase.getWritableDatabase();
+        String setStatusQuery = "UPDATE gift SET status=1 WHERE status=0 AND id=" + id + ";";
+        sqLiteDatabase.execSQL(setStatusQuery);
+    }
+
+    private void syncSendEditedGift() {
+
+        sqLiteDatabase = dataBase.getReadableDatabase();
+        String getUnsyncData = "SELECT * FROM birthday WHERE status=2;";
+        Cursor unsyncData = sqLiteDatabase.rawQuery(getUnsyncData, null);
+
+        String url = IpAddress + "android/sync_send_edited_birthday_android.php";
+
+        ArrayList<String> arrayListIdPerson = new ArrayList<>();
+        ArrayList<String> arrayListDate = new ArrayList<>();
+
+        while (unsyncData.moveToNext()){
+            arrayListIdPerson.add(unsyncData.getString(0));
+            arrayListDate.add(unsyncData.getString(1));
+        }
+
+        for (int i = 0; i < arrayListIdPerson.size(); i++){
+            sendEditedGift(
+                    arrayListIdPerson.get(i),
+                    arrayListDate.get(i),
+                    "1",
+                    url);
+        }
+
+    }
+
+        private void sendEditedGift( final String id_person, final String date, final String status, final String url){
+
+        class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
+            @Override
+            protected String doInBackground(String... params) {
+
+                List<NameValuePair> nameValuePairs = new ArrayList<>();
+
+                String idPersonHolder = id_person;
+                String dateHolder = date;
+                String statusHolder = status;
+
+                nameValuePairs.add(new BasicNameValuePair("id_person", idPersonHolder));
+                nameValuePairs.add(new BasicNameValuePair("date", dateHolder));
+                nameValuePairs.add(new BasicNameValuePair("status", statusHolder));
+
+                try {
+
+                    HttpClient httpClient = new DefaultHttpClient();
+
+                    HttpPost httpPost = new HttpPost(url);
+
+                    httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                    HttpResponse httpResponse = httpClient.execute(httpPost);
+
+                    HttpEntity httpEntity = httpResponse.getEntity();
+
+                } catch (ClientProtocolException e) {
+
+                } catch (IOException e) {
+
+                }
+
+                return "Data Inserted Successfully";
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+
+                super.onPostExecute(result);
+
+            }
+        }
+
+        SendPostReqAsyncTask sendPostReqAsyncTask = new SendPostReqAsyncTask();
+        sendPostReqAsyncTask.execute(id_person, date, status );
+        sqLiteDatabase = dataBase.getWritableDatabase();
+        String setStatusQuery = "UPDATE birthday SET status=1 WHERE status=2 AND id_person=" + id_person + ";";
+        sqLiteDatabase.execSQL(setStatusQuery);
+    }
 
 
 
@@ -2072,6 +3165,848 @@ public class MainMenu extends AppCompatActivity {
 
 
 
+    private void syncGetNewPerson() {
+
+        /**sqLiteDatabase = dataBase.getWritableDatabase();
+         String deleteQuery = "DELETE FROM wallet;";
+         sqLiteDatabase.execSQL(deleteQuery);**/
+
+        mRequestQueue = Volley.newRequestQueue(this);
+
+        String url = IpAddress + "android/sync_get_new_person_android.php";
+
+        final DecimalFormat df = new DecimalFormat("#.##");
+        df.setRoundingMode(RoundingMode.CEILING);
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+
+                for (int i = 0; i < response.length(); i++) {
+
+                    try {
+
+                        JSONObject mysqlDataUnsync = response.getJSONObject(i);
+
+                        Integer id = Integer.parseInt(mysqlDataUnsync.getString("id"));
+                        String name = mysqlDataUnsync.getString("name");
+                        String complete_name = mysqlDataUnsync.getString("complete_name");
+
+                        sqLiteDatabase = dataBase.getWritableDatabase();
+                        String insertQuery = "INSERT INTO person (id, name, complete_name, status ) VALUES ("
+                                + id
+                                + ", '"
+                                + name
+                                + "', '"
+                                + complete_name
+                                + "', 1);";
+                        sqLiteDatabase.execSQL(insertQuery);
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                Log.i(TAG, "Error: " + error.toString());
+
+            }
+        });
+
+        jsonArrayRequest.setTag(REQUESTTAG);
+        mRequestQueue.add(jsonArrayRequest);
+
+    }
+
+    private void syncGetEditedPerson() {
+
+        /**sqLiteDatabase = dataBase.getWritableDatabase();
+         String deleteQuery = "DELETE FROM wallet;";
+         sqLiteDatabase.execSQL(deleteQuery);**/
+
+        mRequestQueue = Volley.newRequestQueue(this);
+
+        String url = IpAddress + "android/sync_get_edited_person_android.php";
+
+        final DecimalFormat df = new DecimalFormat("#.##");
+        df.setRoundingMode(RoundingMode.CEILING);
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+
+                for (int i = 0; i < response.length(); i++) {
+
+                    try {
+
+                        JSONObject mysqlDataUnsync = response.getJSONObject(i);
+
+                        Integer id = Integer.parseInt(mysqlDataUnsync.getString("id"));
+                        String name = mysqlDataUnsync.getString("name");
+                        String complete_name = mysqlDataUnsync.getString("complete_name");
+
+                        sqLiteDatabase = dataBase.getWritableDatabase();
+                        String insertQuery = "UPDATE person SET name='"
+                                + name
+                                + "', complete_name='"
+                                + complete_name
+                                + "', status=1 WHERE id="
+                                + id
+                                + ";";
+                        sqLiteDatabase.execSQL(insertQuery);
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                Log.i(TAG, "Error: " + error.toString());
+
+            }
+        });
+
+        jsonArrayRequest.setTag(REQUESTTAG);
+        mRequestQueue.add(jsonArrayRequest);
+
+    }
+
+    private void syncGetDeletedPerson() {
+
+        /**sqLiteDatabase = dataBase.getWritableDatabase();
+         String deleteQuery = "DELETE FROM wallet;";
+         sqLiteDatabase.execSQL(deleteQuery);**/
+
+        mRequestQueue = Volley.newRequestQueue(this);
+
+        String url = IpAddress + "android/sync_get_deleted_person_android.php";
+
+        final DecimalFormat df = new DecimalFormat("#.##");
+        df.setRoundingMode(RoundingMode.CEILING);
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+
+                for (int i = 0; i < response.length(); i++) {
+
+                    try {
+
+                        JSONObject mysqlDataUnsync = response.getJSONObject(i);
+
+                        Integer id = Integer.parseInt(mysqlDataUnsync.getString("id"));
+
+                        sqLiteDatabase = dataBase.getWritableDatabase();
+                        String insertQuery = "UPDATE person SET status=3 WHERE id="
+                                + id
+                                + ";";
+                        sqLiteDatabase.execSQL(insertQuery);
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                Log.i(TAG, "Error: " + error.toString());
+
+            }
+        });
+
+        jsonArrayRequest.setTag(REQUESTTAG);
+        mRequestQueue.add(jsonArrayRequest);
+
+    }
+
+    private void syncSendNewPerson() {
+
+        sqLiteDatabase = dataBase.getReadableDatabase();
+        String getUnsyncData = "SELECT * FROM person WHERE status=0;";
+        Cursor unsyncData = sqLiteDatabase.rawQuery(getUnsyncData, null);
+
+        String url = IpAddress + "android/sync_send_new_person_android.php";
+
+        ArrayList<String> arrayListId = new ArrayList<>();
+        ArrayList<String> arrayListName = new ArrayList<>();
+        ArrayList<String> arrayListCompleteName = new ArrayList<>();
+
+        while (unsyncData.moveToNext()){
+            arrayListId.add(unsyncData.getString(0));
+            arrayListName.add(unsyncData.getString(1));
+            arrayListCompleteName.add(unsyncData.getString(2));
+        }
+
+        for (int i = 0; i < arrayListId.size(); i++){
+            sendNewPerson(
+                    arrayListId.get(i),
+                    arrayListName.get(i),
+                    arrayListCompleteName.get(i),
+                    "1",
+                    url);
+        }
+
+    }
+
+        private void sendNewPerson( final String id, final String name, final String complete_name, final String status, final String url){
+
+        class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
+            @Override
+            protected String doInBackground(String... params) {
+
+                List<NameValuePair> nameValuePairs = new ArrayList<>();
+
+                String idHolder = id;
+                String nameHolder = name;
+                String completeNameHolder = complete_name;
+                String statusHolder = status;
+
+                nameValuePairs.add(new BasicNameValuePair("id", idHolder));
+                nameValuePairs.add(new BasicNameValuePair("name", nameHolder));
+                nameValuePairs.add(new BasicNameValuePair("complete_name", completeNameHolder));
+                nameValuePairs.add(new BasicNameValuePair("status", statusHolder));
+
+                try {
+
+                    HttpClient httpClient = new DefaultHttpClient();
+
+                    HttpPost httpPost = new HttpPost(url);
+
+                    httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                    HttpResponse httpResponse = httpClient.execute(httpPost);
+
+                    HttpEntity httpEntity = httpResponse.getEntity();
+
+                } catch (ClientProtocolException e) {
+
+                } catch (IOException e) {
+
+                }
+
+                return "Data Inserted Successfully";
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+
+                super.onPostExecute(result);
+
+            }
+        }
+
+        SendPostReqAsyncTask sendPostReqAsyncTask = new SendPostReqAsyncTask();
+        sendPostReqAsyncTask.execute(id, name, complete_name, status );
+        sqLiteDatabase = dataBase.getWritableDatabase();
+        String setStatusQuery = "UPDATE person SET status=1 WHERE status=0 AND id=" + id + ";";
+        sqLiteDatabase.execSQL(setStatusQuery);
+    }
+
+    private void syncSendEditedPerson() {
+
+        sqLiteDatabase = dataBase.getReadableDatabase();
+        String getUnsyncData = "SELECT * FROM person WHERE status=2;";
+        Cursor unsyncData = sqLiteDatabase.rawQuery(getUnsyncData, null);
+
+        String url = IpAddress + "android/sync_send_edited_person_android.php";
+
+        ArrayList<String> arrayListId = new ArrayList<>();
+        ArrayList<String> arrayListName = new ArrayList<>();
+        ArrayList<String> arrayListCompleteName = new ArrayList<>();
+
+        while (unsyncData.moveToNext()){
+            arrayListId.add(unsyncData.getString(0));
+            arrayListName.add(unsyncData.getString(1));
+            arrayListCompleteName.add(unsyncData.getString(2));
+        }
+
+        for (int i = 0; i < arrayListId.size(); i++){
+            sendEditedPerson(
+                    arrayListId.get(i),
+                    arrayListName.get(i),
+                    arrayListCompleteName.get(i),
+                    "1",
+                    url);
+        }
+
+    }
+
+        private void sendEditedPerson( final String id, final String name, final String complete_name, final String status, final String url){
+
+        class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
+            @Override
+            protected String doInBackground(String... params) {
+
+                List<NameValuePair> nameValuePairs = new ArrayList<>();
+
+                String idHolder = id;
+                String nameHolder = name;
+                String completeNameHolder = complete_name;
+                String statusHolder = status;
+
+                nameValuePairs.add(new BasicNameValuePair("id", idHolder));
+                nameValuePairs.add(new BasicNameValuePair("name", nameHolder));
+                nameValuePairs.add(new BasicNameValuePair("complete_name", completeNameHolder));
+                nameValuePairs.add(new BasicNameValuePair("status", statusHolder));
+
+                try {
+
+                    HttpClient httpClient = new DefaultHttpClient();
+
+                    HttpPost httpPost = new HttpPost(url);
+
+                    httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                    HttpResponse httpResponse = httpClient.execute(httpPost);
+
+                    HttpEntity httpEntity = httpResponse.getEntity();
+
+                } catch (ClientProtocolException e) {
+
+                } catch (IOException e) {
+
+                }
+
+                return "Data Inserted Successfully";
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+
+                super.onPostExecute(result);
+
+            }
+        }
+
+        SendPostReqAsyncTask sendPostReqAsyncTask = new SendPostReqAsyncTask();
+        sendPostReqAsyncTask.execute(id, name, complete_name, status );
+        sqLiteDatabase = dataBase.getWritableDatabase();
+        String setStatusQuery = "UPDATE person SET status=1 WHERE status=2 AND id=" + id + ";";
+        sqLiteDatabase.execSQL(setStatusQuery);
+    }
+
+    private void syncSendDeletedPerson() {
+
+        sqLiteDatabase = dataBase.getReadableDatabase();
+        String getUnsyncData = "SELECT * FROM person WHERE status=3;";
+        Cursor unsyncData = sqLiteDatabase.rawQuery(getUnsyncData, null);
+
+        String url = IpAddress + "android/sync_send_deleted_person_android.php";
+
+        ArrayList<String> arrayListId = new ArrayList<>();
+        ArrayList<String> arrayListName = new ArrayList<>();
+        ArrayList<String> arrayListCompleteName = new ArrayList<>();
+
+        while (unsyncData.moveToNext()){
+            arrayListId.add(unsyncData.getString(0));
+            arrayListName.add(unsyncData.getString(1));
+            arrayListCompleteName.add(unsyncData.getString(2));
+        }
+
+        for (int i = 0; i < arrayListId.size(); i++){
+            sendDeletedPerson(
+                    arrayListId.get(i),
+                    arrayListName.get(i),
+                    arrayListCompleteName.get(i),
+                    "1",
+                    url);
+        }
+
+    }
+
+        private void sendDeletedPerson( final String id, final String name, final String complete_name, final String status, final String url){
+
+        class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
+            @Override
+            protected String doInBackground(String... params) {
+
+                List<NameValuePair> nameValuePairs = new ArrayList<>();
+
+                String idHolder = id;
+                String nameHolder = name;
+                String completeNameHolder = complete_name;
+                String statusHolder = status;
+
+                nameValuePairs.add(new BasicNameValuePair("id", idHolder));
+                nameValuePairs.add(new BasicNameValuePair("name", nameHolder));
+                nameValuePairs.add(new BasicNameValuePair("complete_name", completeNameHolder));
+                nameValuePairs.add(new BasicNameValuePair("status", statusHolder));
+
+                try {
+
+                    HttpClient httpClient = new DefaultHttpClient();
+
+                    HttpPost httpPost = new HttpPost(url);
+
+                    httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                    HttpResponse httpResponse = httpClient.execute(httpPost);
+
+                    HttpEntity httpEntity = httpResponse.getEntity();
+
+                } catch (ClientProtocolException e) {
+
+                } catch (IOException e) {
+
+                }
+
+                return "Data Inserted Successfully";
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+
+                super.onPostExecute(result);
+
+            }
+        }
+
+        SendPostReqAsyncTask sendPostReqAsyncTask = new SendPostReqAsyncTask();
+        sendPostReqAsyncTask.execute(id, name, complete_name, status );
+        sqLiteDatabase = dataBase.getWritableDatabase();
+        String setStatusQuery = "UPDATE person SET status=3 WHERE id=" + id + ";";
+        sqLiteDatabase.execSQL(setStatusQuery);
+    }
+
+
+
+
+    private void syncGetNewPhoneNumber() {
+
+        /**sqLiteDatabase = dataBase.getWritableDatabase();
+         String deleteQuery = "DELETE FROM wallet;";
+         sqLiteDatabase.execSQL(deleteQuery);**/
+
+        mRequestQueue = Volley.newRequestQueue(this);
+
+        String url = IpAddress + "android/sync_get_new_phone_number_android.php";
+
+        final DecimalFormat df = new DecimalFormat("#.##");
+        df.setRoundingMode(RoundingMode.CEILING);
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+
+                for (int i = 0; i < response.length(); i++) {
+
+                    try {
+
+                        JSONObject mysqlDataUnsync = response.getJSONObject(i);
+
+                        Integer id_person = Integer.parseInt(mysqlDataUnsync.getString("id_person"));
+                        String number = mysqlDataUnsync.getString("number");
+                        String category = mysqlDataUnsync.getString("category");
+
+                        sqLiteDatabase = dataBase.getWritableDatabase();
+                        String insertQuery = "INSERT INTO phone (id_person, number, category, status ) VALUES ("
+                                + id_person
+                                + ", '"
+                                + number
+                                + "', '"
+                                + category
+                                + "', "
+                                + 1
+                                + ");";
+                        sqLiteDatabase.execSQL(insertQuery);
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                Log.i(TAG, "Error: " + error.toString());
+
+            }
+        });
+
+        jsonArrayRequest.setTag(REQUESTTAG);
+        mRequestQueue.add(jsonArrayRequest);
+
+    }
+
+    private void syncGetEditedPhoneNumber() {
+
+        /**sqLiteDatabase = dataBase.getWritableDatabase();
+         String deleteQuery = "DELETE FROM wallet;";
+         sqLiteDatabase.execSQL(deleteQuery);**/
+
+        mRequestQueue = Volley.newRequestQueue(this);
+
+        String url = IpAddress + "android/sync_get_edited_phone_number_android.php";
+
+        final DecimalFormat df = new DecimalFormat("#.##");
+        df.setRoundingMode(RoundingMode.CEILING);
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+
+                for (int i = 0; i < response.length(); i++) {
+
+                    try {
+
+                        JSONObject mysqlDataUnsync = response.getJSONObject(i);
+
+                        Integer id_person = Integer.parseInt(mysqlDataUnsync.getString("id_person"));
+                        String number = mysqlDataUnsync.getString("number");
+                        String category = mysqlDataUnsync.getString("category");
+
+                        sqLiteDatabase = dataBase.getWritableDatabase();
+                        String insertQuery = "UPDATE phone SET number='"
+                                + number
+                                + "', category='"
+                                + category
+                                + "', status=1 WHERE id_person="
+                                + id_person
+                                + ";";
+                        sqLiteDatabase.execSQL(insertQuery);
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                Log.i(TAG, "Error: " + error.toString());
+
+            }
+        });
+
+        jsonArrayRequest.setTag(REQUESTTAG);
+        mRequestQueue.add(jsonArrayRequest);
+
+    }
+
+    private void syncGetDeletedPhoneNumber() {
+
+        /**sqLiteDatabase = dataBase.getWritableDatabase();
+         String deleteQuery = "DELETE FROM wallet;";
+         sqLiteDatabase.execSQL(deleteQuery);**/
+
+        mRequestQueue = Volley.newRequestQueue(this);
+
+        String url = IpAddress + "android/sync_get_deleted_phone_number_android.php";
+
+        final DecimalFormat df = new DecimalFormat("#.##");
+        df.setRoundingMode(RoundingMode.CEILING);
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+
+                for (int i = 0; i < response.length(); i++) {
+
+                    try {
+
+                        JSONObject mysqlDataUnsync = response.getJSONObject(i);
+
+                        Integer id_person = Integer.parseInt(mysqlDataUnsync.getString("id_person"));
+
+                        sqLiteDatabase = dataBase.getWritableDatabase();
+                        String insertQuery = "UPDATE phone SET status=3 WHERE id_person="
+                                + id_person
+                                + ";";
+                        sqLiteDatabase.execSQL(insertQuery);
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                Log.i(TAG, "Error: " + error.toString());
+
+            }
+        });
+
+        jsonArrayRequest.setTag(REQUESTTAG);
+        mRequestQueue.add(jsonArrayRequest);
+
+    }
+
+    private void syncSendNewPhoneNumber() {
+
+        sqLiteDatabase = dataBase.getReadableDatabase();
+        String getUnsyncData = "SELECT * FROM phone WHERE status=0;";
+        Cursor unsyncData = sqLiteDatabase.rawQuery(getUnsyncData, null);
+
+        String url = IpAddress + "android/sync_send_new_phone_number_android.php";
+
+        ArrayList<String> arrayListIdPerson = new ArrayList<>();
+        ArrayList<String> arrayListNumber = new ArrayList<>();
+        ArrayList<String> arrayListCategory = new ArrayList<>();
+
+        while (unsyncData.moveToNext()){
+            arrayListIdPerson.add(unsyncData.getString(0));
+            arrayListNumber.add(unsyncData.getString(1));
+            arrayListCategory.add(unsyncData.getString(2));
+        }
+
+        for (int i = 0; i < arrayListIdPerson.size(); i++){
+            sendNewPhoneNumber(
+                    arrayListIdPerson.get(i),
+                    arrayListNumber.get(i),
+                    arrayListCategory.get(i),
+                    "1",
+                    url);
+        }
+
+    }
+
+        private void sendNewPhoneNumber( final String id_person, final String number, final String category, final String status, final String url){
+
+        class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
+            @Override
+            protected String doInBackground(String... params) {
+
+                List<NameValuePair> nameValuePairs = new ArrayList<>();
+
+                String idPersonHolder = id_person;
+                String numberHolder = number;
+                String categoryHolder = category;
+                String statusHolder = status;
+
+                nameValuePairs.add(new BasicNameValuePair("id_person", idPersonHolder));
+                nameValuePairs.add(new BasicNameValuePair("number", numberHolder));
+                nameValuePairs.add(new BasicNameValuePair("category", categoryHolder));
+                nameValuePairs.add(new BasicNameValuePair("status", statusHolder));
+
+                try {
+
+                    HttpClient httpClient = new DefaultHttpClient();
+
+                    HttpPost httpPost = new HttpPost(url);
+
+                    httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                    HttpResponse httpResponse = httpClient.execute(httpPost);
+
+                    HttpEntity httpEntity = httpResponse.getEntity();
+
+                } catch (ClientProtocolException e) {
+
+                } catch (IOException e) {
+
+                }
+
+                return "Data Inserted Successfully";
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+
+                super.onPostExecute(result);
+
+            }
+        }
+
+        SendPostReqAsyncTask sendPostReqAsyncTask = new SendPostReqAsyncTask();
+        sendPostReqAsyncTask.execute(id_person, number, category, status );
+        sqLiteDatabase = dataBase.getWritableDatabase();
+        String setStatusQuery = "UPDATE phone SET status=1 WHERE status=0 AND id_person=" + id_person + ";";
+        sqLiteDatabase.execSQL(setStatusQuery);
+    }
+
+    private void syncSendEditedPhoneNumber() {
+
+        sqLiteDatabase = dataBase.getReadableDatabase();
+        String getUnsyncData = "SELECT * FROM phone WHERE status=2;";
+        Cursor unsyncData = sqLiteDatabase.rawQuery(getUnsyncData, null);
+
+        String url = IpAddress + "android/sync_send_edited_phone_number_android.php";
+
+        ArrayList<String> arrayListIdPerson = new ArrayList<>();
+        ArrayList<String> arrayListNumber = new ArrayList<>();
+        ArrayList<String> arrayListCategory = new ArrayList<>();
+
+        while (unsyncData.moveToNext()){
+            arrayListIdPerson.add(unsyncData.getString(0));
+            arrayListNumber.add(unsyncData.getString(1));
+            arrayListCategory.add(unsyncData.getString(2));
+        }
+
+        for (int i = 0; i < arrayListIdPerson.size(); i++){
+            sendEditedPhoneNumber(
+                    arrayListIdPerson.get(i),
+                    arrayListNumber.get(i),
+                    arrayListCategory.get(i),
+                    "1",
+                    url);
+        }
+
+    }
+
+        private void sendEditedPhoneNumber( final String id_person, final String number, final String category, final String status, final String url){
+
+        class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
+            @Override
+            protected String doInBackground(String... params) {
+
+                List<NameValuePair> nameValuePairs = new ArrayList<>();
+
+                String idPersonHolder = id_person;
+                String numberHolder = number;
+                String categoryHolder = category;
+                String statusHolder = status;
+
+                nameValuePairs.add(new BasicNameValuePair("id_person", idPersonHolder));
+                nameValuePairs.add(new BasicNameValuePair("number", numberHolder));
+                nameValuePairs.add(new BasicNameValuePair("category", categoryHolder));
+                nameValuePairs.add(new BasicNameValuePair("status", statusHolder));
+
+                try {
+
+                    HttpClient httpClient = new DefaultHttpClient();
+
+                    HttpPost httpPost = new HttpPost(url);
+
+                    httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                    HttpResponse httpResponse = httpClient.execute(httpPost);
+
+                    HttpEntity httpEntity = httpResponse.getEntity();
+
+                } catch (ClientProtocolException e) {
+
+                } catch (IOException e) {
+
+                }
+
+                return "Data Inserted Successfully";
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+
+                super.onPostExecute(result);
+
+            }
+        }
+
+        SendPostReqAsyncTask sendPostReqAsyncTask = new SendPostReqAsyncTask();
+        sendPostReqAsyncTask.execute(id_person, number, category, status );
+        sqLiteDatabase = dataBase.getWritableDatabase();
+        String setStatusQuery = "UPDATE phone SET status=1 WHERE status=2 AND id_person=" + id_person + ";";
+        sqLiteDatabase.execSQL(setStatusQuery);
+    }
+
+    private void syncSendDeletedPhoneNumber() {
+
+        sqLiteDatabase = dataBase.getReadableDatabase();
+        String getUnsyncData = "SELECT * FROM phone WHERE status=3;";
+        Cursor unsyncData = sqLiteDatabase.rawQuery(getUnsyncData, null);
+
+        String url = IpAddress + "android/sync_send_deleted_phone_number_android.php";
+
+        ArrayList<String> arrayListIdPerson = new ArrayList<>();
+        ArrayList<String> arrayListNumber = new ArrayList<>();
+        ArrayList<String> arrayListCategory = new ArrayList<>();
+
+        while (unsyncData.moveToNext()){
+            arrayListIdPerson.add(unsyncData.getString(0));
+            arrayListNumber.add(unsyncData.getString(1));
+            arrayListCategory.add(unsyncData.getString(2));
+        }
+
+        for (int i = 0; i < arrayListIdPerson.size(); i++){
+            sendDeletedPhoneNumber(
+                    arrayListIdPerson.get(i),
+                    arrayListNumber.get(i),
+                    arrayListCategory.get(i),
+                    "1",
+                    url);
+        }
+
+    }
+
+        private void sendDeletedPhoneNumber( final String id_person, final String number, final String category, final String status, final String url){
+
+        class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
+            @Override
+            protected String doInBackground(String... params) {
+
+                List<NameValuePair> nameValuePairs = new ArrayList<>();
+
+                String idPersonHolder = id_person;
+                String numberHolder = number;
+                String categoryHolder = category;
+                String statusHolder = status;
+
+                nameValuePairs.add(new BasicNameValuePair("id_person", idPersonHolder));
+                nameValuePairs.add(new BasicNameValuePair("number", numberHolder));
+                nameValuePairs.add(new BasicNameValuePair("category", categoryHolder));
+                nameValuePairs.add(new BasicNameValuePair("status", statusHolder));
+
+                try {
+
+                    HttpClient httpClient = new DefaultHttpClient();
+
+                    HttpPost httpPost = new HttpPost(url);
+
+                    httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                    HttpResponse httpResponse = httpClient.execute(httpPost);
+
+                    HttpEntity httpEntity = httpResponse.getEntity();
+
+                } catch (ClientProtocolException e) {
+
+                } catch (IOException e) {
+
+                }
+
+                return "Data Inserted Successfully";
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+
+                super.onPostExecute(result);
+
+            }
+        }
+
+        SendPostReqAsyncTask sendPostReqAsyncTask = new SendPostReqAsyncTask();
+        sendPostReqAsyncTask.execute(id_person, number, category, status );
+        sqLiteDatabase = dataBase.getWritableDatabase();
+        String setStatusQuery = "DELETE FROM phone WHERE status=3 AND id_person=" + id_person + " AND category='" + category + "';";
+        sqLiteDatabase.execSQL(setStatusQuery);
+    }
+
+
+
+
 
     private void syncGetNewSubdivisionBox() {
 
@@ -2389,9 +4324,6 @@ public class MainMenu extends AppCompatActivity {
 
         String url = IpAddress + "android/sync_get_new_entry_wallet_android.php";
 
-        final DecimalFormat df = new DecimalFormat("#.##");
-        df.setRoundingMode(RoundingMode.CEILING);
-
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
@@ -2431,7 +4363,6 @@ public class MainMenu extends AppCompatActivity {
                                 + "', "
                                 + 1
                                 + ");";
-                        Log.i(TAG, "MYSQL: " + insertQuery);
                         sqLiteDatabase.execSQL(insertQuery);
 
                     } catch (JSONException e) {
@@ -2568,14 +4499,6 @@ public class MainMenu extends AppCompatActivity {
         jsonArrayRequest.setTag(REQUESTTAG);
         mRequestQueue.add(jsonArrayRequest);
 
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if (mRequestQueue != null){
-            mRequestQueue.cancelAll(REQUESTTAG);
-        }
     }
 
     private void syncSendNewEntryWallet(){

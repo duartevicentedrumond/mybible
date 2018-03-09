@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import java.util.ArrayList;
 
@@ -26,6 +27,11 @@ public class NewItemBox extends AppCompatActivity {
     private AutoCompleteTextView editTextBox;
     private AutoCompleteTextView editTextConsumable;
     private EditText editTextCost;
+    private Spinner spinnerGift;
+    private AutoCompleteTextView editTextPersonGift;
+    private AutoCompleteTextView editTextCategoryGift;
+    private AutoCompleteTextView editTextDescriptionGift;
+    private String personGiftId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +44,10 @@ public class NewItemBox extends AppCompatActivity {
         editTextBox = (AutoCompleteTextView) findViewById(R.id.edit_text_item_box);
         editTextConsumable = (AutoCompleteTextView) findViewById(R.id.edit_text_consumable);
         editTextCost = (EditText) findViewById(R.id.edit_text_cost);
+        spinnerGift = (Spinner) findViewById(R.id.spinner_gift);
+        editTextPersonGift = (AutoCompleteTextView) findViewById(R.id.edit_text_person_gift);
+        editTextCategoryGift = (AutoCompleteTextView) findViewById(R.id.edit_text_category_gift);
+        editTextDescriptionGift = (AutoCompleteTextView) findViewById(R.id.edit_text_description_gift);
         dataBase = new mybibleDataBase(this);
 
         //this line removes the arrow from the action bar menu in this activity
@@ -47,6 +57,10 @@ public class NewItemBox extends AppCompatActivity {
         getLocationAutoComplete();
         getBoxAutoComplete();
         getConsumableAutoComplete();
+        getGiftSpinner();
+        getPersonAutoComplete();
+        getCategoryGiftAutoComplete();
+        getDescriptionGiftAutoComplete();
 
     }
 
@@ -62,7 +76,8 @@ public class NewItemBox extends AppCompatActivity {
             switch (item.getItemId()) {
 
                 case R.id.action_add_new:
-                    insertNewItemBox();
+                    personGiftId = getPersonGiftId();
+                    insertNewItemBox(personGiftId);
                     String stringQuery = "SELECT * FROM item";
                     Intent intent = new Intent(NewItemBox.this, ItemBox.class);
                     intent.putExtra("stringQuery", stringQuery);
@@ -76,7 +91,7 @@ public class NewItemBox extends AppCompatActivity {
             }
         }
 
-    public void insertNewItemBox(){
+    public void insertNewItemBox(String personGiftId){
         //inputs new item into item table
             sqLiteDatabase = dataBase.getWritableDatabase();
             sqLiteDatabase.execSQL("INSERT INTO item (name, category, status) VALUES ('" + editTextName.getText().toString() + "', '" + editTextCategory.getText().toString() + "', 0);");
@@ -89,8 +104,10 @@ public class NewItemBox extends AppCompatActivity {
 
             String subdivisionId;
             if (editTextLocation.getText().toString().equals("")){
+                //if user didn't input any subdivision location
                 subdivisionId = "0";
             }else {
+                //if user inputted a subdivision location
                 sqLiteDatabase = dataBase.getReadableDatabase();
                 Cursor subdivisionData = sqLiteDatabase.rawQuery("SELECT id FROM subdivision WHERE subdivision='" + editTextLocation.getText() + "';", null);
                 subdivisionData.moveToFirst();
@@ -99,8 +116,10 @@ public class NewItemBox extends AppCompatActivity {
 
             String boxId;
             if (editTextBox.getText().toString().equals("")){
+                //if user didn't input any box location
                 boxId = "0";
             }else {
+                //if user inputted a box location
                 sqLiteDatabase = dataBase.getReadableDatabase();
                 Cursor boxData = sqLiteDatabase.rawQuery("SELECT id FROM box WHERE box='" + editTextBox.getText() + "';", null);
                 boxData.moveToFirst();
@@ -122,6 +141,28 @@ public class NewItemBox extends AppCompatActivity {
         //inputs into cost table
             sqLiteDatabase = dataBase.getWritableDatabase();
             sqLiteDatabase.execSQL("INSERT INTO cost (id_item, cost, status) VALUES (" + itemId + ",'" + editTextCost.getText().toString() + "', 0);");
+
+
+        //if the new item is a gift, inputs into gift table
+            if (spinnerGift.getSelectedItem().toString().equals("sim")){
+                sqLiteDatabase = dataBase.getWritableDatabase();
+                Cursor dateGiftData = sqLiteDatabase.rawQuery("SELECT date FROM cost WHERE id_item=" + itemId + ";", null);
+                dateGiftData.moveToFirst();
+                String date_gift = dateGiftData.getString(0).split(" ")[0];
+
+                sqLiteDatabase = dataBase.getWritableDatabase();
+                sqLiteDatabase.execSQL("INSERT INTO gift (id_item, id_wallet, id_person, date, description, category, status) VALUES ("
+                        + itemId
+                        + ", 0, "
+                        + personGiftId
+                        + ", '"
+                        + date_gift
+                        + "', '"
+                        + editTextDescriptionGift.getText().toString()
+                        + "', '"
+                        + editTextCategoryGift.getText().toString()
+                        + "', 0);");
+            }
 
     }
 
@@ -177,6 +218,68 @@ public class NewItemBox extends AppCompatActivity {
         arrayListConsumable.add("não");
 
         editTextConsumable.setAdapter(adapter);
+    }
+
+    public void getGiftSpinner(){
+        ArrayList<String> arrayList = new ArrayList<>();
+        final ArrayAdapter<String> adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, arrayList);
+
+        arrayList.add("sim");
+        arrayList.add("não");
+        spinnerGift.setAdapter(adapter);
+    }
+
+    public void getPersonAutoComplete(){
+        ArrayList<String> arrayList = new ArrayList<>();
+        ArrayAdapter<String> adapter  = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, arrayList);
+
+        sqLiteDatabase = dataBase.getReadableDatabase();
+        Cursor data = sqLiteDatabase.rawQuery("SELECT name FROM person;", null);
+        while (data.moveToNext()){
+            arrayList.add(data.getString(0));
+        }
+        editTextPersonGift.setAdapter(adapter);
+    }
+
+    public void getCategoryGiftAutoComplete(){
+        ArrayList<String> arrayList = new ArrayList<>();
+        ArrayAdapter<String> adapter  = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, arrayList);
+
+        sqLiteDatabase = dataBase.getReadableDatabase();
+        Cursor data = sqLiteDatabase.rawQuery("SELECT DISTINCT category FROM gift;", null);
+        while (data.moveToNext()){
+            arrayList.add(data.getString(0));
+        }
+        editTextCategoryGift.setAdapter(adapter);
+    }
+
+    public void getDescriptionGiftAutoComplete(){
+        ArrayList<String> arrayList = new ArrayList<>();
+        ArrayAdapter<String> adapter  = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, arrayList);
+
+        sqLiteDatabase = dataBase.getReadableDatabase();
+        Cursor data = sqLiteDatabase.rawQuery("SELECT DISTINCT description FROM gift;", null);
+        while (data.moveToNext()){
+            arrayList.add(data.getString(0));
+        }
+        editTextDescriptionGift.setAdapter(adapter);
+    }
+
+    private String getPersonGiftId() {
+        //checks if new entry is a gift or not
+        if (spinnerGift.getSelectedItem().toString().equals("sim")){
+            //if it is...
+            sqLiteDatabase = dataBase.getReadableDatabase();
+            String insertNewEntryQuery = "SELECT id FROM person WHERE name='" + editTextPersonGift.getText() + "';";
+            Cursor data = sqLiteDatabase.rawQuery(insertNewEntryQuery, null);
+            data.moveToFirst();
+            personGiftId = data.getString(0);
+        }
+        else{
+            //if it is not...
+            personGiftId = "0";
+        }
+        return personGiftId;
     }
 
 }

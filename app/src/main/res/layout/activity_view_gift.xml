@@ -19,11 +19,13 @@
 
     <TextView
         android:id="@+id/text_view_item_name"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
         android:layout_marginStart="8dp"
         android:text="@string/text_view_name"
         app:layout_constraintBottom_toBottomOf="@+id/image_view_item_name"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/image_view_item_name"
         app:layout_constraintTop_toTopOf="@+id/image_view_item_name" />
 
@@ -49,11 +51,13 @@
 
     <TextView
         android:id="@+id/text_view_value"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
         android:layout_marginStart="8dp"
         android:text="@string/text_view_value"
         app:layout_constraintBottom_toBottomOf="@+id/image_view_value"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/image_view_value"
         app:layout_constraintTop_toTopOf="@+id/image_view_value" />
 
@@ -61,18 +65,21 @@
         android:id="@+id/image_view_person"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintStart_toStartOf="@+id/image_view_value"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/image_view_value"
         app:srcCompat="@drawable/ic_person" />
 
     <TextView
         android:id="@+id/text_view_person"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
         android:layout_marginStart="8dp"
         android:text="person"
         app:layout_constraintBottom_toBottomOf="@+id/image_view_person"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/image_view_person"
         app:layout_constraintTop_toTopOf="@+id/image_view_person" />
 
@@ -87,11 +94,13 @@
 
     <TextView
         android:id="@+id/text_view_description"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
         android:layout_marginStart="8dp"
         android:text="descrição"
         app:layout_constraintBottom_toBottomOf="@+id/image_view_description"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/image_view_description"
         app:layout_constraintTop_toTopOf="@+id/image_view_description" />
 
@@ -106,11 +115,13 @@
 
     <TextView
         android:id="@+id/text_view_date"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
         android:layout_marginStart="8dp"
         android:text="data"
         app:layout_constraintBottom_toBottomOf="@+id/image_view_date"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/image_view_date"
         app:layout_constraintTop_toTopOf="@+id/image_view_date" />
 
@@ -125,11 +136,13 @@
 
     <TextView
         android:id="@+id/text_view_category"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
         android:layout_marginStart="8dp"
         android:text="categoria"
         app:layout_constraintBottom_toBottomOf="@+id/image_view_category"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/image_view_category"
         app:layout_constraintTop_toTopOf="@+id/image_view_category" />
 </android.support.constraint.ConstraintLayout>
